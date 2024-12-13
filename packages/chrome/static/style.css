@@ -3,6 +3,9 @@
     --primary: #009CFD;
     --secondary: #A665F0;
     --tertiary: #65E6F0;
+    --primary-dark: #007ecb;
+    --secondary-dark: #8149c2;
+    --tertiary-dark: #5dd1da;
 
     --grey-1: #f1f1f1;
     --grey-3: #d4d4d4;
@@ -13,6 +16,8 @@
 
 
     --font-size: 14px;
+    --font-size-s: 12px;
+    --font-size-l: 16px;
     --font-color: #444;
     --font-family: "Gill Sans Extrabold", sans-serif;
 }

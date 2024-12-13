@@ -13,8 +13,20 @@ export class ViewDefault extends LitElement {
 
     render() {
         return html`
-            <wf-button @click="${() => console.log( 'test cta' )}">Test Button</wf-button>
             <wf-button href="#test">Test Link</wf-button>
+            <wf-button disabled href="#test">Test Link</wf-button>
+            <wf-button appearance="primary" href="#test">Test Link</wf-button>
+            <wf-button appearance="secondary" href="#test">Test Link</wf-button>
+            <wf-button appearance="tertiary" href="#test">Test Link</wf-button>
+            <wf-button appearance="primary-outline" href="#test">Test Link</wf-button>
+            <wf-button appearance="secondary-outline" href="#test">Test Link</wf-button>
+            <wf-button appearance="tertiary-outline" href="#test">Test Link</wf-button>
+
+            <wf-button size="xs" href="#test">Test Link</wf-button>
+            <wf-button size="s" href="#test">Test Link</wf-button>
+            <wf-button size="m" href="#test">Test Link</wf-button>
+            <wf-button size="l" href="#test">Test Link</wf-button>
+            <wf-button size="xl" href="#test">Test Link</wf-button>
         `;
     }
 }

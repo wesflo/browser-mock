@@ -22,19 +22,19 @@ class CTA extends LitElement {
     }
 
     protected renderButton = () => html`
-        <button class="cta ${this.appearance} ${this.size}" type="${this.type}" ?disabled="${this.disabled}" @click(${this.handleClick})>
+        <button class="cta ${this.appearance} ${this.size}" type="${this.type}" @click(${this.handleClick})>
             <slot></slot>
         </button>
     `;
 
     protected renderLink = () => html`
-        <a href="${this.href}" class="cta ${this.appearance} ${this.size}" ?disabled="${this.disabled}" target="${this.target}" @click(${this.handleClick})>
+        <a href="${this.disabled ? 'javascript:void(0)' : this.href}" class="cta ${this.appearance} ${this.size}" target="${this.target}" @click(${this.handleClick})>
             <slot></slot>
         </a>
     `;
 
     handleClick = () => {
-        (!this.disabled && this.onClick) && this.onClick()
+        this.onClick && this.onClick()
     }
 }
 
