@@ -16,7 +16,13 @@ export default class Component extends LitElement {
 
     render() {
         return html`
-            <input id="input" type="${this.type}" ?disabled="${this.disabled}" @change="${this.handleChange}" />
+            <input
+                    id="input"
+                    type="${this.type}"
+                    ?disabled="${this.disabled}"
+                    value="${this.value}"
+                    @change="${this.handleChange}"
+            />
             <label for="input" class="${classMap({active: this.value})}">
                 ${this.label}
             </label>
