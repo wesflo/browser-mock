@@ -4,7 +4,7 @@ import {css} from "lit";
 export const defaultStyle = css`
     :host {
         display: block;
-        font-family: var(--font-family);
+        font-family: var(--font-family), sans-serif;
         font-size: var(--font-size);
         color: var(--font-color);
     }

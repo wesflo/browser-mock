@@ -7,6 +7,8 @@ import "../../component/button";
 import "../../component/switch";
 import "../../component/select";
 import "../../component/input";
+import "../../component/options";
+import "../../component/textarea";
 
 export class ViewDefault extends LitElement {
     @property({type: String}) error: string = '';
@@ -15,7 +17,7 @@ export class ViewDefault extends LitElement {
 
     render() {
         return html`
-            <wf-switch>Label switch </wf-switch>
+            <wf-switch>Label switch</wf-switch>
             <wf-input label="Label text"> </wf-input>
             <wf-input type="password" label="Label password"></wf-input>
             <wf-select label="Label select">
@@ -23,6 +25,17 @@ export class ViewDefault extends LitElement {
                 <option value="Herr">Herr</option>
                 <option value="Frau">Frau</option>
             </wf-select>
+            <wf-textarea label="Textarea Label"></wf-textarea>
+            
+            <wf-options name="foo" multiple>
+                <wf-option value="1">Label checkbox 1</wf-option>
+                <wf-option value="2">Label checkbox 2</wf-option>
+            </wf-options>
+            <wf-options name="bar">
+                <wf-option value="1">Label radio 1</wf-option>
+                <wf-option value="2">Label radio 2</wf-option>
+            </wf-options>
+            
             <wf-button>Label Button </wf-button>
         `;
     }

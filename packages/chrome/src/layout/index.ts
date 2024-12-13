@@ -63,13 +63,11 @@ export class BrowserMock extends LitElement {
 
     viewsMap = {
         [TAB_PROJECTS]: async () => {
-            console.log( 0 )
             await import("../views/projects");
             return html`
                 <wf-view-projects></wf-view-projects>`;
         },
         [TAB_CONFIG]: async () => {
-            console.log( 1 )
             await import("../views/config");
             return html`
                 <wf-view-config></wf-view-config>`;

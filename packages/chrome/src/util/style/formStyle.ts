@@ -5,24 +5,31 @@ export const formStyle = css`
     :host {
         position: relative;
     }
+    
+    textarea,
     select,
     input {
-       border-radius: 12px;
-       border: 1px solid var(--grey-5);
-       padding-top: 16px;
-       padding-inline: 16px 40px;
-       height: 54px;
-       width: 100%;
+        font-family: var(--font-family), sans-serif;
+        color: var(--font-color);
+        border-radius: 12px;
+        border: 1px solid var(--grey-5);
+        padding-top: 20px;
+        padding-bottom: 4px;
+        padding-inline: 16px 40px;
+        height: 54px;
+        width: 100%;
+        max-width: 100%;
         font-size: var(--font-size-l);
         outline: none;
-        
+
         &:focus-visible,
         &:focus {
             border-color: var(--primary);
             border-width: 2px;
         }
-   }
+    }
 
+    textarea,
     input {
         &:focus-visible,
         &:focus {
@@ -37,8 +44,7 @@ export const formStyle = css`
 export const labelStyle = css`
     label {
         position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
+        top: 20px;
         font-size: var(--font-size-l);
         inset-inline-start: 16px;
         max-width: 100%;
