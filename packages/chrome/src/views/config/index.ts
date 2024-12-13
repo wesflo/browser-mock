@@ -22,8 +22,11 @@ export class ViewDefault extends LitElement {
             <wf-input type="password" label="Label password"></wf-input>
             <wf-select label="Label select">
                 <option value="">Eins auswählen</option>
-                <option value="Herr">Herr</option>
-                <option value="Frau">Frau</option>
+                <option value="1">Foo 1</option>
+                <option value="2">Foo 2</option>
+                <option value="3">Foo 3</option>
+                <option value="4">Foo 4</option>
+                <option value="5">Foo 5</option>
             </wf-select>
             <wf-textarea label="Textarea Label"></wf-textarea>
             

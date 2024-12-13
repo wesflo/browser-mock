@@ -16,7 +16,11 @@ export default class Component extends LitElement {
 
     render() {
         return html`
-            <select id="select" class="${classMap({hide: !this.value})}" ?disabled="${this.disabled}" @change="${this.handleChange}">
+            <select 
+                    id="select" 
+                    class="${classMap({hide: !this.value})}" 
+                    ?disabled="${this.disabled}"
+                    @change="${this.handleChange}">
                 ${this.renderSelectOptions(this.childNodes)}
             </select>
             <label for="select" class="${classMap({active: this.value})}">${this.label}</label>
