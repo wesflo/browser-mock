@@ -1,11 +1,12 @@
 import { property } from 'lit/decorators.js';
 import {css, html, LitElement} from 'lit';
-
-import "../../component/button"
-import "../../component/switch"
-import "../../component/select"
 import {defaultStyle} from "../../util/style/defaultStyle";
 import {style} from "./style";
+
+import "../../component/button";
+import "../../component/switch";
+import "../../component/select";
+import "../../component/input";
 
 export class ViewDefault extends LitElement {
     @property({type: String}) error: string = '';
@@ -14,13 +15,15 @@ export class ViewDefault extends LitElement {
 
     render() {
         return html`
-            <wf-switch>Label text </wf-switch>
-            <wf-select label="Label text">
+            <wf-switch>Label switch </wf-switch>
+            <wf-input label="Label text"> </wf-input>
+            <wf-input type="password" label="Label password"></wf-input>
+            <wf-select label="Label select">
                 <option value="">Eins auswählen</option>
                 <option value="Herr">Herr</option>
                 <option value="Frau">Frau</option>
             </wf-select>
-            <wf-button>Label text </wf-button>
+            <wf-button>Label Button </wf-button>
         `;
     }
 }

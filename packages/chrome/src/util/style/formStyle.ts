@@ -9,9 +9,9 @@ export const formStyle = css`
     input {
        border-radius: 12px;
        border: 1px solid var(--grey-5);
-       padding-top: 12px;
+       padding-top: 16px;
        padding-inline: 16px 40px;
-       height: 48px;
+       height: 54px;
        width: 100%;
         font-size: var(--font-size-l);
         outline: none;
@@ -22,6 +22,16 @@ export const formStyle = css`
             border-width: 2px;
         }
    }
+
+    input {
+        &:focus-visible,
+        &:focus {
+            + label {
+                font-size: var(--font-size-s);
+                top: 12px;
+            }
+        }
+    }
 `
 
 export const labelStyle = css`
