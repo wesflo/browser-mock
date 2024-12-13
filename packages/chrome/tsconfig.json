@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+    "target": "ES2020",
+        "module": "es2022",
+        "moduleResolution": "node",
+        "noEmitOnError": true,
+        "lib": ["ESNext", "dom", "dom.iterable"],
+        "types": ["vitest/globals"],
+        "strict": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "experimentalDecorators": true,
+        "importHelpers": true,
+        "outDir": "out-tsc",
+        "sourceMap": true,
+        "inlineSources": true,
+        "rootDir": "../",
+        "incremental": true
+},
+    "include": ["**/*.ts"],
+    "exclude": ["test/**/*.ts", "build", "dist", "out-tsc", "node_modules"]
+}
