@@ -41,7 +41,9 @@ export const style = css`
         }
     }
 
-    
+    .tabs {
+        padding: 16px 8px;
+    }
     
     
 `

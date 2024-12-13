@@ -23,7 +23,7 @@ export const style = css`
         border: 2px solid transparent;
         cursor: pointer;
         border-radius: 999em;
-        transition: background-color 300ms ease-in-out;
+        transition: all 300ms ease-in-out;
     }
 
     .xs {
@@ -62,6 +62,7 @@ export const style = css`
         &:focus,
         &:focus-visible {
             background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
         }
     }
 
@@ -73,6 +74,7 @@ export const style = css`
         &:focus,
         &:focus-visible {
             background-color: var(--secondary-dark);
+            border-color: var(--secondary-dark);
         }
     }
 
@@ -84,6 +86,7 @@ export const style = css`
         &:focus,
         &:focus-visible {
             background-color: var(--tertiary-dark);
+            border-color: var(--tertiary-dark);
         }
     }
 
@@ -109,6 +112,36 @@ export const style = css`
         &:focus,
         &:focus-visible {
             background-color: #f1f1f1;
+        }
+    }
+
+    .primary-clean {
+        color: var(--primary);
+
+        &:hover,
+        &:focus,
+        &:focus-visible {
+            color: var(--primary-dark);
+        }
+    }
+
+    .secondary-clean {
+        color: var(--secondary);
+
+        &:hover,
+        &:focus,
+        &:focus-visible {
+            color: var(--secondary-dark);
+        }
+    }
+
+    .tertiary-clean {
+        color: var(--tertiary);
+
+        &:hover,
+        &:focus,
+        &:focus-visible {
+            color: var(--tertiary-dark);
         }
     }
 `

@@ -14,7 +14,7 @@ import {resetStyle} from "../util/style/resetStyle";
 export class BrowserMock extends LitElement {
     @property({type: Boolean}) hidePrice: boolean = false;
 
-    @property({type: String}) currentView: TCurrentView = TAB_PROJECTS; // Default view
+    @property({type: String}) currentView: TCurrentView = TAB_CONFIG; // Default view
 
     tabs = [
         TAB_PROJECTS,

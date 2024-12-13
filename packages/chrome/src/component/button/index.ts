@@ -4,7 +4,7 @@ import {TAppearance, TSize, TType} from "./interface";
 import {defaultStyle} from "../../util/style/defaultStyle";
 import {style} from "./style";
 
-class CTA extends LitElement {
+export default class Component extends LitElement {
     @property({ type: Boolean }) disabled: boolean = false;
     @property({ type: String }) appearance: TAppearance = 'primary';
     @property({ type: String }) type: TType = 'button';
@@ -13,7 +13,6 @@ class CTA extends LitElement {
     @property({ type: String }) target: string = '_self';
     @property({ type: Function }) onClick: () => void;
 
-    @query('#cta') _button!: HTMLButtonElement;
 
     static styles = [defaultStyle, style];
 
@@ -39,5 +38,5 @@ class CTA extends LitElement {
 }
 
 if (!customElements.get('wf-button')) {
-    customElements.define('wf-button', CTA);
+    customElements.define('wf-button', Component);
 }

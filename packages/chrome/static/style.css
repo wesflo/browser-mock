@@ -1,4 +1,7 @@
-
+body,html {
+    padding: 0;
+    margin: 0;
+}
 :root {
     --primary: #009CFD;
     --secondary: #A665F0;
@@ -14,10 +17,9 @@
     --grey-9: #636363;
     --grey-11: #444;
 
-
     --font-size: 14px;
     --font-size-s: 12px;
     --font-size-l: 16px;
-    --font-color: #444;
+    --font-color: var(--grey-9);
     --font-family: "Gill Sans Extrabold", sans-serif;
 }
