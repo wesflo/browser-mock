@@ -39,6 +39,11 @@ export const style = css`
                 color: var(--primary);
             }
         }
+        
+        wf-switch {
+            padding-top: 6px;
+            margin-left: auto;
+        }
     }
 
     .tabs {

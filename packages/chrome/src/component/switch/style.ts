@@ -7,12 +7,11 @@ export const style = css`
         appearance: none;
         margin: 0;
 
-        &:focus-visible,
-        &:focus {
+        &:focus-visible {
             outline: none;
 
             + label {
-                border: 2px solid var(--secondary);
+                box-shadow: 0 0 1px 2px var(--secondary);
             }
         }
 

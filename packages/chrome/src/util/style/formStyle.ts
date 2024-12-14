@@ -22,8 +22,7 @@ export const formStyle = css`
         font-size: var(--font-size-l);
         outline: none;
 
-        &:focus-visible,
-        &:focus {
+        &:focus-visible, &:focus {
             border-color: var(--secondary);
             border-width: 2px;
         }

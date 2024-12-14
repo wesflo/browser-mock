@@ -12,13 +12,11 @@ export const style = css`
         appearance: none;
         margin: 0;
 
-        &:focus-visible,
-        &:focus {
+        &:focus-visible {
             outline: none;
 
             + label span {
-                border-width: 2px;
-                border-color: var(--secondary);
+                box-shadow: 0 0 1px 2px var(--secondary);
             }
         }
     }
@@ -32,6 +30,7 @@ export const style = css`
         transform: unset;
         inset-inline-start: unset;
         padding-top: 2px;
+        overflow: visible;
 
         span {
             position: relative;

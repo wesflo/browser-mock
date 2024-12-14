@@ -22,6 +22,6 @@ export class ErrorAsync extends LitElement {
     }
 }
 
-if (!customElements.get('wf-error-async')) {
-    customElements.define('wf-error-async', ErrorAsync);
+if (!customElements.get('wf-error')) {
+    customElements.define('wf-error', ErrorAsync);
 }

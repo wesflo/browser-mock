@@ -6,13 +6,13 @@ import {TAB_CONFIG, TAB_PROJECTS} from "./constant";
 import {TCurrentView} from "./interface";
 import {style} from "./style";
 import i18n from "../i18n.json";
-import "../views/error";
-import "../views/projects";
 import {defaultStyle} from "../util/style/defaultStyle";
 import {resetStyle} from "../util/style/resetStyle";
+import "../component/switch";
+import "../views/error";
 
 export class BrowserMock extends LitElement {
-    @property({type: Boolean}) hidePrice: boolean = false;
+    @property({type: Boolean, reflect: true}) bmIsActive: boolean = false;
 
     @property({type: String}) currentView: TCurrentView = TAB_PROJECTS; // Default view
 
@@ -56,7 +56,7 @@ export class BrowserMock extends LitElement {
                     </div>
                 `,
                 error: (e) => html`
-                    <wf-error-async error="${e}"></wf-error-async>`,
+                    <wf-error error="${e}"></wf-error>`,
             }),
         ];
     }
@@ -84,8 +84,15 @@ export class BrowserMock extends LitElement {
     `
 
     renderButtons = () => html`
-        
+        <wf-switch .onChange="${this.handleToggleBm}">
+            ${this.bmIsActive ? 'Deaktivieren' : 'Aktivieren'}
+        </wf-switch>
     `
+
+    handleToggleBm = () => {
+        this.bmIsActive = !this.bmIsActive;
+        console.log( this.bmIsActive )
+    }
 
     handleToast = ({detail}: any) => {
 
