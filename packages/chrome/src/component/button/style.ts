@@ -54,6 +54,17 @@ export const style = css`
         color: #fff;
     }
 
+    .none {
+        background-color: rgba(0,0,0, 0);
+        border-color: rgba(0,0,0, 0);
+        
+        &:hover,
+        &:focus,
+        &:focus-visible {
+            background-color: rgba(0,0,0, .1);
+        }
+    }
+
     .primary {
         background-color: var(--primary);
         border-color: var(--primary);

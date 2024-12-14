@@ -1,0 +1,1 @@
+export type TNotificationTypes = 'success' | 'error';

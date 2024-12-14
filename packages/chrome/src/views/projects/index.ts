@@ -1,12 +1,16 @@
 import { property, queryAll } from 'lit/decorators.js';
 import { html, LitElement} from 'lit';
-import "../../component/button";
 import {defaultStyle} from "../../util/style/defaultStyle";
 import {style} from "./style";
-import "../../component/collapse";
 import {openOnlyOneCollapse} from "../../component/collapse/util/openOnlyOneCollapse";
+import "../../component/button";
+import "../../component/collapse";
+import "../../component/toast";
+import {toastFactory} from "../../component/toast/util/toastFactory";
+import {TNotificationTypes} from "../../component/toast/interface";
 
 export class ViewDefault extends LitElement {
+    toastHandler = toastFactory()
     @property({type: String}) error: string = '';
 
     @queryAll('wf-collapse') collapses: NodeListOf<HTMLElement>;
@@ -45,11 +49,22 @@ export class ViewDefault extends LitElement {
                     Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
                 </p>
             </wf-collapse>
+            <wf-toast appearance="success">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr
+            </wf-toast>
+            <wf-toast appearance="error">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr
+            </wf-toast>
+            <wf-button .onClick="${this.addToast}">Add toast(s)</wf-button>
         `;
     }
 
     handleToggleCollapse = (isOpen: boolean, id) => {
         isOpen && openOnlyOneCollapse(this.collapses, id)
+    }
+
+    addToast = () => {
+        this.toastHandler.add('Lorem ipsum dolor sit amet', ['error', 'success'][Math.round(Math.random())] as TNotificationTypes)
     }
 }
 

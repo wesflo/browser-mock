@@ -10,12 +10,21 @@ body,html {
     --secondary-dark: #8149c2;
     --tertiary-dark: #5dd1da;
 
+    --success: #007944;
+    --success-bg: #00c9a1;
+    --warning: #dc5c03;
+    --warning-bg: #ffab00;
+    --error: #b41b1b;
+    --error-bg: #ff5457;
+
+    --grey-0: #fff;
     --grey-1: #f1f1f1;
     --grey-3: #d4d4d4;
     --grey-5: #b4b4b4;
     --grey-7: #909090;
     --grey-9: #636363;
     --grey-11: #444;
+    --grey-100: #000;
 
     --font-size: 14px;
     --font-size-s: 12px;
