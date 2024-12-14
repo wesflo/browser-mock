@@ -24,7 +24,8 @@ export default class Component extends LitElement {
         const value = item.getAttribute('value');
         const checked = this.value.includes(value);
         return html`
-            <input
+            <div>
+                <input
                     id="${id}"
                     type="${this.type}"
                     name="${this.name}"
@@ -33,10 +34,11 @@ export default class Component extends LitElement {
                     ?checked="${checked}"
                     @change="${this.handleChange}"
             />
-            <label for="${id}" tabindex="0">
+            <label for="${id}">
                 <span></span>
                 ${item.innerHTML}
             </label>
+            </div>
         `
     }
 

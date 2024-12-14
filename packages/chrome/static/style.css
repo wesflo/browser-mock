@@ -22,4 +22,8 @@ body,html {
     --font-size-l: 16px;
     --font-color: var(--grey-9);
     --font-family: "Gill Sans Extrabold", sans-serif;
+
+    --collapse-padding: 16px 16px 32px;
+
+
 }

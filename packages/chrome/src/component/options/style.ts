@@ -2,12 +2,25 @@ import {css} from "lit";
 
 export const style = css`
     :host {
-        display: flex;
-        gap: 16px 32px;
-        flex-wrap: nowrap;
+        display: grid;
+        grid-gap: 16px 32px;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     }
+    
     input {
-        display: none;
+        opacity: 0;
+        appearance: none;
+        margin: 0;
+
+        &:focus-visible,
+        &:focus {
+            outline: none;
+
+            + label span {
+                border-width: 2px;
+                border-color: var(--secondary);
+            }
+        }
     }
 
     label {
@@ -46,26 +59,18 @@ export const style = css`
                 transition: opacity 200ms ease-out;
             }
         }
-
-        &:focus-visible,
-        &:focus {
-            outline: none;
-            
-            span {
-                border-width: 2px;
-            }
-        }
     }
 
     input[type="checkbox"] + label span {
         border-radius: 6px;
+        
         &:before {
             border-radius: 4px;
         }
     }
 
     input:checked + label span {
-        border-color: var(--primary);
+        border-color: var(--primary) !important;
         border-width: 2px;
 
         &:before {

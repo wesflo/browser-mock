@@ -21,7 +21,7 @@ export default class Component extends LitElement {
     }
 
     protected renderButton = () => html`
-        <button class="cta ${this.appearance} ${this.size}" type="${this.type}" @click(${this.handleClick})>
+        <button class="cta ${this.appearance} ${this.size}" type="${this.type}" @click="${this.handleClick}">
             <slot></slot>
         </button>
     `;

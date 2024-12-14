@@ -145,3 +145,21 @@ export const style = css`
         }
     }
 `
+
+export const buttonsWrapperStyles = css`
+    .buttons {
+        display: flex;
+        gap: 16px;
+    
+        &.right {
+            justify-content: right;
+        }
+    
+        &.center {
+            justify-content: center;
+        }
+    }
+    wf-button {
+        margin: 0 !important;
+    }
+`
