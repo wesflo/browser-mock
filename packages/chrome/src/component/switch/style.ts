@@ -35,6 +35,7 @@ export const style = css`
         top: unset;
         transform: unset;
         inset-inline-start: unset;
+        overflow: visible;
     }
 
     span {
@@ -67,8 +68,7 @@ export const style = css`
             height: 24px;
             border-radius: 50%;
             background: var(--grey-7);
-            box-shadow:  1px 1px 4px 0px rgba(0,0,0,0.2);;
-            //box-shadow:  rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px;
+            box-shadow: var(--box-shadow);
         }
     }
 `

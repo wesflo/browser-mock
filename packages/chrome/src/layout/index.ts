@@ -1,5 +1,5 @@
-import {css, html, LitElement} from "lit";
-import {property, query} from "lit/decorators.js";
+import {html, LitElement} from "lit";
+import {property} from "lit/decorators.js";
 import {classMap} from "lit-html/directives/class-map.js";
 import {Task} from '@lit/task';
 import {TAB_CONFIG, TAB_PROJECTS} from "./constant";
@@ -9,6 +9,7 @@ import i18n from "../i18n.json";
 import {defaultStyle} from "../util/style/defaultStyle";
 import {resetStyle} from "../util/style/resetStyle";
 import "../component/switch";
+import "../component/progress";
 import "../views/error";
 
 export class BrowserMock extends LitElement {
@@ -49,11 +50,12 @@ export class BrowserMock extends LitElement {
             `,
             this.viewLoadTask.render({
                 pending: () => html`
-                    <wf-spinner active></wf-spinner>`,
+                    <wf-progress visible></wf-progress>`,
                 complete: (page) => html`
                     <div class="tabs">
                         ${page}
                     </div>
+                    <wf-progress visible></wf-progress>
                 `,
                 error: (e) => html`
                     <wf-error error="${e}"></wf-error>`,

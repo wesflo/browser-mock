@@ -17,9 +17,11 @@ export const toastFactory = () => {
 
     const remove = (id) => {
         const toast = document.getElementById(id) as any;
-        toast.style.marginLeft = '-120%';
-        clearTimeout(toast.to)
-        setTimeout(() => toast.remove(), 500)
+        if(toast) {
+            toast.style.marginLeft = '-120%';
+            clearTimeout(toast.to)
+            setTimeout(() => toast.remove(), 500)
+        }
     };
 
     const getTarget = () :HTMLDivElement => {

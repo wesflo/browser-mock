@@ -66,6 +66,7 @@ export const style = css`
         top: 50%;
         transition: transform 260ms ease-in-out;
         transform: translateY(-50%) rotate(90deg);
+        filter: drop-shadow(1px 2px 2px rgba(0, 0, 0, .2 ));
     }
      
     #cnt {
