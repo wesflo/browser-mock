@@ -11,7 +11,7 @@ export const formStyle = css`
     input {
         font-family: var(--font-family), sans-serif;
         color: var(--font-color);
-        border-radius: 8px;
+        border-radius: var(--border-radius);
         border: 1px solid var(--grey-5);
         padding-top: 20px;
         padding-bottom: 4px;

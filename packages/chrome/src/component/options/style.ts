@@ -2,9 +2,9 @@ import {css} from "lit";
 
 export const style = css`
     :host {
-        display: grid;
-        grid-gap: 16px 32px;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        display: flex;
+        gap: 16px 32px;
+        flex-wrap: nowrap;
     }
     
     input {

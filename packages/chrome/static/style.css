@@ -30,8 +30,12 @@ body,html {
     --font-size-s: 12px;
     --font-size-l: 16px;
     --font-color: var(--grey-9);
+    --font-color-iverse: var(--grey-1);
     --font-family: "Gill Sans Extrabold", sans-serif;
 
+    --main-bg: #fff;
+
+    --border-radius: 8px;
     --collapse-padding: 16px 16px 32px;
     --box-shadow: 0 2px 6px rgba(0,0,0,0.18), 0 2px 6px rgba(0,0,0,0.24);
 

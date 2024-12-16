@@ -1,19 +1,17 @@
 import {property} from 'lit/decorators.js';
 import {html, LitElement} from 'lit';
 import {defaultStyle} from "../../util/style/defaultStyle";
-import {labelStyle} from "../../util/style/formStyle";
 import {style} from "./style";
 import {filter} from "../../util/nodeListHelper";
+import {ifDefined} from "lit-html/directives/if-defined.js";
 
 export default class Component extends LitElement {
-    @property({type: String}) value: string | string[] = [];
+    @property({type: String}) value?: string;
     @property({type: String}) name?: string;
     @property({type: Boolean}) disabled: boolean = false;
     @property({type: Function}) onChange: (value: typeof this.value) => void;
 
-    type!: 'radio' | 'checkbox';
-
-    static styles = [defaultStyle, labelStyle, style];
+    static styles = [defaultStyle, style];
 
     render = () => filter(this.childNodes, (item: Element) => item.nodeName === 'WF-OPTION')
             .map((item, index) => this.renderOption(item, index));
@@ -21,58 +19,47 @@ export default class Component extends LitElement {
     renderOption(item: HTMLInputElement, index: number) {
         const id = `input-${index}`;
         const value = item.getAttribute('value');
-        const checked = this.value.includes(value);
+        const appearance = item.getAttribute('appearance');
+        const checked = this.value === value;
+console.log( this.value , value )
         return html`
-            <div>
+            <div class="${ifDefined(appearance)}">
                 <input
                     id="${id}"
-                    type="${this.type}"
-                    name="${this.name}"
+                    type="radio"
+                    name="options"
                     value="${value}"
                     ?disabled="${this.disabled}"
                     ?checked="${checked}"
                     @change="${this.handleChange}"
                 />
                 <label for="${id}">
-                    <span></span>
-                    ${item.innerHTML}
+                    ${item.cloneNode(true)}
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                            <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/>
+                        </svg>
+                    </span>
                 </label>
             </div>
         `
     }
 
     connectedCallback() {
-        this.type = this.hasAttribute('multiple') ? 'checkbox' : 'radio'
         super.connectedCallback();
-    }
-
-    changeHandlerMap: {[key: typeof this.type]: (value: string) => void} = {
-        radio: (value) => {
-            if(value !== this.value) {
-                this.value = value;
-            }
-        },
-        checkbox: (value) => {
-            const index = this.value.indexOf(value);
-            if(index === -1) {
-                (this.value as string[]).push(value);
-            } else {
-                (this.value as string[]).splice(index, 1);
-            }
-        }
     }
 
     handleChange = ({ target }: Event) => {
         const { value } = target as HTMLSelectElement;
-        if(this.disabled) {
+        if(this.disabled || value === this.value) {
             return;
         }
-        this.changeHandlerMap[this.type](value);
+        this.value = value;
         this.onChange && this.onChange(this.value);
     }
 }
 
-if (!customElements.get('wf-options')) {
-    customElements.define('wf-options', Component);
+if (!customElements.get('wf-option-picker')) {
+    customElements.define('wf-option-picker', Component);
 }
 
