@@ -8,42 +8,49 @@ export const style = css`
     
     nav {
         display: flex;
-        border-bottom: 1px solid var(--grey-3);
         flex-wrap: wrap;
-        padding: 0 8px;
+        background-color: var(--primary);
+        font-size: var(--font-size-l);
+        font-weight: bold;
         
         a {
-            padding: 14px 16px 8px;
-            color: var(--font-color);
-            border: 1px solid var(--grey-3);
-            margin-bottom: -1px;
-            transition: all 400ms ease-in-out;
+            position: relative;
+            padding: 16px 24px 14px;
+            color: var(--font-color-iverse);
+            background-color: var(--primary);
+            transition: background-color 400ms ease-in-out;
             
-            &:not(:first-child) {
-                border-left: 0;
-            }
-            
-            &:first-child {
-                border-top-left-radius: 4px;
-            }
-            
-            &:last-of-type {
-                border-top-right-radius: 4px;
+            &:after {
+                content: '';
+                display: block;
+                width: 0;
+                height: 4px;
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                opacity: 0;
+                background-color: var(--font-color-iverse);
+                transition: all 400ms ease-in-out;
             }
             
             &.active {
-                border-bottom-color: #fff;
-                color: var(--secondary);
+                background-color: var(--primary-bright);
             }
             
             &:hover {
-                color: var(--primary);
+                
+                &:after {
+                    opacity: 1;
+                    width: 100%;
+                }
             }
         }
         
         wf-switch {
-            padding-top: 6px;
+            padding: 10px 24px 0 0;
             margin-left: auto;
+            width: 177px;
         }
     }
 

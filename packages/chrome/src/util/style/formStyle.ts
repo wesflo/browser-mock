@@ -58,4 +58,10 @@ export const labelStyle = css`
         font-size: var(--font-size-s);
         top: 12px;
     }
+
+    :host([inverse]) {
+        label {
+            color: var(--font-color-iverse);
+        }
+    }
 `

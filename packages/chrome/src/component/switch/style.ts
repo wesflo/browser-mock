@@ -1,6 +1,7 @@
 import {css} from "lit";
 
 export const style = css`
+    
     input {
         position: absolute;
         opacity: 0;
@@ -69,6 +70,29 @@ export const style = css`
             border-radius: 50%;
             background: var(--grey-7);
             box-shadow: var(--box-shadow);
+        }
+    }
+
+    :host([inverse]) {
+        input {
+            &:checked + label span {
+                &:before {
+                    background: var(--primary-inverse);
+                }
+
+                &:after {
+                    background: var(--primary-inverse);
+                }
+            }
+        }
+        span {
+            &:before {
+            background: var(--grey-3);
+        }
+
+            &:after {
+                background: var(--grey-5);
+            }
         }
     }
 `

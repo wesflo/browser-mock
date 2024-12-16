@@ -86,7 +86,7 @@ export class BrowserMock extends LitElement {
     `
 
     renderButtons = () => html`
-        <wf-switch .onChange="${this.handleToggleBm}">
+        <wf-switch .onChange="${this.handleToggleBm}" inverse>
             ${this.bmIsActive ? 'Deaktivieren' : 'Aktivieren'}
         </wf-switch>
     `
