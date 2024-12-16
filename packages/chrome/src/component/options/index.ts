@@ -33,11 +33,11 @@ export default class Component extends LitElement {
                     ?disabled="${this.disabled}"
                     ?checked="${checked}"
                     @change="${this.handleChange}"
-            />
-            <label for="${id}">
-                <span></span>
-                ${item.innerHTML}
-            </label>
+                />
+                <label for="${id}">
+                    <span></span>
+                    ${item.innerHTML}
+                </label>
             </div>
         `
     }
