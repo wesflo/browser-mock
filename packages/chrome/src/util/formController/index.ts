@@ -9,7 +9,7 @@ export class FormController<T, N> {
     values: Partial<T>;
     invalidFields: string[] = [];
 
-    valide: boolean = !!this.invalidFields.length;
+    private _isValide: boolean = !this.invalidFields.length;
 
     constructor(host: N, checks: IChecks<T>) {
         this.host = host;
@@ -53,7 +53,6 @@ export class FormController<T, N> {
 
         item.removeAttribute('error');
         this.invalidFields = this.invalidFields.filter((field) => field !== name);
-
         return true;
     }
 
@@ -68,6 +67,7 @@ export class FormController<T, N> {
     handleBlur: EventListener = (evt: CustomEvent) => {
         const {currentTarget} = evt;
         this.validateFormField(evt.detail, currentTarget as HTMLElement);
+        this._isValide = !this.invalidFields.length;
     };
 
     addEventListeners = () => {
@@ -88,6 +88,10 @@ export class FormController<T, N> {
             }
             item.removeEventListener('onChange', this.handleChange);
         });
+    }
+
+    isValide = () => {
+        return this._isValide
     }
 
     hostConnected() {

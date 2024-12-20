@@ -99,7 +99,7 @@ export class ViewDefault extends LitElement {
     }
 
     handleFormSubmit = () => {
-        console.log( this.form )
+        console.log( this.form.isValide() )
     }
 
     handleOpenAll = () => openAllCollapses(this.collapses)
