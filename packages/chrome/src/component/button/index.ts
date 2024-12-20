@@ -11,7 +11,6 @@ export default class Component extends LitElement {
     @property({ type: String }) size: TSize = 'm';
     @property({ type: String }) href: string | null = null;
     @property({ type: String }) target: string = '_self';
-    @property({ type: Function }) onClick: () => void;
 
 
     static styles = [defaultStyle, style];
@@ -33,7 +32,7 @@ export default class Component extends LitElement {
     `;
 
     handleClick = () => {
-        this.onClick && this.onClick()
+        !this.disabled && this.dispatchEvent(new CustomEvent('onClick'));
     }
 }
 

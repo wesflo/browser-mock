@@ -1,15 +1,20 @@
 import { property, query } from 'lit/decorators.js';
-import { html, LitElement } from 'lit';
+import {html, LitElement, nothing} from 'lit';
 import {defaultStyle} from "../../util/style/defaultStyle";
 import {style} from "./style";
-import {labelStyle} from "../../util/style/formStyle";
+import {formErrorStyle, formHintStyle, labelStyle} from "../../util/style/formStyle";
+import {renderFormErrorMsg} from "../../util/render/renderFormErrorMsg";
+import {renderFormInputHint} from "../../util/render/renderFormInputHint";
+import {renderAsterisks} from "../../util/render/renderAsterisks";
 
 export default class Component extends LitElement {
-    @property({ type: Boolean }) checked: boolean = true;
+    @property({ type: Boolean, reflect: true }) checked: boolean = true;
     @property({ type: Boolean }) disabled: boolean = false;
-    @property({ type: Function }) onChange: (checked: typeof this.checked) => void;
+    @property({ type: Boolean }) required: boolean = false;
+    @property({ type: String }) error?: string;
+    @property({ type: String }) hint?: string;
 
-    static styles = [defaultStyle, labelStyle, style];
+    static styles = [defaultStyle, formHintStyle, formErrorStyle, labelStyle, style];
 
     render() {
         return html`
@@ -17,14 +22,17 @@ export default class Component extends LitElement {
             <label for="switch">
                 <span></span>
                 <slot></slot>
+                ${renderAsterisks(this.required)}
             </label>
+            ${renderFormErrorMsg(this.error)}
+            ${renderFormInputHint(this.hint)}
         `
     }
 
     handleChange = () => {
         if(!this.disabled) {
             this.checked = !this.checked;
-            this.onChange && this.onChange(this.checked)
+            this.dispatchEvent(new CustomEvent('onChange', {detail: this.checked}));
         }
     }
 }

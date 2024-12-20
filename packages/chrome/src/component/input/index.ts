@@ -1,18 +1,24 @@
 import {property} from 'lit/decorators.js';
-import {html, LitElement} from 'lit';
+import {html, LitElement, nothing} from 'lit';
 import {defaultStyle} from "../../util/style/defaultStyle";
-import {formStyle, labelStyle} from "../../util/style/formStyle";
+import {formErrorStyle, formHintStyle, formStyle, labelStyle} from "../../util/style/formStyle";
 import {style} from "./style";
 import {classMap} from "lit-html/directives/class-map.js";
+import {capitalizeFirstLetter} from "../../util/string/capitalizeFirstLetter";
+import {renderAsterisks} from "../../util/render/renderAsterisks";
+import {renderFormInputHint} from "../../util/render/renderFormInputHint";
+import {renderFormErrorMsg} from "../../util/render/renderFormErrorMsg";
 
 export default class Component extends LitElement {
     @property({type: String}) label!: string;
     @property({type: String}) type: string = 'text';
-    @property({type: String}) value?: string;
+    @property({type: String}) value: string = '';
     @property({type: Boolean}) disabled: boolean = false;
-    @property({type: Function}) onChange: (value: typeof this.value) => void;
+    @property({ type: Boolean }) required: boolean = false;
+    @property({ type: String }) error?: string;
+    @property({ type: String }) hint?: string;
 
-    static styles = [defaultStyle, formStyle, labelStyle, style];
+    static styles = [defaultStyle, formStyle, formHintStyle, formErrorStyle, labelStyle, style];
 
     render() {
         return html`
@@ -21,20 +27,30 @@ export default class Component extends LitElement {
                     type="${this.type}"
                     ?disabled="${this.disabled}"
                     value="${this.value}"
-                    @change="${this.handleChange}"
+                    @change="${this.handleDefaultEvents}"
+                    @blur="${this.handleDefaultEvents}"
+                    @input="${this.handleInput}"
             />
             <label for="input" class="${classMap({active: this.value})}">
                 ${this.label}
+                ${renderAsterisks(this.required)}
             </label>
+            ${renderFormErrorMsg(this.error)}
+            ${renderFormInputHint(this.hint)}
         `
     }
-    handleChange = ({ target }: Event) => {
+    handleDefaultEvents = (e: Event) => {
+        this.dispatchEvent(new CustomEvent(`on${capitalizeFirstLetter(e.type)}`, {detail: this.value}));
+    }
+
+    handleInput = ({ target }: Event) => {
         const { value } = target as HTMLSelectElement;
         if(this.disabled || value === this.value) {
             return;
         }
+
         this.value = value;
-        this.onChange && this.onChange(this.value)
+        this.dispatchEvent(new CustomEvent('onInput', {detail: this.value}));
     }
 }
 

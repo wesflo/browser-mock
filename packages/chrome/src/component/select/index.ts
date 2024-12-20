@@ -1,18 +1,24 @@
 import {property} from 'lit/decorators.js';
-import {html, LitElement} from 'lit';
+import {html, LitElement, nothing} from 'lit';
 import {defaultStyle} from "../../util/style/defaultStyle";
-import {formStyle, labelStyle} from "../../util/style/formStyle";
+import {formErrorStyle, formHintStyle, formStyle, labelStyle} from "../../util/style/formStyle";
 import {style} from "./style";
 import {filter} from "../../util/nodeListHelper";
 import {classMap} from "lit-html/directives/class-map.js";
+import {ifDefined} from "lit-html/directives/if-defined.js";
+import {renderFormErrorMsg} from "../../util/render/renderFormErrorMsg";
+import {renderFormInputHint} from "../../util/render/renderFormInputHint";
+import {renderAsterisks} from "../../util/render/renderAsterisks";
 
 export default class Component extends LitElement {
     @property({type: String}) label!: string;
     @property({type: String}) value?: string;
     @property({type: Boolean}) disabled: boolean = false;
-    @property({type: Function}) onChange: (value: typeof this.value) => void;
+    @property({ type: Boolean }) required: boolean = false;
+    @property({ type: String }) error?: string;
+    @property({ type: String }) hint?: string;
 
-    static styles = [defaultStyle, formStyle, labelStyle, style];
+    static styles = [defaultStyle, formHintStyle, formErrorStyle, formStyle, labelStyle, style];
 
     render() {
         return html`
@@ -20,25 +26,33 @@ export default class Component extends LitElement {
                     id="select" 
                     class="${classMap({hide: !this.value})}" 
                     ?disabled="${this.disabled}"
-                    @change="${this.handleChange}">
+                    @change="${this.handleChange}"
+            >
                 ${this.renderSelectOptions(this.childNodes)}
             </select>
-            <label for="select" class="${classMap({active: this.value})}">${this.label}</label>
+            <label for="select" class="${classMap({active: this.value})}">
+                ${this.label}
+                ${renderAsterisks(this.required)}
+            </label>
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"><path d="M480-360 280-560h400L480-360Z"/></svg>
+            ${renderFormErrorMsg(this.error)}
+            ${renderFormInputHint(this.hint)}
         `
     }
 
     renderSelectOptions = (nodeList: NodeList) => {
-        return filter(nodeList, (item: Element) => item.nodeName === 'OPTION')
-            .map((item: HTMLOptionElement) => html`
+        return filter(nodeList, (item: Element) => item.nodeName === 'WF-OPTION')
+            .map((item: HTMLOptionElement) => {
+                const value = item.getAttribute('value')
+                return html`
                     <option 
-                            value="${item.value ? item.value : ''}"
-                            ?selected="${this.value === item.value}"
+                            value="${ifDefined(value)}"
+                            ?selected="${this.value === value}"
                     >
                         ${item.innerHTML}
                     </option>
                 `
-            );
+                });
     }
 
     handleChange = ({ target }: Event) => {
@@ -47,7 +61,7 @@ export default class Component extends LitElement {
             return;
         }
         this.value = value;
-        this.onChange && this.onChange(this.value)
+        this.dispatchEvent(new CustomEvent('onChange', {detail: this.value}));
     }
 }
 

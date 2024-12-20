@@ -13,11 +13,21 @@ import "../../component/input";
 import "../../component/options";
 import "../../component/textarea";
 import "../../component/collapse";
+import {FormController} from "../../util/formController";
+import {IFormValues} from "./interface";
+import {inputFieldTypes} from "../../util/formController/constant";
+import {required} from "../../util/formController/validators/required";
+import {minLength} from "../../util/formController/validators/minLength";
 
 export class ViewDefault extends LitElement {
     @property({type: String}) error: string = '';
 
     @queryAll('wf-collapse') collapses: NodeListOf<HTMLElement>;
+    @queryAll(inputFieldTypes.join(',')) inputFields: NodeListOf<HTMLElement>;
+
+    form: FormController<IFormValues, ViewDefault> = new FormController(this, {
+        text: [required, minLength],
+    });
 
     static styles = [defaultStyle, buttonsWrapperStyles, style];
 
@@ -28,29 +38,32 @@ export class ViewDefault extends LitElement {
                 <wf-button .onClick="${this.handleCloseAll}">Close All</wf-button>
             </div>
             <wf-collapse title="Collapse Dummy" isOpen >
-                <wf-switch>Label switch</wf-switch>
-                <wf-input label="Label text"> </wf-input>
-                <wf-input type="password" label="Label password"></wf-input>
-                <wf-select label="Label select">
-                    <option value="">Eins auswählen</option>
-                    <option value="1">Foo 1</option>
-                    <option value="2">Foo 2</option>
-                    <option value="3">Foo 3</option>
-                    <option value="4">Foo 4</option>
-                    <option value="5">Foo 5</option>
+                <wf-switch name="switch">Label switch</wf-switch>
+                
+                <wf-input name="text" min-length="5" label="Label text" required></wf-input>
+                <wf-input naem="pwd" type="password" label="Label password" required></wf-input>
+                
+                <wf-select name="select" label="Label select" required @onBlur="${() => console.log( 'blur' )}" @onChange="${() => console.log( 'change' )}" >
+                    <wf-option value="">Eins auswählen</wf-option>
+                    <wf-option value="1">Foo 1</wf-option>
+                    <wf-option value="2">Foo 2</wf-option>
+                    <wf-option value="3">Foo 3</wf-option>
+                    <wf-option value="4">Foo 4</wf-option>
+                    <wf-option value="5">Foo 5</wf-option>
                 </wf-select>
-                <wf-textarea label="Textarea Label"></wf-textarea>
+                
+                <wf-textarea name="textarea" label="Textarea Label" required @onBlur="${() => console.log( 'blur' )}" @onChange="${() => console.log( 'change' )}" ></wf-textarea>
 
-                <wf-options name="foo" multiple>
+                <wf-options name="checkboxes" label="Checkboxes" multiple required @onBlur="${() => console.log( 'blur' )}" @onChange="${() => console.log( 'change' )}" >
                     <wf-option value="1">Label checkbox 1</wf-option>
                     <wf-option value="2">Label checkbox 2</wf-option>
                 </wf-options>
-                <wf-options name="bar">
+                <wf-options name="radio" label="Radios" required @onBlur="${() => console.log( 'blur' )}" @onChange="${() => console.log( 'change' )}" >
                     <wf-option value="1">Label radio 1</wf-option>
                     <wf-option value="2">Label radio 2</wf-option>
                 </wf-options>
 
-                <wf-button>Label Button </wf-button>
+                <wf-button @onClick="${this.handleFormSubmit}">Label Button </wf-button>
             </wf-collapse>
             <wf-collapse title="Collapse Dummy">
                 <h1>Stet clita kasd gubergren</h1>
@@ -83,6 +96,10 @@ export class ViewDefault extends LitElement {
                 </p>
             </wf-collapse>
         `;
+    }
+
+    handleFormSubmit = () => {
+        console.log( this.form )
     }
 
     handleOpenAll = () => openAllCollapses(this.collapses)

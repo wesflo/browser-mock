@@ -15,7 +15,7 @@ import "../views/error";
 export class BrowserMock extends LitElement {
     @property({type: Boolean, reflect: true}) bmIsActive: boolean = false;
 
-    @property({type: String}) currentView: TCurrentView = TAB_PROJECTS; // Default view
+    @property({type: String}) currentView: TCurrentView = TAB_CONFIG; // Default view
 
     tabs = [
         TAB_PROJECTS,
@@ -93,7 +93,6 @@ export class BrowserMock extends LitElement {
 
     handleToggleBm = () => {
         this.bmIsActive = !this.bmIsActive;
-        console.log( this.bmIsActive )
     }
 
     handleToast = ({detail}: any) => {

@@ -21,7 +21,7 @@ export default class Component extends LitElement {
         const value = item.getAttribute('value');
         const appearance = item.getAttribute('appearance');
         const checked = this.value === value;
-console.log( this.value , value )
+
         return html`
             <div class="${ifDefined(appearance)}">
                 <input

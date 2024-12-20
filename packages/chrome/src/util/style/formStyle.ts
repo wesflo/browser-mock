@@ -34,7 +34,7 @@ export const formStyle = css`
         &:focus {
             + label {
                 font-size: var(--font-size-s);
-                top: 12px;
+                top: 8px;
             }
         }
     }
@@ -56,12 +56,44 @@ export const labelStyle = css`
     
     label.active {
         font-size: var(--font-size-s);
-        top: 12px;
+        top: 8px;
     }
 
     :host([inverse]) {
         label {
             color: var(--font-color-iverse);
+        }
+    }
+    
+    .asterisks {
+        color: var(--grey-3);
+    }
+`
+
+export const formHintStyle = css`
+    .hint {
+        display: block;
+        padding: 4px 0 0 8px;
+        font-size: var(--font-size-s);
+        color: var(--grey-3);
+    }
+`
+
+export const formErrorStyle = css`
+    .err {
+        display: block;
+        padding: 4px 0 0 8px;
+        color: var(--error);
+    }
+
+    :host([error]) {
+        label {
+            color: var(--error);
+        }
+        textarea,
+        select,
+        input {
+            border-color: var(--error);
         }
     }
 `
