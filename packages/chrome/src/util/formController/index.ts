@@ -1,6 +1,11 @@
 import {forEach} from "../nodeListHelper";
 import {errorMessages, inputFieldTypesChangeOnly} from "./constant";
-import {ICheckObj, IChecks, TChecks} from "./interface";
+import {ICheckObj, IChecks, TChecks, TDefaultCheckAttributes} from "./interface";
+import {required} from "./validators/required";
+import {min} from "./validators/min";
+import {max} from "./validators/max";
+import {minLength} from "./validators/minLength";
+import {maxLength} from "./validators/maxLength";
 
 export class FormController<T, N> {
     private host: N;
@@ -11,9 +16,10 @@ export class FormController<T, N> {
 
     private _isValide: boolean = !this.invalidFields.length;
 
-    constructor(host: N, checks: IChecks<T>) {
+    constructor(host: N, checks?: IChecks<T>) {
         this.host = host;
-        this.checks = checks;
+        checks && (this.checks = checks);
+
         host.addController(this);
     }
 
@@ -21,21 +27,20 @@ export class FormController<T, N> {
         const name = item.getAttribute('name');
         const checks: TChecks = this.checks[name];
 
-        if(!checks) {
+        if (!checks) {
             return true;
         }
-
-        for(let i = 0; i < checks.length; i++) {
+        for (let i = 0; i < checks.length; i++) {
             const check = checks[i];
             let {fn: checkFn, errorMsg, ...args} = check as ICheckObj;
 
-            if(typeof check === 'function') {
+            if (typeof check === 'function') {
                 checkFn = check;
             }
 
-            const isValid =  checkFn(value, item);
+            const isValid = checkFn(value, item);
 
-            if(!isValid) {
+            if (!isValid) {
                 const key = checkFn.name;
                 !this.invalidFields.includes(name) && this.invalidFields.push(name);
                 errorMsg = errorMsg || errorMessages[key] as string;
@@ -71,31 +76,86 @@ export class FormController<T, N> {
     };
 
     addEventListeners = () => {
-        forEach(this.host.inputFields, (item: Element) => {
-            if (!inputFieldTypesChangeOnly.includes(item.nodeName.toLowerCase())) {
-                item.addEventListener('onBlur', this.handleBlur);
-                item.addEventListener('onInput', this.handleInput);
-            }
-            item.addEventListener('onChange', this.handleChange);
-        });
+        this.toggleEventListeners(true);
     }
 
     removeEventListeners = () => {
+        this.toggleEventListeners(false);
+    }
+
+    toggleEventListeners = (add: boolean) => {
+        const funcName = add ? 'addEventListener' : 'removeEventListener';
         forEach(this.host.inputFields, (item: Element) => {
             if (!inputFieldTypesChangeOnly.includes(item.nodeName.toLowerCase())) {
-                item.removeEventListener('onBlur', this.handleBlur);
-                item.removeEventListener('onInput', this.handleInput);
+                item[funcName]('onBlur', this.handleBlur);
+                item[funcName]('onInput', this.handleInput);
             }
-            item.removeEventListener('onChange', this.handleChange);
+            item[funcName]('onChange', this.handleChange);
         });
+    }
+
+    setInitialChecks = () => {
+        forEach(this.host.inputFields, (item: Element) => {
+            const name = item.getAttribute('name');
+            const defaults = this.getDefaultValidationAttributes(item);
+            const checks: TChecks[] = this.checks[name] || [];
+            defaults.forEach((key) => this.addCheckToArray(key, checks));
+
+            this.checks[name] = checks;
+        });
+    }
+
+    defaultCheckMap = {
+        required: required,
+        min: min,
+        max: max,
+        minLength: minLength,
+        maxLength: maxLength,
+    }
+
+    addCheckToArray = (key: string, checks: TChecks[]) => {
+        const check = this.defaultCheckMap[key];
+
+        if (!checks.includes(check)) {
+            checks.push(check);
+        }
+        return checks;
+    }
+
+    getDefaultValidationAttributes = (item: Element) => {
+        const arr: TDefaultCheckAttributes = [];
+        const required = item.hasAttribute('required');
+        const min = item.hasAttribute('min');
+        const max = item.hasAttribute('max');
+        const minLength = item.hasAttribute('min-length');
+        const maxLength = item.hasAttribute('max-length');
+
+        required && arr.push('required');
+        min && arr.push('min');
+        max && arr.push('max');
+        minLength && arr.push('minLength');
+        maxLength && arr.push('maxLength');
+
+        return arr
     }
 
     isValide = () => {
         return this._isValide
     }
 
+    validate = () => {
+        forEach(this.host.inputFields, (item: Element) => {
+            const {value} = item as HTMLInputElement;
+            this.validateFormField(value, item as HTMLElement);
+        });
+        return this.isValide();
+    }
+
     hostConnected() {
-        setTimeout(this.addEventListeners, 1);
+        setTimeout(() => {
+            this.addEventListeners();
+            this.setInitialChecks();
+        }, 1);
     }
 
     hostDisconnected() {

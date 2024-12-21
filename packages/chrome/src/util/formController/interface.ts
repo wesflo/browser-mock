@@ -11,3 +11,5 @@ export interface ICheckObj {
 export interface IChecks<T> {
     [key: keyof Partial<T>]: TChecks;
 }
+
+export type TDefaultCheckAttributes = ('required' | 'min' | 'max' | 'minLength' | 'maxLength')[];

@@ -19,11 +19,13 @@ import {IFormValues} from "./interface";
 import {inputFieldTypes} from "../../util/formController/constant";
 import {required} from "../../util/formController/validators/required";
 import {minLength} from "../../util/formController/validators/minLength";
+import {resizeCollapses} from "../../component/collapse/util/resizeCollapses";
+import CollapseComponent from "../../component/collapse";
 
 export class ViewDefault extends LitElement {
     @property({type: String}) error: string = '';
 
-    @queryAll('wf-collapse') collapses: NodeListOf<HTMLElement>;
+    @queryAll('wf-collapse') collapses: NodeListOf<CollapseComponent>;
     @queryAll(inputFieldTypes.join(',')) inputFields: NodeListOf<HTMLElement>;
 
     form: FormController<IFormValues, ViewDefault> = new FormController(this, {
@@ -102,7 +104,8 @@ export class ViewDefault extends LitElement {
     }
 
     handleFormSubmit = () => {
-        console.log( this.form.isValide() )
+        console.log( this.form.validate() )
+        resizeCollapses(this.collapses);
     }
 
     handleOpenAll = () => openAllCollapses(this.collapses)

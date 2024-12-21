@@ -1,5 +1,6 @@
 import {forEach} from "../../../util/nodeListHelper";
+import Component from "../index";
 
-export const openOnlyOneCollapse = (collapses, openId) => {
-    forEach(collapses, (collapse: HTMLElement) => collapse.id !== openId && collapse.removeAttribute('isOpen'))
+export const openOnlyOneCollapse = (collapses: NodeListOf<Component>, openId) => {
+    forEach(collapses, (collapse: Component) => collapse.id !== openId && collapse.removeAttribute('isOpen'))
 }
