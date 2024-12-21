@@ -13,6 +13,7 @@ import {capitalizeFirstLetter} from "../../util/string/capitalizeFirstLetter";
 export default class Component extends LitElement {
     @property({type: String}) label!: string;
     @property({type: String}) type: string = 'text';
+    @property({type: String}) accept: string = '.json';
     @property({type: String}) value: File[] = [];
     @property({type: Boolean}) multiple: boolean = false;
     @property({type: Boolean}) disabled: boolean = false;
@@ -28,7 +29,7 @@ export default class Component extends LitElement {
 
     render() {
         return html`
-            <wf-button @onClick="${this.handleBtnClick}" size="s" appearance="none" ?disabled="${this.disabled}">
+            <wf-button @onClick="${this.handleBtnClick}" size="inherit" appearance="none" ?disabled="${this.disabled}">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" >
                     <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/>
                 </svg>
@@ -42,6 +43,7 @@ export default class Component extends LitElement {
                 value="${this.value}"
                 ?multiple="${this.multiple}"
                 ?disabled="${this.disabled}"
+                accept="${this.accept}"
                 @change="${this.handleInput}"
             />
             <label for="input" class="${classMap({active: this.value.length})}">

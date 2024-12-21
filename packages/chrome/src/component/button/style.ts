@@ -50,6 +50,14 @@ export const style = css`
         font-size: var(--font-size-l);
     }
 
+    .inherit {
+        padding: inherit;
+        font-size: inherit;
+        width: inherit;
+        height: inherit;
+        border-radius: inherit;
+    }
+
     .primary, .secondary, .tertiary {
         color: #fff;
     }

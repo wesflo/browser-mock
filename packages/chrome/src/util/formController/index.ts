@@ -8,15 +8,15 @@ import {minLength} from "./validators/minLength";
 import {maxLength} from "./validators/maxLength";
 
 export class FormController<T, N> {
-    private host: N;
+    private host: T;
 
-    checks: IChecks<T>;
-    values: Partial<T>;
+    checks: IChecks<N> = [];
+    values: Partial<N>;
     invalidFields: string[] = [];
 
     private _isValide: boolean = !this.invalidFields.length;
 
-    constructor(host: N, checks?: IChecks<T>) {
+    constructor(host: T, checks?: IChecks<N>) {
         this.host = host;
         checks && (this.checks = checks);
 
@@ -148,6 +148,7 @@ export class FormController<T, N> {
             const {value} = item as HTMLInputElement;
             this.validateFormField(value, item as HTMLElement);
         });
+        this._isValide = !this.invalidFields.length;
         return this.isValide();
     }
 

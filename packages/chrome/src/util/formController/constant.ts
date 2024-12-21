@@ -4,6 +4,7 @@ export const inputFieldTypes = [
     'wf-select',
     'wf-textarea',
     'wf-options',
+    'wf-file',
 ]
 
 export const inputFieldTypesChangeOnly = [
