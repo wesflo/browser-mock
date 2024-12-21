@@ -12,6 +12,7 @@ import "../../component/select";
 import "../../component/input";
 import "../../component/options";
 import "../../component/textarea";
+import "../../component/file";
 import "../../component/collapse";
 import {FormController} from "../../util/formController";
 import {IFormValues} from "./interface";
@@ -62,6 +63,8 @@ export class ViewDefault extends LitElement {
                     <wf-option value="1">Label radio 1</wf-option>
                     <wf-option value="2">Label radio 2</wf-option>
                 </wf-options>
+                
+                <wf-file name="file" label="Label File" accept=".png,.pdf" multiple required></wf-file>
 
                 <wf-button @onClick="${this.handleFormSubmit}">Label Button </wf-button>
             </wf-collapse>

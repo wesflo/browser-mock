@@ -8,6 +8,7 @@ import {capitalizeFirstLetter} from "../../util/string/capitalizeFirstLetter";
 import {renderAsterisks} from "../../util/render/renderAsterisks";
 import {renderFormInputHint} from "../../util/render/renderFormInputHint";
 import {renderFormErrorMsg} from "../../util/render/renderFormErrorMsg";
+import {FormFieldController} from "../../util/formField";
 
 export default class Component extends LitElement {
     @property({type: String}) label!: string;
@@ -18,6 +19,8 @@ export default class Component extends LitElement {
     @property({ type: String }) error?: string;
     @property({ type: String }) hint?: string;
 
+    input: FormFieldController<Component> = new FormFieldController(this);
+
     static styles = [defaultStyle, formStyle, formHintStyle, formErrorStyle, labelStyle, style];
 
     render() {
@@ -27,9 +30,9 @@ export default class Component extends LitElement {
                     type="${this.type}"
                     ?disabled="${this.disabled}"
                     value="${this.value}"
-                    @change="${this.handleDefaultEvents}"
-                    @blur="${this.handleDefaultEvents}"
-                    @input="${this.handleInput}"
+                    @change="${this.input.handleInput}"
+                    @blur="${this.input.handleInput}"
+                    @input="${this.input.handleInput}"
             />
             <label for="input" class="${classMap({active: this.value})}">
                 ${this.label}
@@ -39,19 +42,7 @@ export default class Component extends LitElement {
             ${renderFormInputHint(this.hint)}
         `
     }
-    handleDefaultEvents = (e: Event) => {
-        this.dispatchEvent(new CustomEvent(`on${capitalizeFirstLetter(e.type)}`, {detail: this.value}));
-    }
 
-    handleInput = ({ target }: Event) => {
-        const { value } = target as HTMLSelectElement;
-        if(this.disabled || value === this.value) {
-            return;
-        }
-
-        this.value = value;
-        this.dispatchEvent(new CustomEvent('onInput', {detail: this.value}));
-    }
 }
 
 if (!customElements.get('wf-input')) {

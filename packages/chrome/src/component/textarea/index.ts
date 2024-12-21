@@ -8,6 +8,7 @@ import {renderFormErrorMsg} from "../../util/render/renderFormErrorMsg";
 import {renderFormInputHint} from "../../util/render/renderFormInputHint";
 import {renderAsterisks} from "../../util/render/renderAsterisks";
 import {capitalizeFirstLetter} from "../../util/string/capitalizeFirstLetter";
+import {FormFieldController} from "../../util/formField";
 
 export default class Component extends LitElement {
     @property({type: String}) label!: string;
@@ -18,6 +19,8 @@ export default class Component extends LitElement {
     @property({ type: String }) error?: string;
     @property({ type: String }) hint?: string;
 
+    input: FormFieldController<Component> = new FormFieldController(this);
+
     static styles = [defaultStyle, formHintStyle, formErrorStyle, formStyle, labelStyle, style];
 
     render() {
@@ -25,9 +28,9 @@ export default class Component extends LitElement {
             <textarea 
                     id="textarea" 
                     ?disabled="${this.disabled}"
-                    @change="${this.handleDefaultEvents}"
-                    @blur="${this.handleDefaultEvents}"
-                    @input="${this.handleInput}"
+                    @change="${this.input.handleInput}"
+                    @blur="${this.input.handleInput}"
+                    @input="${this.input.handleInput}"
             >${this.value}</textarea>
             <label for="textarea" class="${classMap({active: this.value})}">
                 ${this.label}
@@ -36,18 +39,6 @@ export default class Component extends LitElement {
             ${renderFormErrorMsg(this.error)}
             ${renderFormInputHint(this.hint)}
         `
-    }
-    handleInput = ({ target }: Event) => {
-        const { value } = target as HTMLSelectElement;
-        if(this.disabled || value === this.value) {
-            return;
-        }
-        this.value = value;
-        this.dispatchEvent(new CustomEvent('onInput', {detail: this.value}));
-    }
-
-    handleDefaultEvents = (e: Event) => {
-        this.dispatchEvent(new CustomEvent(`on${capitalizeFirstLetter(e.type)}`, {detail: this.value}));
     }
 }
 

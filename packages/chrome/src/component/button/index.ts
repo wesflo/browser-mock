@@ -26,7 +26,7 @@ export default class Component extends LitElement {
     `;
 
     protected renderLink = () => html`
-        <a href="${this.disabled ? 'javascript:void(0)' : this.href}" class="cta ${this.appearance} ${this.size}" target="${this.target}" @click(${this.handleClick})>
+        <a href="${this.disabled ? 'javascript:void(0)' : this.href}" class="cta ${this.appearance} ${this.size}" target="${this.target}" @click="${this.handleClick}")>
             <slot></slot>
         </a>
     `;
