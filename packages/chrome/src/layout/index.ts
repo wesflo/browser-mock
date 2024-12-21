@@ -2,7 +2,7 @@ import {html, LitElement} from "lit";
 import {property} from "lit/decorators.js";
 import {classMap} from "lit-html/directives/class-map.js";
 import {Task} from '@lit/task';
-import {TAB_CONFIG, TAB_PROJECTS} from "./constant";
+import {TAB_API_CALLS, TAB_PROJECTS, TABS} from "./constant";
 import {TCurrentView} from "./interface";
 import {style} from "./style";
 import i18n from "../i18n.json";
@@ -15,12 +15,7 @@ import "../views/error";
 export class BrowserMock extends LitElement {
     @property({type: Boolean, reflect: true}) bmIsActive: boolean = false;
 
-    @property({type: String}) currentView: TCurrentView = TAB_CONFIG; // Default view
-
-    tabs = [
-        TAB_PROJECTS,
-        TAB_CONFIG
-    ];
+    @property({type: String}) currentView: TCurrentView = TAB_PROJECTS; // Default view
 
     static styles = [resetStyle, defaultStyle, style];
     async connectedCallback() {
@@ -44,7 +39,7 @@ export class BrowserMock extends LitElement {
         return [
             html`
                 <nav>
-                    ${this.tabs.map(this.renderTabLink)}
+                    ${TABS.map(this.renderTabLink)}
                     ${this.renderButtons()}
                 </nav>
             `,
@@ -55,7 +50,6 @@ export class BrowserMock extends LitElement {
                     <div class="tabs">
                         ${page}
                     </div>
-                    <wf-progress visible></wf-progress>
                 `,
                 error: (e) => html`
                     <wf-error error="${e}"></wf-error>`,
@@ -69,8 +63,8 @@ export class BrowserMock extends LitElement {
             return html`
                 <wf-view-projects></wf-view-projects>`;
         },
-        [TAB_CONFIG]: async () => {
-            await import("../views/config");
+        [TAB_API_CALLS]: async () => {
+            await import("../views/apiCalls");
             return html`
                 <wf-view-config></wf-view-config>`;
         },
@@ -86,12 +80,11 @@ export class BrowserMock extends LitElement {
     `
 
     renderButtons = () => html`
-        <wf-switch .onChange="${this.handleToggleBm}" inverse>
-            ${this.bmIsActive ? 'Deaktivieren' : 'Aktivieren'}
-        </wf-switch>
+        <wf-switch @onChange="${this.handleToggleBm}" inverse></wf-switch>
     `
 
     handleToggleBm = () => {
+        console.log( 1 )
         this.bmIsActive = !this.bmIsActive;
     }
 

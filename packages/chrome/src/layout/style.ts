@@ -48,9 +48,8 @@ export const style = css`
         }
         
         wf-switch {
-            padding: 10px 24px 0 0;
+            padding: 10px 16px 0 0;
             margin-left: auto;
-            width: 177px;
         }
     }
 
