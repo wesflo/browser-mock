@@ -64,7 +64,7 @@ export class BrowserMock extends LitElement {
                 <wf-view-projects></wf-view-projects>`;
         },
         [TAB_API_CALLS]: async () => {
-            await import("../views/apiCalls");
+            await import("../views/apis");
             return html`
                 <wf-view-config></wf-view-config>`;
         },
@@ -84,7 +84,6 @@ export class BrowserMock extends LitElement {
     `
 
     handleToggleBm = () => {
-        console.log( 1 )
         this.bmIsActive = !this.bmIsActive;
     }
 

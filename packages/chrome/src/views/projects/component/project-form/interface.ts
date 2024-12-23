@@ -1,4 +1,5 @@
 export interface IFormValues {
-    name: boolean;
+    name: string;
+    path: string;
     config: File[];
 }

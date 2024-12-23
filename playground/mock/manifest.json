@@ -1,0 +1,16 @@
+{
+  "domains": [
+    "http://localhost:5174"
+  ],
+  "requests": [
+    {
+      "url": "/api/v1/health",
+      "method": "GET",
+      "response": {
+        "200": "./mock/health.json",
+        "201": "",
+        "400": "./mock/badRequest.json"
+      }
+    }
+  ]
+}

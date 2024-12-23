@@ -9,11 +9,17 @@ import "../../../../component/button";
 import "../../../../component/input";
 import "../../../../component/file";
 import {buttonsWrapperStyles} from "../../../../component/button/style";
+import { getStorageItem} from "../../../../util/storage";
+import {STORAGE_PROJECTS} from "../../../../constant";
+import {ifDefined} from "lit-html/directives/if-defined.js";
 
 export class Component extends LitElement {
     @property({type: String}) error: string = '';
+    @property({type: Boolean}) canDelete: boolean = false;
+    @property({type: String}) id!: string;
 
     @state() showForm: boolean = false;
+    @state() values?: IFormValues = {};
 
     @queryAll(inputFieldTypes.join(',')) inputFields: NodeListOf<HTMLElement>;
 
@@ -23,17 +29,37 @@ export class Component extends LitElement {
 
     render() {
         return html`
-            <wf-input name="name" label="Project Name" required></wf-input>
-            <wf-file name="config" label="Project mock config" accept=".json" required></wf-file>
+            <wf-input name="name" label="Project Name" value="${ifDefined(this.values.name)}"></wf-input>
+            <wf-input name="path" label="Absolut Path to manifest.json" value="${ifDefined(this.values.path)}"></wf-input>
+            <wf-file name="configFile" label="manifest.json" accept=".json" ></wf-file>
             <div class="buttons right">
+                ${this.canDelete ? html`<wf-button @onClick="${this.handleDelete}" appearance="secondary-outline" size="l">delete</wf-button>` : nothing}
                 <wf-button @onClick="${this.handleFormSubmit}" size="l">Save</wf-button>
             </div>
         `;
     }
 
+    async connectedCallback() {
+        const projects = await getStorageItem(STORAGE_PROJECTS) || {};
+
+        if(!this.id) {
+            this.id = `${Object.keys(projects).length + 1}`;
+        } else {
+            this.values = projects[this.id];
+        }
+
+        super.connectedCallback();
+    }
+
+    handleDelete = () => {
+         this.dispatchEvent(new CustomEvent('onDelete'));
+    }
+
     handleFormSubmit = () => {
         if(this.form.validate()) {
-            this.dispatchEvent(new CustomEvent('onSubmit', {detail: this.form.values}));
+            const data: any = this.form.getValues();
+            data.id = this.id;
+            this.dispatchEvent(new CustomEvent('onSubmit', {detail: data}));
         }
     }
 }

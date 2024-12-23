@@ -24,30 +24,52 @@ export const style = css`
         cursor: pointer;
         border-radius: 999em;
         transition: all 300ms ease-in-out;
+        background-color: transparent;
     }
 
+    ::slotted(svg) {
+        width: 24px;
+        height: 24px;
+        fill: var(--grey-0);
+    }
+    
+    .xs,
+    .s {
+        font-size: var(--font-size-s);
+
+        svg {
+            width: 18px;
+            height: 18px;
+        }
+    }
     .xs {
         padding: 2px 8px;
-        font-size: var(--font-size-s);
     }
 
     .s {
         padding: 4px 12px;
-        font-size: var(--font-size-s);
     }
 
     .m {
         padding: 8px 16px;
     }
 
+    .l,
+    .xl {
+        font-size: var(--font-size-l);
+
+        svg {
+            width: 32px;
+            height: 32px;
+        }
+    }
+
     .l {
         padding: 12px 24px;
-        font-size: var(--font-size-l);
     }
 
     .xl {
         padding: 16px 36px;
-        font-size: var(--font-size-l);
     }
 
     .inherit {
@@ -59,24 +81,28 @@ export const style = css`
     }
 
     .primary, .secondary, .tertiary {
-        color: #fff;
+        color: var(--grey-0);
     }
 
     .none {
         background-color: rgba(0,0,0, 0);
         border-color: rgba(0,0,0, 0);
-        
+
         &:hover,
         &:focus,
         &:focus-visible {
-            background-color: rgba(0,0,0, .1);
+            background-color: var(--primary-inverse);
+        }
+
+        svg {
+            fill: var(--grey-7);
         }
     }
 
     .primary {
         background-color: var(--primary);
         border-color: var(--primary);
-        
+
         &:hover,
         &:focus,
         &:focus-visible {
@@ -109,33 +135,13 @@ export const style = css`
         }
     }
 
-    .primary-outline {
-        border-color: var(--primary);
-        color: var(--primary);
-    }
-
-    .secondary-outline {
-        border-color: var(--secondary);
-        color: var(--secondary);
-    }
-
-    .tertiary-outline {
-        border-color: var(--tertiary);
-        color: var(--tertiary);
-    }
-
     .primary-outline,
-    .secondary-outline,
-    .tertiary-outline {
-        &:hover,
-        &:focus,
-        &:focus-visible {
-            background-color: #f1f1f1;
-        }
-    }
-
     .primary-clean {
         color: var(--primary);
+
+        svg {
+            fill: var(--primary);
+        }
 
         &:hover,
         &:focus,
@@ -144,23 +150,57 @@ export const style = css`
         }
     }
 
-    .secondary-clean {
-        color: var(--secondary);
+    .primary-outline {
+        border-color: var(--primary);
 
         &:hover,
         &:focus,
         &:focus-visible {
-            color: var(--secondary-dark);
+            border-color: var(--secondary-dark);
         }
     }
 
+    .secondary-outline,
+    .secondary-clean {
+        color: var(--secondary);
+
+        svg {
+            fill: var(--secondary);
+        }
+
+        &:hover,
+        &:focus,
+        &:focus-visible {
+            color: var(--primary-dark);
+        }
+    }
+    
+    .secondary-outline {
+        border-color: var(--secondary);
+    }
+
+    .tertiary-outline,
     .tertiary-clean {
         color: var(--tertiary);
+
+        svg {
+            fill: var(--tertiary);
+        }
 
         &:hover,
         &:focus,
         &:focus-visible {
             color: var(--tertiary-dark);
+        }
+    }
+    
+    .tertiary-outline {
+        border-color: var(--tertiary);
+
+        &:hover,
+        &:focus,
+        &:focus-visible {
+            border-color: var(--secondary-dark);
         }
     }
 `
@@ -169,11 +209,11 @@ export const buttonsWrapperStyles = css`
     .buttons {
         display: flex;
         gap: 16px;
-    
+
         &.right {
             justify-content: right;
         }
-    
+
         &.center {
             justify-content: center;
         }

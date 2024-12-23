@@ -55,12 +55,6 @@ export const style = css`
         width: 52px;
         border-radius: 0 var(--border-radius) var(--border-radius) 0;
         
-        svg {
-            width: 24px;
-            height: 24px;
-            fill: var(--primary);
-        }
-        
         &:focus-visible,
         &:focus {
             + .input {

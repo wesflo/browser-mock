@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "rm -rf ./node_modules/.vite && vite",
     "build": "rm -Rf ./dist && mkdir ./dist && vite build",
+    "cem": "cem analyze",
     "tsc": "tsc",
     "preview": "vite preview",
     "test": "vitest"
@@ -28,6 +29,7 @@
     "tslib": "^2.8.1"
   },
   "devDependencies": {
+    "@custom-elements-manifest/analyzer": "^0.10.4",
     "@testing-library/dom": "^10.4.0",
     "happy-dom": "^15.11.7",
     "jest-environment-jsdom": "^29.7.0",

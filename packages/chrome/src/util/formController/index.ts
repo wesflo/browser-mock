@@ -11,7 +11,7 @@ export class FormController<T, N> {
     private host: T;
 
     checks: IChecks<N> = [];
-    values: Partial<N>;
+    values: unknown = {};
     invalidFields: string[] = [];
 
     private _isValide: boolean = !this.invalidFields.length;
@@ -61,12 +61,12 @@ export class FormController<T, N> {
         return true;
     }
 
-    handleInput: EventListener = (evt: CustomEvent) => {
-        // console.log('handleInput', evt.detail );
+    handleInput: EventListener = ({currentTarget, detail}: CustomEvent) => {
+        this.setValue(currentTarget, detail);
     };
 
-    handleChange: EventListener = (evt: CustomEvent) => {
-        // console.log('handleChange', evt.detail );
+    handleChange: EventListener = ({currentTarget, detail}: CustomEvent) => {
+        this.setValue(currentTarget, detail);
     };
 
     handleBlur: EventListener = (evt: CustomEvent) => {
@@ -158,6 +158,12 @@ export class FormController<T, N> {
             this.setInitialChecks();
         }, 1);
     }
+
+    setValue = (item, value) => {
+        const key: keyof N = item.getAttribute('name');
+        this.values[key] = value;
+    };
+    getValues = () => this.values as Partial<N>;
 
     hostDisconnected() {
         this.removeEventListeners();
