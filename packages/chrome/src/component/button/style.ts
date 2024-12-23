@@ -156,7 +156,7 @@ export const style = css`
         &:hover,
         &:focus,
         &:focus-visible {
-            border-color: var(--secondary-dark);
+            border-color: var(--primary-dark);
         }
     }
 
@@ -171,12 +171,18 @@ export const style = css`
         &:hover,
         &:focus,
         &:focus-visible {
-            color: var(--primary-dark);
+            color: var(--secondary-dark);
         }
     }
     
     .secondary-outline {
         border-color: var(--secondary);
+
+        &:hover,
+        &:focus,
+        &:focus-visible {
+            border-color: var(--secondary-dark);
+        }
     }
 
     .tertiary-outline,
@@ -200,7 +206,7 @@ export const style = css`
         &:hover,
         &:focus,
         &:focus-visible {
-            border-color: var(--secondary-dark);
+            border-color: var(--tertiary-dark);
         }
     }
 `

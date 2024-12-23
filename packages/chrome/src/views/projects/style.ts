@@ -7,4 +7,8 @@ export const style = css`
         align-items: center;
         margin-bottom: 20px;
     }
+
+    wf-button {
+        margin-bottom: 16px;
+    }
 `
