@@ -31,13 +31,14 @@ export const style = css`
         width: 24px;
         height: 24px;
         fill: var(--grey-0);
+        transition: fill 300ms ease-in-out;
     }
     
     .xs,
     .s {
         font-size: var(--font-size-s);
 
-        svg {
+        ::slotted(svg) {
             width: 18px;
             height: 18px;
         }
@@ -58,7 +59,7 @@ export const style = css`
     .xl {
         font-size: var(--font-size-l);
 
-        svg {
+        ::slotted(svg) {
             width: 32px;
             height: 32px;
         }
@@ -84,7 +85,7 @@ export const style = css`
         color: var(--grey-0);
     }
 
-    .none {
+    .clean {
         background-color: rgba(0,0,0, 0);
         border-color: rgba(0,0,0, 0);
 
@@ -94,7 +95,7 @@ export const style = css`
             background-color: var(--primary-inverse);
         }
 
-        svg {
+        ::slotted(svg) {
             fill: var(--grey-7);
         }
     }
@@ -139,7 +140,7 @@ export const style = css`
     .primary-clean {
         color: var(--primary);
 
-        svg {
+        ::slotted(svg) {
             fill: var(--primary);
         }
 
@@ -147,6 +148,10 @@ export const style = css`
         &:focus,
         &:focus-visible {
             color: var(--primary-dark);
+
+            ::slotted(svg) {
+                fill: var(--primary-dark);
+            }
         }
     }
 
@@ -164,7 +169,7 @@ export const style = css`
     .secondary-clean {
         color: var(--secondary);
 
-        svg {
+        ::slotted(svg) {
             fill: var(--secondary);
         }
 
@@ -172,6 +177,10 @@ export const style = css`
         &:focus,
         &:focus-visible {
             color: var(--secondary-dark);
+
+            ::slotted(svg) {
+                fill: var(--secondary-dark);
+            }
         }
     }
     
@@ -189,7 +198,7 @@ export const style = css`
     .tertiary-clean {
         color: var(--tertiary);
 
-        svg {
+        ::slotted(svg) {
             fill: var(--tertiary);
         }
 
@@ -197,6 +206,9 @@ export const style = css`
         &:focus,
         &:focus-visible {
             color: var(--tertiary-dark);
+            ::slotted(svg) {
+                fill: var(--tertiary-dark);
+            }
         }
     }
     
@@ -223,8 +235,5 @@ export const buttonsWrapperStyles = css`
         &.center {
             justify-content: center;
         }
-    }
-    wf-button {
-        margin: 0 !important;
     }
 `

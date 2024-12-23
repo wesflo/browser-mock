@@ -15,11 +15,11 @@ import {ifDefined} from "lit-html/directives/if-defined.js";
 
 export class Component extends LitElement {
     @property({type: String}) error: string = '';
-    @property({type: Boolean}) canDelete: boolean = false;
+    @property({type: Boolean}) isUpdate: boolean = false;
     @property({type: String}) id!: string;
 
     @state() showForm: boolean = false;
-    @state() values?: IFormValues = {};
+    @state() values?: Partial<IFormValues> = {};
 
     @queryAll(inputFieldTypes.join(',')) inputFields: NodeListOf<HTMLElement>;
 
@@ -29,12 +29,13 @@ export class Component extends LitElement {
 
     render() {
         return html`
-            <wf-input name="name" label="Project Name" value="${ifDefined(this.values.name)}"></wf-input>
-            <wf-input name="path" label="Absolut Path to manifest.json" value="${ifDefined(this.values.path)}"></wf-input>
-            <wf-file name="configFile" label="manifest.json" accept=".json" ></wf-file>
+            <wf-input name="name" label="Project Name" value="${ifDefined(this.values.name)}" required></wf-input>
+            <wf-input name="path" label="Absolut Path to manifest.json" value="${ifDefined(this.values.path)}" required></wf-input>
+            <wf-file name="configFile" label="manifest.json" accept=".json" ?required="${!this.isUpdate}"></wf-file>
             <div class="buttons right">
-                ${this.canDelete ? html`<wf-button @onClick="${this.handleDelete}" appearance="secondary-outline" size="l">delete</wf-button>` : nothing}
-                <wf-button @onClick="${this.handleFormSubmit}" size="l">Save</wf-button>
+                ${this.isUpdate ? html`<wf-button @onClick="${this.handleDelete}" appearance="secondary-outline" size="l" style="margin-right: auto">delete</wf-button>` : nothing}
+                <wf-button @onClick="${this.handleCancel}" size="l" appearance="secondary-outline">cancel</wf-button>
+                <wf-button @onClick="${this.handleFormSubmit}" size="l">save</wf-button>
             </div>
         `;
     }
@@ -51,8 +52,12 @@ export class Component extends LitElement {
         super.connectedCallback();
     }
 
+    handleCancel = () => {
+         this.dispatchEvent(new CustomEvent('onCancel'));
+    }
+
     handleDelete = () => {
-         this.dispatchEvent(new CustomEvent('onDelete'));
+         this.dispatchEvent(new CustomEvent('onDelete', {detail: this.id}));
     }
 
     handleFormSubmit = () => {

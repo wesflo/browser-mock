@@ -152,18 +152,27 @@ export class FormController<T, N> {
         return this.isValide();
     }
 
-    hostConnected() {
-        setTimeout(() => {
-            this.addEventListeners();
-            this.setInitialChecks();
-        }, 1);
-    }
+    getValues = () => this.values as Partial<N>;
 
     setValue = (item, value) => {
         const key: keyof N = item.getAttribute('name');
         this.values[key] = value;
     };
-    getValues = () => this.values as Partial<N>;
+
+    setInitialValues = () => {
+        forEach(this.host.inputFields, (item: Element) => {
+            const {value} = item as HTMLInputElement;
+            this.setValue(item as HTMLElement, value);
+        });
+    }
+
+    hostConnected() {
+        setTimeout(() => {
+            this.addEventListeners();
+            this.setInitialChecks();
+            this.setInitialValues();
+        }, 1);
+    }
 
     hostDisconnected() {
         this.removeEventListeners();
