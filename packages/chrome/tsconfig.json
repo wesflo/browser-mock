@@ -5,7 +5,7 @@
         "moduleResolution": "node",
         "noEmitOnError": true,
         "lib": ["ESNext", "dom", "dom.iterable"],
-        "types": ["vitest/globals"],
+        "types": ["vitest/globals", "@types/chrome"],
         "strict": true,
         "resolveJsonModule": true,
         "esModuleInterop": true,
@@ -16,7 +16,8 @@
         "sourceMap": true,
         "inlineSources": true,
         "rootDir": "../",
-        "incremental": true
+        "incremental": true,
+        "skipLibCheck": true
 },
     "include": ["**/*.ts"],
     "exclude": ["test/**/*.ts", "build", "dist", "out-tsc", "node_modules"]

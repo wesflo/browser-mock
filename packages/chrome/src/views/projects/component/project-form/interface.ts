@@ -1,6 +1,5 @@
-export interface IFormValues {
-    name: string;
-    path: string;
-    id: string;
+import {IProject} from "../../../../interface";
+
+export interface IFormValues extends IProject{
     config: File[];
 }

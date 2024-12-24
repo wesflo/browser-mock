@@ -4,3 +4,4 @@
 */node_modules/
 .idea/
 /packages/chrome/dist/
+/packages/chrome/out-tsc/

@@ -48,7 +48,7 @@ export class FormController<T, N> {
                 patterns && patterns.forEach((pattern: string) => {
                     const attr: string = pattern.replace(/[{}]/g, '');
                     const val: string = item.getAttribute(attr) || 'n/a';
-                    errorMsg = errorMsg?.replace(pattern, val);
+                    errorMsg && (errorMsg = errorMsg.replace(pattern, val));
                 });
 
                 item.setAttribute('error', errorMsg);
