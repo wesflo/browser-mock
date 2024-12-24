@@ -1,11 +1,17 @@
 import {capitalizeFirstLetter} from "../string/capitalizeFirstLetter";
+import {LitElement, ReactiveController} from "lit";
 
-export class FormFieldController<T> {
+declare class FormField extends LitElement {
+    disabled: boolean;
+    value: unknown;
+}
+
+export class FormFieldController<T extends FormField> {
     private host: T;
 
     constructor(host: T) {
         this.host = host;
-        host.addController(this);
+        host.addController(this as ReactiveController);
     }
 
     handleInput = ({ target, type }: Event) => {

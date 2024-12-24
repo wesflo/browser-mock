@@ -4,7 +4,6 @@ import {defaultStyle} from "../../util/style/defaultStyle";
 import {formErrorStyle, formHintStyle, formStyle, labelStyle} from "../../util/style/formStyle";
 import {style} from "./style";
 import {classMap} from "lit-html/directives/class-map.js";
-import {capitalizeFirstLetter} from "../../util/string/capitalizeFirstLetter";
 import {renderAsterisks} from "../../util/render/renderAsterisks";
 import {renderFormInputHint} from "../../util/render/renderFormInputHint";
 import {renderFormErrorMsg} from "../../util/render/renderFormErrorMsg";

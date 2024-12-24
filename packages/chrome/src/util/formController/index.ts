@@ -1,22 +1,27 @@
 import {forEach} from "../nodeListHelper";
 import {errorMessages, inputFieldTypesChangeOnly} from "./constant";
-import {ICheckObj, IChecks, TChecks, TDefaultCheckAttributes} from "./interface";
+import {ICheckObj, TChecks, TCheckFn, TDefaultCheckAttributes} from "./interface";
 import {required} from "./validators/required";
 import {min} from "./validators/min";
 import {max} from "./validators/max";
 import {minLength} from "./validators/minLength";
 import {maxLength} from "./validators/maxLength";
+import {LitElement} from "lit";
 
-export class FormController<T, N> {
+declare class Form extends LitElement {
+    inputFields: NodeListOf<HTMLElement>;
+}
+
+export class FormController<T extends Form, N> {
     private host: T;
 
-    checks: IChecks<N> = [];
+    checks: TChecks = {};
     values: unknown = {};
     invalidFields: string[] = [];
 
     private _isValide: boolean = !this.invalidFields.length;
 
-    constructor(host: T, checks?: IChecks<N>) {
+    constructor(host: T, checks?: TChecks) {
         this.host = host;
         checks && (this.checks = checks);
 
@@ -25,7 +30,7 @@ export class FormController<T, N> {
 
     validateFormField = (value, item: HTMLElement): boolean => {
         const name = item.getAttribute('name');
-        const checks: TChecks = this.checks[name];
+        const checks: (TCheckFn | ICheckObj)[] = this.checks[name];
 
         if (!checks) {
             return true;
@@ -98,7 +103,7 @@ export class FormController<T, N> {
         forEach(this.host.inputFields, (item: Element) => {
             const name = item.getAttribute('name');
             const defaults = this.getDefaultValidationAttributes(item);
-            const checks: TChecks[] = this.checks[name] || [];
+            const checks: (TCheckFn | ICheckObj)[] = this.checks[name] || [];
             defaults.forEach((key) => this.addCheckToArray(key, checks));
 
             this.checks[name] = checks;
@@ -113,7 +118,7 @@ export class FormController<T, N> {
         maxLength: maxLength,
     }
 
-    addCheckToArray = (key: string, checks: TChecks[]) => {
+    addCheckToArray = (key: string, checks: (TCheckFn | ICheckObj)[]) => {
         const check = this.defaultCheckMap[key];
 
         if (!checks.includes(check)) {

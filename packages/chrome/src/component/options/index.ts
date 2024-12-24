@@ -64,7 +64,7 @@ export default class Component extends LitElement {
         super.connectedCallback();
     }
 
-    changeHandlerMap: {[key: typeof this.type]: (value: string) => void} = {
+    changeHandlerMap: {[key: string]: (value: string) => void} = {
         radio: (value) => {
             if(value !== this.value) {
                 this.value = value;
