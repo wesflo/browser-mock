@@ -12,6 +12,7 @@ import {buttonsWrapperStyles} from "../../../../component/button/style";
 import { getStorageItem} from "../../../../util/storage";
 import {STORAGE_PROJECTS} from "../../../../constant";
 import {ifDefined} from "lit-html/directives/if-defined.js";
+import {uid} from "../../../../util/uid";
 
 export class Component extends LitElement {
     @property({type: String}) error: string = '';
@@ -44,7 +45,7 @@ export class Component extends LitElement {
         const projects = await getStorageItem(STORAGE_PROJECTS) || {};
 
         if(!this.id) {
-            this.id = `${Object.keys(projects).length + 1}`;
+            this.id = uid();
         } else {
             this.values = projects[this.id];
         }

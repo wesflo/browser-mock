@@ -9,8 +9,8 @@ import {IFormValues} from "./component/project-form/interface";
 import {jsonFileContent} from "../../util/jsonFileContent";
 import {Task} from "@lit/task";
 import {TView} from "./interface";
-import {STORAGE_PROJECTS} from "../../constant";
-import {getStorageItem, mergeStorageItem, setStorageItem} from "../../util/storage";
+import {STORAGE_MANIFEST_PREFIX, STORAGE_PROJECT_PREFIX, STORAGE_PROJECTS} from "../../constant";
+import {getStorageItem, mergeStorageItem, removeStorageItem, setStorageItem} from "../../util/storage";
 import {ifDefined} from "lit-html/directives/if-defined.js";
 import "../../component/button";
 import "../../component/progress";
@@ -41,7 +41,7 @@ export class Component extends LitElement {
             ${this.viewTask.render({
                 pending: () => html`
                     <wf-progress></wf-progress>`,
-                complete: (tab) => tab,
+                complete: (view) => view,
                 error: (e) => html`
                     <wf-error error="${e}"></wf-error>`,
             })}
@@ -55,32 +55,34 @@ export class Component extends LitElement {
 
     handleFormSubmit = async ({detail: formValues}: CustomEvent<IFormValues>) => {
         const {name, configFile, id, path} = formValues;
-        const project = await getStorageItem(STORAGE_PROJECTS)?.[id] || {};
+        const projectMeta = await getStorageItem(STORAGE_PROJECTS)?.[id] || {};
         const pathPartials = path.replace('/manifest.json', '').split('/');
-        const data = {
+        const projectsData = {
             [id]: {
-                ...project,
+                ...projectMeta,
                 id,
                 name,
                 path,
                 pathPartials,
             }
         };
+        await mergeStorageItem(STORAGE_PROJECTS, projectsData);
+
 
         if (configFile && configFile.length !== 0) {
-            data[id].manifest = await jsonFileContent(configFile[0]);
+            const manifest = await jsonFileContent(configFile[0]);
+            await setStorageItem(STORAGE_MANIFEST_PREFIX + id, manifest);
         }
-
-        await mergeStorageItem(STORAGE_PROJECTS, data);
 
         this.setView(VIEW_LIST);
         this.toast.add('Project saved', 'success');
     }
 
-    handleDeleteProject = async ({detail}: CustomEvent) => {
+    handleDeleteProject = async ({detail: id}: CustomEvent) => {
         const projects = await getStorageItem(STORAGE_PROJECTS) || {};
-        delete projects[detail];
+        delete projects[id];
         await setStorageItem(STORAGE_PROJECTS, projects);
+        await removeStorageItem(STORAGE_MANIFEST_PREFIX + id)
         this.toast.add('Project deleted', 'success');
         this.setView(VIEW_LIST);
     }

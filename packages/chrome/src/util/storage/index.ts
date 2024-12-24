@@ -14,7 +14,7 @@ const setItem = async (key: string, data: Object) => {
     if(import.meta.env.MODE === MODE_DEV) {
         return window.sessionStorage.setItem(key, JSON.stringify(data));
     }
-console.log( key, data )
+
     return await chrome.storage.local.set({[key]: data});
 }
 
@@ -32,4 +32,12 @@ export const mergeStorageItem = async (key: string, obj: Object) => {
         ...sItem,
         ...obj,
     });
+}
+
+export const removeStorageItem = async (key: string) => {
+    if(import.meta.env.MODE === MODE_DEV) {
+        return window.sessionStorage.removeItem(key);
+    }
+
+    return await chrome.storage.local.remove(key);
 }

@@ -2,7 +2,7 @@ import {html, LitElement} from "lit";
 import {property} from "lit/decorators.js";
 import {classMap} from "lit-html/directives/class-map.js";
 import {Task} from '@lit/task';
-import {TAB_API_CALLS, TAB_PROJECTS, TABS} from "./constant";
+import {TAB_API_MOCKS, TAB_PROJECTS, TABS} from "./constant";
 import {TCurrentView} from "./interface";
 import {style} from "./style";
 import i18n from "../i18n.json";
@@ -15,7 +15,7 @@ import "../views/error";
 export class BrowserMock extends LitElement {
     @property({type: Boolean, reflect: true}) bmIsActive: boolean = false;
 
-    @property({type: String}) currentView: TCurrentView = TAB_PROJECTS; // Default view
+    @property({type: String}) currentView: TCurrentView = TAB_PROJECTS; // TAB_API_MOCKS; // Default view
 
     static styles = [resetStyle, defaultStyle, style];
     async connectedCallback() {
@@ -63,8 +63,8 @@ export class BrowserMock extends LitElement {
             return html`
                 <wf-view-projects></wf-view-projects>`;
         },
-        [TAB_API_CALLS]: async () => {
-            await import("../views/apis");
+        [TAB_API_MOCKS]: async () => {
+            await import("../views/mocks");
             return html`
                 <wf-view-config></wf-view-config>`;
         },

@@ -1,7 +1,7 @@
 export const TAB_PROJECTS = 'projects';
-export const TAB_API_CALLS = 'apiCalls';
+export const TAB_API_MOCKS = 'mocks';
 
 export const TABS = [
-    TAB_API_CALLS,
+    TAB_API_MOCKS,
     TAB_PROJECTS,
 ];
