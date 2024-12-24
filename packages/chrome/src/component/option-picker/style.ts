@@ -3,61 +3,43 @@ import {css} from "lit";
 export const style = css`
     :host {
         display: flex;
-        gap: 16px 32px;
+        gap: 16px;
         flex-wrap: nowrap;
+        position: relative;
     }
     
     input {
         opacity: 0;
         appearance: none;
         margin: 0;
+        position: absolute;
 
         &:focus-visible {
             outline: none;
         }
     }
-    h5 {
-        font-weight: bold;
-        font-size: var(--font-size-l);
-    }
-
+    
     label {
-        position: relative;
         cursor: pointer;
         display: inline-flex;
         align-items: center;
+        font-weight: bold;
+        font-size: var(--font-size-l);
         top: unset;
         transform: unset;
         inset-inline-start: unset;
-        border-radius: var(--border-radius);
-        border: 1px solid;
-        padding: 8px 0 8px 16px;
+        border-radius: 999em;
+        border: 1px solid var(--primary);
+        color: var(--primary);
+        padding: 8px 24px;
         background-color: var(--main-bg);
         transition: color 200ms ease-out, background-color 200ms ease-out;
-
-        span {
-            position: relative;
-            display: inline-block;
-            width: 0;
-            padding-left: 16px;
-            overflow: hidden;
-            transition: opacity 200ms ease-out, width 360ms ease-out;
-        }
-    }
-
-    svg {
-        width: 24px;
-        filter: drop-shadow(1px 2px 2px rgba(0, 0, 0, .2 ));
-        fill: var(--font-color-iverse);
+        overflow: hidden;
     }
 
     input:checked + label {
+        background-color: var(--primary-bright);
         color: var(--font-color-iverse);
-        
-        span {
-            opacity: 1;
-            width: 56px;
-        }
     }
     
     .success {

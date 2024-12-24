@@ -5,7 +5,7 @@ import {style} from "./style";
 import CollapseComponent from "../../component/collapse";
 import {textStyle} from "../../util/style/textStyle";
 import {VIEW_EDIT, VIEW_LIST, VIEW_NEW} from "./constant";
-import {IFormValues} from "./component/project-form/interface";
+import {IFormValues} from "./component/form/interface";
 import {jsonFileContent} from "../../util/jsonFileContent";
 import {Task} from "@lit/task";
 import {TView} from "./interface";
@@ -17,6 +17,7 @@ import "../../component/progress";
 import "../error";
 import {toastFactory} from "../../component/toast/util/toastFactory";
 import {IProject} from "../../interface";
+import {updateStorageProject} from "../../util/updateStorageProject";
 
 export class Component extends LitElement {
     @property({type: String}) error: string = '';
@@ -56,22 +57,18 @@ export class Component extends LitElement {
 
     handleFormSubmit = async ({detail: formValues}: CustomEvent<IFormValues>) => {
         const {name, configFile, id, path} = formValues;
-        const projectMeta = await getStorageItem(STORAGE_PROJECTS)?.[id] || {};
         const pathPartials = path.replace('/manifest.json', '').split('/');
-        const projectsData = {
-            [id]: {
-                ...projectMeta,
-                id,
-                name,
-                path,
-                pathPartials,
-            }
-        };
-        await mergeStorageItem(STORAGE_PROJECTS, projectsData);
 
+        updateStorageProject(id, {
+            id,
+            name,
+            path,
+            pathPartials,
+        });
 
         if (configFile && configFile.length !== 0) {
             const manifest = await jsonFileContent(configFile[0]);
+            manifest.active = true;
             await setStorageItem(STORAGE_MANIFEST_PREFIX + id, manifest);
         }
 
@@ -98,21 +95,21 @@ export class Component extends LitElement {
 
     views = {
         [VIEW_NEW]: () => {
-            import("./component/project-form");
+            import("./component/form");
             return html`
-                <wf-project-form @onSubmit="${this.handleFormSubmit}"></wf-project-form>`;
+                <wf-projects-form @onSubmit="${this.handleFormSubmit}"></wf-projects-form>`;
         },
         [VIEW_EDIT]: () => {
-            import("./component/project-form");
+            import("./component/form");
             return html`
-                <wf-project-form @onSubmit="${this.handleFormSubmit}" @onCancel="${this.handleCancel}"
+                <wf-projects-form @onSubmit="${this.handleFormSubmit}" @onCancel="${this.handleCancel}"
                                  @onDelete="${this.handleDeleteProject}" .values="${ifDefined(this.selectedProject)}"
-                                 isUpdate></wf-project-form>`
+                                 isUpdate></wf-projects-form>`
         },
         [VIEW_LIST]: () => {
-            import("./component/project-list");
+            import("./component/list");
             return html`
-                <wf-project-list @onEdit="${this.editProject}"></wf-project-list>`;
+                <wf-projects-list @onEdit="${this.editProject}"></wf-projects-list>`;
         }
     }
 

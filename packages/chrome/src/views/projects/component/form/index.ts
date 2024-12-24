@@ -63,6 +63,6 @@ export class Component extends LitElement {
     }
 }
 
-if (!customElements.get('wf-project-form')) {
-    customElements.define('wf-project-form', Component);
+if (!customElements.get('wf-projects-form')) {
+    customElements.define('wf-projects-form', Component);
 }

@@ -49,7 +49,7 @@ export default class Component extends LitElement {
                             value="${ifDefined(value)}"
                             ?selected="${this.value === value}"
                     >
-                        ${item.innerHTML}
+                        ${item.innerText}
                     </option>
                 `
                 });

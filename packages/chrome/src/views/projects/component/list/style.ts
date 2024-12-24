@@ -9,9 +9,18 @@ export const style = css`
         border: 1px solid var(--grey-5);
         border-radius: var(--border-radius);
         margin-bottom: 8px;
-        
+        cursor: pointer;
+        background-color: var(--main-bg);
+        transition: background-color 260ms ease-out;
+
         &:last-child {
             margin-bottom: 0;
+        }
+
+        &:hover,
+        &:focus,
+        &:focus-visible {
+            background-color: var(--primary-inverse);
         }
     }
 

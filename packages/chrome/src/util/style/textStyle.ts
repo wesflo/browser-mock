@@ -14,4 +14,15 @@ export const textStyle = css`
     h1 {
         font-size: 28px;
     }
+
+    dl {
+        dt, dd {
+            margin-bottom: 4px;
+        }
+        
+        dt {
+            font-weight: bold;
+            font-size: var(--font-size-s);
+        }
+    }
 `

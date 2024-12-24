@@ -15,25 +15,9 @@ import "../views/error";
 export class BrowserMock extends LitElement {
     @property({type: Boolean, reflect: true}) bmIsActive: boolean = false;
 
-    @property({type: String}) currentView: TCurrentView = TAB_PROJECTS; // TAB_API_MOCKS; // Default view
+    @property({type: String}) currentView: TCurrentView = TAB_API_MOCKS; // TAB_API_MOCKS; // TAB_PROJECTS //Default view
 
     static styles = [resetStyle, defaultStyle, style];
-    async connectedCallback() {
-        this.setInitialState();
-        window.addEventListener('updateToastMessage', this.handleToast);
-        super.connectedCallback();
-    }
-
-    disconnectedCallback() {
-        window.removeEventListener('updateToastMessage', this.handleToast);
-        super.disconnectedCallback();
-    }
-
-    setInitialState() {
-        // if (view) {
-        //     this.currentView = view;
-        // }
-    }
 
     render() {
         return [
@@ -66,7 +50,7 @@ export class BrowserMock extends LitElement {
         [TAB_API_MOCKS]: async () => {
             await import("../views/mocks");
             return html`
-                <wf-view-config></wf-view-config>`;
+                <wf-view-mocks></wf-view-mocks>`;
         },
     }
 
@@ -86,10 +70,6 @@ export class BrowserMock extends LitElement {
     handleToggleBm = () => {
         this.bmIsActive = !this.bmIsActive;
     }
-
-    handleToast = ({detail}: any) => {
-
-    };
 }
 
 

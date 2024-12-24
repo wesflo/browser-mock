@@ -11,6 +11,22 @@
         "201": "",
         "400": "./mock/badRequest.json"
       }
+    },
+    {
+      "url": "/api/v2/foo/[\\d]{1,10}",
+      "method": "POST",
+      "response": {
+        "200": "./mock/health.json",
+        "400": "./mock/badRequest.json"
+      }
+    },
+    {
+      "url": "/api/v1/return/[\\d]{4,10}/[\\d]{2,10}",
+      "method": "Put",
+      "response": {
+        "200": "./mock/health.json",
+        "400": "./mock/badRequest.json"
+      }
     }
   ]
 }

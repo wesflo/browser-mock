@@ -1,6 +1,10 @@
 import {css} from "lit";
 
 export const style = css`
+    :host {
+        position: relative;
+    }
+    
     label {
         position: unset;
         display: block;
@@ -55,6 +59,7 @@ export const style = css`
         opacity: 0;
         appearance: none;
         margin: 0;
+        position: absolute;
 
         &:focus-visible {
             outline: none;
