@@ -25,13 +25,13 @@ export interface IManifest {
     requests: IManifestRequest[];
 }
 
-export interface IActiveRequest {
+export interface IActiveMock {
     url: string;
     method: TRequestMethod;
     status: number;
     path: string;
 }
 
-export interface IActiveRequests {
-        [key: string]: IActiveRequest
+export interface IActiveMocks {
+        [key: string]: IActiveMock
 }

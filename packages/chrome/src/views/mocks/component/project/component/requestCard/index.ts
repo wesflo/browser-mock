@@ -3,7 +3,7 @@ import {html, LitElement} from 'lit';
 import {defaultStyle} from "../../../../../../util/style/defaultStyle";
 import {style} from "./style";
 import {textStyle} from "../../../../../../util/style/textStyle";
-import {IActiveRequest, IActiveRequests, IManifestRequest} from "../../../../../../interface";
+import {IActiveMock, IActiveMocks, IManifestRequest} from "../../../../../../interface";
 import "../../../../../../component/input";
 import "../../../../../../component/button";
 import "../../../../../../component/switch";
@@ -16,14 +16,14 @@ import {STORAGE_ACTIVE_REQUESTS} from "../../../../../../constant";
 
 export class Component extends LitElement {
     @property({type: Object}) req!: IManifestRequest;
-    @property({type: Array}) activeRequests!: IActiveRequests;
+    @property({type: Array}) activeMocks!: IActiveMocks;
     @property({type: String}) projectId!: string;
 
     @state() active!: boolean;
     @state() status!: number;
 
     statusArr: string[];
-    activeRequestId: string;
+    activeMockId: string;
 
     static styles = [defaultStyle, textStyle, style];
 
@@ -69,43 +69,41 @@ export class Component extends LitElement {
 
         const {req} = this;
         const statusArr = Object.keys(req.response);
-        const activeRequestId = generateRequestId(req);
+        const activeMockId = generateRequestId(req);
 
-        const activeRequest: IActiveRequest | null = this.activeRequests[activeRequestId];
+        const activeMocks: IActiveMock | null = this.activeMocks[activeMockId];
 
-        this.activeRequestId = activeRequestId;
-        this.status = activeRequest?.status || Number(statusArr[0])
-        this.active = !!activeRequest
+        this.activeMockId = activeMockId;
+        this.status = activeMocks?.status || Number(statusArr[0])
+        this.active = !!activeMocks
         this.statusArr = statusArr;
     }
 
-    handleRequestToggle = (active: boolean, req: IManifestRequest) => {
+    handleRequestToggle = async (active: boolean, req: IManifestRequest) => {
         this.active = active;
-
-        console.log( active )
-        this.saveActiveRequest()
+        await this.saveActiveMock()
     }
 
-    handleRequestStatus = (status: string, req: IManifestRequest) => {
+    handleRequestStatus = async (status: string, req: IManifestRequest) => {
         this.status = Number(status);
-        this.saveActiveRequest()
+        await this.saveActiveMock()
     }
 
-    saveActiveRequest = () => {
+    saveActiveMock = async () => {
         if(this.active) {
             const {url, method, response} = this.req;
-            this.activeRequests[this.activeRequestId] = {
+            this.activeMocks[this.activeMockId] = {
                 url,
                 method,
                 status: this.status,
                 path: response[this.status],
             }
         } else {
-            delete this.activeRequests[this.activeRequestId];
+            delete this.activeMocks[this.activeMockId];
         }
-console.log( this.activeRequests )
-        mergeStorageItem(STORAGE_ACTIVE_REQUESTS, {
-            [this.projectId]: this.activeRequests,
+
+        await mergeStorageItem(STORAGE_ACTIVE_REQUESTS, {
+            [this.projectId]: this.activeMocks,
         });
     }
 }
