@@ -24,5 +24,9 @@ export const textStyle = css`
             font-weight: bold;
             font-size: var(--font-size-s);
         }
+        
+        dd {
+            font-size: var(--font-size);
+        }
     }
 `

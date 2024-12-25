@@ -11,6 +11,10 @@ export const style = css`
         wf-switch {
             margin-left: auto;
         }
+
+        wf-button svg {
+            fill: var(--primary);
+        }
     }
 
     .card {
@@ -44,13 +48,13 @@ export const style = css`
         border-radius: 999em;
 
         &.get {
-            color: #006aa9;
-            border-color: #006aa9;
+            color: #1fa900;
+            border-color: #1fa900;
         }
 
         &.post {
-            color: #b76100;
-            border-color: #b76100;
+            color: #f58200;
+            border-color: #f58200;
         }
 
         &.put {
