@@ -36,7 +36,7 @@ export class Component extends LitElement {
     renderProject = (project: IProject) => {
         return html`
             <li>
-                <wf-switch @onChange="${() => this.toggleProject(project)}" .checked="${project.active}"></wf-switch>
+                <wf-switch @onChange="${() => this.toggleProject(project)}" ?checked="${project.active}"></wf-switch>
                 <div class="cta" @click="${() => this.openProject(project)}">
                     <span>${project.name}</span>
                     <wf-button appearance="primary" size="inherit" >

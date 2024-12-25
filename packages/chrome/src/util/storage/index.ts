@@ -28,6 +28,11 @@ export const setStorageItem = async (key: string, obj: Object) => {
 
 export const mergeStorageItem = async (key: string, obj: Object) => {
     const sItem = await getStorageItem(key);
+
+    console.log( {
+        sItem,
+        obj,
+    } )
     return await setStorageItem(key, {
         ...sItem,
         ...obj,

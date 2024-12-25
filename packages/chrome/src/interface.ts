@@ -31,3 +31,7 @@ export interface IActiveRequest {
     status: number;
     path: string;
 }
+
+export interface IActiveRequests {
+        [key: string]: IActiveRequest
+}

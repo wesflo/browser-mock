@@ -4,22 +4,17 @@ import {defaultStyle} from "../../../../util/style/defaultStyle";
 import {style} from "./style";
 import {textStyle} from "../../../../util/style/textStyle";
 import {getStorageItem} from "../../../../util/storage";
-import {IManifest, IManifestRequest, IProject} from "../../../../interface";
+import {IActiveRequest, IManifest, IProject} from "../../../../interface";
 import {Task} from "@lit/task";
-import {STORAGE_MANIFEST_PREFIX} from "../../../../constant";
+import {STORAGE_ACTIVE_REQUESTS, STORAGE_MANIFEST_PREFIX} from "../../../../constant";
 import "../../../../component/progress";
-import "../../../../component/input";
 import "../../../../component/button";
-import "../../../../component/switch";
-import "../../../../component/select";
-import "../../../../component/options";
+import "./component/requestCard";
 import "../../../error";
 
 
 export class Component extends LitElement {
     @property({type: Object}) project!: IProject;
-
-    @state() manifest?: any;
 
     static styles = [defaultStyle, textStyle, style];
 
@@ -28,7 +23,7 @@ export class Component extends LitElement {
             ${this.projectTask.render({
                 pending: () => html`
                     <wf-progress></wf-progress>`,
-                complete: (manifest: IManifest) => html`
+                complete: ([manifest, activeRequests]: [IManifest, IActiveRequest]) => html`
                     <header>
                         <wf-button appearance="none" size="m" @onClick="${this.handleCancel}">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" ><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
@@ -39,7 +34,9 @@ export class Component extends LitElement {
                         <dt>Domains</dt>
                         <dd>${manifest.domains.join(', ')}</dd>
                     </dl>
-                    ${manifest.requests.map(this.renderRequestCard)}
+                    ${manifest.requests.map((request) => html`
+                            <wf-mock-project-request-card .req="${request}" .activeRequests="${activeRequests}" projectId="${this.project.id}"></wf-mock-project-request-card>
+                    `)}
                 `,
                 error: (e) => html`
                     <wf-error error="${e}"></wf-error>`,
@@ -47,43 +44,22 @@ export class Component extends LitElement {
         `;
     }
 
-    renderRequestCard = (req: IManifestRequest) => {
-        return html`
-                <div class="card">
-                    <header>
-                        <h4>
-                            <span class="flag ${req.method.toLowerCase()}">${req.method.toUpperCase()}</span>
-                            ${req.url}
-                        </h4>
-                        <wf-switch checked>enable</wf-switch>
-                    </header>
-                    <div class="cnt">
-                        <wf-select value="" label="Status">
-                            ${Object.keys(req.response).map((status) => html`
-                            <wf-option value="${status}">${status}</wf-option>
-                        `)}
-                            <wf-option value="500">500</wf-option>
-                        </wf-select>
-
-                        <wf-input name="name" label="timeout" value=""></wf-input>
-                        <wf-options multiple>
-                            <wf-option value="1">enable Log</wf-option>
-                        </wf-options>
-                    </div>
-                </div>
-        `;
-    }
-
     projectTask: Task<[IProject]> = new Task(this, {
-        task: async ([project]) => {
-            return await getStorageItem(STORAGE_MANIFEST_PREFIX + project.id);
+        task: async ([id]) => {
+            const [manifest, allActiveRequests] = await Promise.all([
+                getStorageItem(STORAGE_MANIFEST_PREFIX + id),
+                getStorageItem(STORAGE_ACTIVE_REQUESTS)
+            ]);
+
+            return [manifest, allActiveRequests[id] || {}]
         },
-        args: () => [this.project],
+        args: () => [this.project.id],
     });
 
     handleCancel = () => {
         this.dispatchEvent(new CustomEvent('onCancel'));
     }
+
 }
 
 if (!customElements.get('wf-mock-project')) {
