@@ -31,7 +31,7 @@ export class Component extends LitElement {
             <wf-input name="path" label="Absolut Path to manifest.json" value="${ifDefined(this.values.path)}" required></wf-input>
             <wf-file name="configFile" label="manifest.json" accept=".json" ?required="${!this.isUpdate}"></wf-file>
             <div class="buttons right">
-                ${this.isUpdate ? html`<wf-button @onClick="${this.handleDelete}" appearance="secondary-outline" size="l" style="margin-right: auto">delete</wf-button>` : nothing}
+                ${this.isUpdate ? html`<wf-button @onClick="${this.handleDelete}" appearance="danger-outline" size="l" style="margin-right: auto">delete</wf-button>` : nothing}
                 <wf-button @onClick="${this.handleCancel}" size="l" appearance="secondary-outline">cancel</wf-button>
                 <wf-button @onClick="${this.handleFormSubmit}" size="l">save</wf-button>
             </div>

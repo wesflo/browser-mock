@@ -221,6 +221,63 @@ export const style = css`
             border-color: var(--tertiary-dark);
         }
     }
+
+    .danger-outline,
+    .danger-clean {
+        color: var(--error);
+
+        ::slotted(svg) {
+            fill: var(--error);
+        }
+
+        &:hover,
+        &:focus,
+        &:focus-visible {
+            color: var(--error-dark);
+            
+            ::slotted(svg) {
+                fill: var(--error-dark);
+            }
+        }
+    }
+    
+    .danger-outline {
+        border-color: var(--error);
+
+        &:hover,
+        &:focus,
+        &:focus-visible {
+            border-color: var(--error-dark);
+        }
+    }
+
+    .success-outline,
+    .success-clean {
+        color: var(--success);
+
+        ::slotted(svg) {
+            fill: var(--success);
+        }
+
+        &:hover,
+        &:focus,
+        &:focus-visible {
+            color: var(--success-dark);
+            ::slotted(svg) {
+                fill: var(--success-dark);
+            }
+        }
+    }
+    
+    .success-outline {
+        border-color: var(--success);
+
+        &:hover,
+        &:focus,
+        &:focus-visible {
+            border-color: var(--success-dark);
+        }
+    }
 `
 
 export const buttonsWrapperStyles = css`

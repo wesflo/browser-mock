@@ -4,10 +4,16 @@ export type TAppearance =
     | 'primary'
     | 'secondary'
     | 'tertiary'
+    | 'success'
+    | 'danger'
     | 'primary-outline'
     | 'secondary-outline'
     | 'tertiary-outline'
+    | 'success-outline'
+    | 'danger-outline'
     | 'primary-clean'
     | 'secondary-clean'
-    | 'tertiary-clean';
+    | 'tertiary-clean'
+    | 'success-clean'
+    | 'danger-clean';
 export type TSize = 'm' | 'xs' | 's' | 'l' | 'xl';

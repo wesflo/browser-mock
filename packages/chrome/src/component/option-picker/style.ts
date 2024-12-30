@@ -7,7 +7,7 @@ export const style = css`
         flex-wrap: nowrap;
         position: relative;
     }
-    
+
     input {
         opacity: 0;
         appearance: none;
@@ -18,7 +18,7 @@ export const style = css`
             outline: none;
         }
     }
-    
+
     label {
         cursor: pointer;
         display: inline-flex;
@@ -41,25 +41,27 @@ export const style = css`
         background-color: var(--primary-bright);
         color: var(--font-color-iverse);
     }
-    
+
     .success {
         label {
             border-color: var(--success);
             color: var(--success);
         }
+
         input:checked + label {
-            background-color: var(--success-bg);
+            background-color: var(--success-bright);
         }
     }
-    
+
     .error {
         label {
             border-color: var(--error);
             color: var(--error);
         }
+
         input:checked + label {
-            background-color: var(--error-bg);
+            background-color: var(--error-bright);
         }
     }
-    
+
 `

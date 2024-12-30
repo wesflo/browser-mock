@@ -40,7 +40,8 @@ export class Component extends LitElement {
                     <wf-switch
                             ?checked="${this.active}"
                             @onChange="${({detail}: CustomEvent) => this.handleRequestToggle(detail, req)}"
-                    >enable
+                    >
+                        enable
                     </wf-switch>
                 </header>
                 <div class="cnt">

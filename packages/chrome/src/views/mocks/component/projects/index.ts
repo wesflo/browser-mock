@@ -1,5 +1,4 @@
-import {property, queryAll} from 'lit/decorators.js';
-import {css, html, LitElement} from 'lit';
+import {html, LitElement} from 'lit';
 import {defaultStyle} from "../../../../util/style/defaultStyle";
 import {style} from "./style";
 import {textStyle} from "../../../../util/style/textStyle";
@@ -36,7 +35,6 @@ export class Component extends LitElement {
     renderProject = (project: IProject) => {
         return html`
             <li>
-                <wf-switch @onChange="${() => this.toggleProject(project)}" ?checked="${project.active}"></wf-switch>
                 <div class="cta" @click="${() => this.openProject(project)}">
                     <span>${project.name}</span>
                     <wf-button appearance="primary" size="inherit" >
@@ -45,6 +43,7 @@ export class Component extends LitElement {
                         </svg>
                     </wf-button>
                 </div>
+                <wf-switch @onChange="${() => this.toggleProject(project)}" ?checked="${project.active}"></wf-switch>
             </li>
         `;
     }
