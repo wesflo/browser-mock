@@ -5,6 +5,19 @@ export const style = css`
         position: relative;
     }
     
+    :host([disabled]) {
+        cursor: default;
+        pointer-events: none;
+        
+        .options label {
+            color: var(--grey-3);
+
+            span {
+                border-color: var(--grey-3);
+            }
+        }
+    }
+    
     label {
         position: unset;
         display: block;

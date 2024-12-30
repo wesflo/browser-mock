@@ -1,7 +1,6 @@
 import {css} from "lit";
 
-export const style = css`
-    
+export const style = css`    
     select {
         appearance: none;
         cursor: pointer;

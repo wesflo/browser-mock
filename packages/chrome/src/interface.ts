@@ -30,6 +30,8 @@ export interface IActiveMock {
     method: TRequestMethod;
     status: number;
     path: string;
+    timeout?: number;
+    enableLogging?: boolean;
 }
 
 export interface IActiveMocks {

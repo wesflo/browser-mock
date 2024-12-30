@@ -12,6 +12,7 @@ import "../../../../../../component/options";
 import {generateRequestId} from "../../../../../../util/generateRequestId";
 import {mergeStorageItem} from "../../../../../../util/storage";
 import {STORAGE_ACTIVE_REQUESTS} from "../../../../../../constant";
+import {ifDefined} from "lit-html/directives/if-defined.js";
 
 
 export class Component extends LitElement {
@@ -21,7 +22,9 @@ export class Component extends LitElement {
     @property({type: String}) rerenderHack!: string;
 
     @state() active!: boolean;
+    @state() enableLogging!: boolean;
     @state() status!: number;
+    @state() timeout!: number;
 
     statusArr: string[];
     activeMockId: string;
@@ -49,6 +52,7 @@ export class Component extends LitElement {
                     <wf-select
                             label="Status"
                             value="${this.status}"
+                            ?disabled="${!this.active}"
                             @onChange="${({detail}: CustomEvent) => this.handleRequestStatus(detail, req)}"
                     >
                         ${this.statusArr.map((status) => html`
@@ -57,8 +61,18 @@ export class Component extends LitElement {
                         <wf-option value="500">500</wf-option>
                     </wf-select>
 
-                    <wf-input name="name" label="timeout" value=""></wf-input>
-                    <wf-options multiple>
+                    <wf-input 
+                            name="name" 
+                            label="timeout" 
+                            value="${ifDefined(this.timeout)}"
+                            ?disabled="${!this.active}"
+                            @onChange="${({detail}: CustomEvent) => this.handleRequestTimeout(detail, req)}"
+                    ></wf-input>
+                    <wf-options
+                            ?disabled="${!this.active}"
+                            @onChange="${({detail}: CustomEvent) => this.handleRequestLogging(detail, req)}"
+                            multiple
+                    >
                         <wf-option value="1">enable Log</wf-option>
                     </wf-options>
                 </div>
@@ -77,6 +91,8 @@ export class Component extends LitElement {
         this.activeMockId = activeMockId;
         this.status = activeMocks?.status || Number(statusArr[0])
         this.active = !!activeMocks;
+        this.enableLogging = activeMocks?.enableLogging;
+        this.timeout = activeMocks?.timeout;
         this.statusArr = statusArr;
     }
 
@@ -87,13 +103,23 @@ export class Component extends LitElement {
     }
 
 
-    handleRequestToggle = async (active: boolean, req: IManifestRequest) => {
+    handleRequestToggle = async (active: boolean) => {
         this.active = active;
         await this.saveActiveMock()
     }
 
-    handleRequestStatus = async (status: string, req: IManifestRequest) => {
+    handleRequestStatus = async (status: string) => {
         this.status = Number(status);
+        await this.saveActiveMock()
+    }
+
+    handleRequestTimeout = async (timeout: string) => {
+        this.timeout = Number(timeout);
+        await this.saveActiveMock()
+    }
+
+    handleRequestLogging = async (log: string) => {
+        this.enableLogging = !!log.length;
         await this.saveActiveMock()
     }
 
@@ -104,6 +130,8 @@ export class Component extends LitElement {
                 url,
                 method,
                 status: this.status,
+                timeout: this.timeout,
+                enableLogging: this.enableLogging,
                 path: response[this.status],
             }
         } else {

@@ -5,6 +5,11 @@ export const formStyle = css`
     :host {
         position: relative;
     }
+
+    :host([disabled]) {
+        cursor: default;
+        pointer-events: none;
+    }
     
     textarea,
     select,
@@ -13,6 +18,7 @@ export const formStyle = css`
         color: var(--font-color);
         border-radius: var(--border-radius);
         border: 1px solid var(--grey-5);
+        background-color: var(--main-bg);
         padding-top: 20px;
         padding-bottom: 4px;
         padding-inline: 16px 40px;
@@ -22,9 +28,20 @@ export const formStyle = css`
         font-size: var(--font-size-l);
         outline: none;
 
-        &:focus-visible, &:focus {
+        &:focus-visible, 
+        &:focus {
             border-color: var(--secondary);
             border-width: 2px;
+        }
+
+        &:disabled {
+            background-color: var(--main-bg);
+            border-color: var(--grey-3);
+
+            &,
+            + label {
+                color: var(--grey-3);
+            }
         }
     }
 

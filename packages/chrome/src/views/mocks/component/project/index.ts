@@ -104,6 +104,7 @@ export class Component extends LitElement {
 
     buildActiveMockObj = (activeMockId: string, req: IManifestRequest) => {
         const initActiveMock = this.initActiveMocks[activeMockId];
+
         if(initActiveMock) {
             return initActiveMock
         }
