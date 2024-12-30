@@ -1,5 +1,5 @@
 import {property, state} from 'lit/decorators.js';
-import {html, LitElement} from 'lit';
+import {html, LitElement, PropertyValues} from 'lit';
 import {defaultStyle} from "../../../../../../util/style/defaultStyle";
 import {style} from "./style";
 import {textStyle} from "../../../../../../util/style/textStyle";
@@ -18,6 +18,7 @@ export class Component extends LitElement {
     @property({type: Object}) req!: IManifestRequest;
     @property({type: Array}) activeMocks!: IActiveMocks;
     @property({type: String}) projectId!: string;
+    @property({type: String}) rerenderHack!: string;
 
     @state() active!: boolean;
     @state() status!: number;
@@ -71,14 +72,20 @@ export class Component extends LitElement {
         const {req} = this;
         const statusArr = Object.keys(req.response);
         const activeMockId = generateRequestId(req);
-
         const activeMocks: IActiveMock | null = this.activeMocks[activeMockId];
 
         this.activeMockId = activeMockId;
         this.status = activeMocks?.status || Number(statusArr[0])
-        this.active = !!activeMocks
+        this.active = !!activeMocks;
         this.statusArr = statusArr;
     }
+
+    protected update(changedProperties: PropertyValues) {
+        super.update(changedProperties);
+
+        this.active = !!this.activeMocks[this.activeMockId];
+    }
+
 
     handleRequestToggle = async (active: boolean, req: IManifestRequest) => {
         this.active = active;
