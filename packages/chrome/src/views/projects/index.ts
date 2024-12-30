@@ -68,7 +68,6 @@ export class Component extends LitElement {
 
         if (configFile && configFile.length !== 0) {
             const manifest = await jsonFileContent(configFile[0]);
-            manifest.active = true;
             await setStorageItem(STORAGE_MANIFEST_PREFIX + id, manifest);
         }
 

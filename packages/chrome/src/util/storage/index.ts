@@ -18,8 +18,8 @@ const setItem = async (key: string, data: Object) => {
     return await chrome.storage.local.set({[key]: data});
 }
 
-export const getStorageItem = async (key: string) => {
-    return  await getItem(key) || {};
+export const getStorageItem = async (key: string, fallback = {}) => {
+    return  await getItem(key) || fallback;
 }
 
 export const setStorageItem = async (key: string, obj: Object) => {

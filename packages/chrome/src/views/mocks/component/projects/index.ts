@@ -4,8 +4,13 @@ import {style} from "./style";
 import {textStyle} from "../../../../util/style/textStyle";
 import {state} from "lit/decorators.js";
 import {IProject, IProjects} from "../../../../interface";
-import {getStorageItem} from "../../../../util/storage";
-import {STORAGE_PROJECTS} from "../../../../constant";
+import {getStorageItem, setStorageItem} from "../../../../util/storage";
+import {
+    STORAGE_ACTIVE_PROJECTS,
+    STORAGE_ACTIVE_REQUESTS,
+    STORAGE_MANIFEST_PREFIX,
+    STORAGE_PROJECTS
+} from "../../../../constant";
 import {updateStorageProject} from "../../../../util/updateStorageProject";
 import {Task} from "@lit/task";
 import "../../../../component/progress";
@@ -15,6 +20,7 @@ import "../../../error";
 
 export class Component extends LitElement {
     @state() projects!: IProjects;
+    @state() activeProjects!: string[];
 
     static styles = [defaultStyle, textStyle, style];
 
@@ -43,23 +49,29 @@ export class Component extends LitElement {
                         </svg>
                     </wf-button>
                 </div>
-                <wf-switch @onChange="${() => this.toggleProject(project)}" ?checked="${project.active}"></wf-switch>
+                <wf-switch @onChange="${({detail}: CustomEvent) => this.toggleProject(detail, project)}" ?checked="${this.activeProjects.includes(project.id) }"></wf-switch>
             </li>
         `;
     }
 
     projectsTask: Task<[any]> = new Task(this, {
         task: async () => {
-            return  await getStorageItem(STORAGE_PROJECTS) || {};
+            const [projects, activeProjects] = await Promise.all([
+                getStorageItem(STORAGE_PROJECTS),
+                getStorageItem(STORAGE_ACTIVE_PROJECTS, [])
+            ]);
+
+            this.activeProjects = activeProjects;
+
+            return projects;
         },
         args: () => [],
     });
 
-    toggleProject = async (project: IProject) => {
-        project.active = !project.active;
-        await updateStorageProject(project.id, {
-            active: project.active
-        });
+    toggleProject = async (checked: boolean, project: IProject) => {
+        const {id} = project;
+        checked ? this.activeProjects.push(id) : this.activeProjects.splice(this.activeProjects.indexOf(id), 1);
+        setStorageItem(STORAGE_ACTIVE_PROJECTS, this.activeProjects)
     }
 
     openProject = async (project: IProject) => {

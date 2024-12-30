@@ -12,17 +12,17 @@ import {IProject} from "../../interface";
 export class Component extends LitElement {
     @property({type: String}) error: string = '';
 
-    // @state() view: TView = VIEW_PROJECTS;
-    // @state() selectedProject?: IProject;
+    @state() view: TView = VIEW_PROJECTS;
+    @state() selectedProject?: IProject;
 
-    @state() view: TView = VIEW_PROJECT; // VIEW_PROJECTS;
-    @state() selectedProject?: IProject = {
-        id: "m52a0k6iixlc4j928pr",
-        name: "Test Projekt 1",
-        path: "/Users/d_wessner/projects/wesflo/browser-mock/playground/mock/manifest.json",
-        pathPartials: ["", "Users", "d_wessner", "projects", "wesflo", "browser-mock", "playground", "mock"],
-        active: true
-    };
+    // @state() view: TView = VIEW_PROJECT; // VIEW_PROJECTS;
+    // @state() selectedProject?: IProject = {
+    //     id: "m52a0k6iixlc4j928pr",
+    //     name: "Test Projekt 1",
+    //     path: "/Users/d_wessner/projects/wesflo/browser-mock/playground/mock/manifest.json",
+    //     pathPartials: ["", "Users", "d_wessner", "projects", "wesflo", "browser-mock", "playground", "mock"],
+    //     active: true
+    // };
 
     static styles = [defaultStyle, textStyle, style];
 

@@ -11,6 +11,8 @@ import {resetStyle} from "../util/style/resetStyle";
 import "../component/switch";
 import "../component/progress";
 import "../views/error";
+import {getStorageItem, setStorageItem} from "../util/storage";
+import {STORAGE_ACTIVE} from "../constant";
 
 export class BrowserMock extends LitElement {
     @property({type: Boolean, reflect: true}) bmIsActive: boolean = false;
@@ -24,7 +26,9 @@ export class BrowserMock extends LitElement {
             html`
                 <nav>
                     ${TABS.map(this.renderTabLink)}
-                    ${this.renderButtons()}
+                    ${this.buttonTask.render({
+                        complete: this.renderButtons
+                    })}
                 </nav>
             `,
             this.viewLoadTask.render({
@@ -59,16 +63,22 @@ export class BrowserMock extends LitElement {
         args: () => [this.currentView],
     });
 
+    buttonTask = new Task(this, {
+        task: async () => await getStorageItem(STORAGE_ACTIVE, false),
+        args: () => [],
+    });
+
     renderTabLink = (tab: TCurrentView) => html`
         <a href="javascript:void(0)" class="tab-link${classMap({active: this.currentView === tab})}" @click="${() => this.currentView = tab}">${i18n.tab[tab]}</a>
     `
 
-    renderButtons = () => html`
-        <wf-switch @onChange="${this.handleToggleBm}" inverse></wf-switch>
+    renderButtons = (checked) => html`
+        <wf-switch @onChange="${this.handleToggleBm}" inverse ?checked="${checked}"></wf-switch>
     `
 
     handleToggleBm = () => {
         this.bmIsActive = !this.bmIsActive;
+        setStorageItem(STORAGE_ACTIVE, this.bmIsActive)
     }
 }
 
