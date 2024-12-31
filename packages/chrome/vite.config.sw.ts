@@ -7,10 +7,15 @@ export default defineConfig({
             "top-level-await": true, //browsers can handle top-level-await features
         },
     },
-
-    plugins: [
-    ],
     build: {
         emptyOutDir: false,
+        rollupOptions: {
+            input: {
+                service_worker: './src/sw/background.ts'
+            },
+            output: {
+                entryFileNames: 'sw/background.js'
+            }
+        }
     },
 });

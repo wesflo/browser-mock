@@ -3,7 +3,7 @@ import {html, LitElement} from 'lit';
 import {defaultStyle} from "../../../../util/style/defaultStyle";
 import {style} from "./style";
 import {buttonsWrapperStyles} from "../../../../component/button/style";
-import {getStorageItem} from "../../../../util/storage";
+import {flushStorage, getStorageItem} from "../../../../util/storage";
 import {STORAGE_PROJECTS} from "../../../../constant";
 import {IProject, IProjects} from "../../../../interface";
 import "../../../../component/progress";
@@ -34,6 +34,8 @@ export class Component extends LitElement {
                     <wf-error error="${e}"></wf-error>`,
                 })}
             </ul>
+
+            <wf-button @onClick="${flushStorage}" appearance="danger-outline" style="margin-top: 40px">flush storage</wf-button>
         `;
     }
 

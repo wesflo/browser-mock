@@ -53,6 +53,7 @@ export class Component extends LitElement {
                                 .rerenderHack="${this.rerenderHack++}"
                                 .req="${request}"
                                 .activeMocks="${this.activeMocks}"
+                                .domains="${this.manifest.domains}"
                                 projectId="${this.project.id}"
                         ></wf-mock-project-request-card>
                     `)}
@@ -118,6 +119,7 @@ export class Component extends LitElement {
             method,
             status: Number(status),
             path: response[status],
+            domains: this.manifest.domains,
         }
 
     }

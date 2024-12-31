@@ -6,7 +6,11 @@
   "private": "true",
   "scripts": {
     "dev": "rm -rf ./node_modules/.vite && vite",
-    "build": "rm -Rf ./dist && mkdir ./dist && vite build",
+    "build": "npm run clean && npm run build:popup && npm run build:sw",
+    "build:popup": "vite build --config ./vite.config.ts",
+    "build:sw": "vite build --config ./vite.config.sw.ts",
+    "dev:sw": "vite build --config ./vite.config.sw.ts --watch",
+    "clean" : "rm -Rf ./dist && mkdir ./dist",
     "cem": "cem analyze",
     "tsc": "tsc",
     "preview": "vite preview",

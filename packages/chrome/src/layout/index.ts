@@ -72,9 +72,12 @@ export class BrowserMock extends LitElement {
         <a href="#" class="tab-link${classMap({active: this.currentView === tab})}" @click="${() => this.currentView = tab}">${i18n.tab[tab]}</a>
     `
 
-    renderButtons = (checked) => html`
+    renderButtons = (checked) => {
+        console.log( checked )
+        return html`
         <wf-switch @onChange="${this.handleToggleBm}" inverse ?checked="${checked}"></wf-switch>
     `
+    }
 
     handleToggleBm = () => {
         this.bmIsActive = !this.bmIsActive;

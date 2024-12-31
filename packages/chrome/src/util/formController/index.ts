@@ -49,7 +49,7 @@ export class FormController<T extends Form, N> {
                 const key = checkFn.name;
                 !this.invalidFields.includes(name) && this.invalidFields.push(name);
                 errorMsg = errorMsg || errorMessages[key] as string;
-                const patterns = errorMsg.match(/\{(.*?)}/g);
+                const patterns = errorMsg && errorMsg.match(/\{(.*?)}/g);
                 patterns && patterns.forEach((pattern: string) => {
                     const attr: string = pattern.replace(/[{}]/g, '');
                     const val: string = item.getAttribute(attr) || 'n/a';

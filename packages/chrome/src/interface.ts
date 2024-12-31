@@ -33,6 +33,7 @@ export interface IActiveMock {
     path: string;
     timeout?: number;
     enableLogging?: boolean;
+    domains: string[];
 }
 
 export interface IActiveMocks {

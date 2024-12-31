@@ -42,3 +42,11 @@ export const removeStorageItem = async (key: string) => {
 
     return await chrome.storage.local.remove(key);
 }
+
+export const flushStorage = async () => {
+    if(import.meta.env.MODE === MODE_DEV) {
+        return window.sessionStorage.clear();
+    }
+
+    return await chrome.storage.local.clear();
+}

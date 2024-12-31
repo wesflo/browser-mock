@@ -18,6 +18,7 @@ import {ifDefined} from "lit-html/directives/if-defined.js";
 export class Component extends LitElement {
     @property({type: Object}) req!: IManifestRequest;
     @property({type: Array}) activeMocks!: IActiveMocks;
+    @property({type: Array}) domains!: string[];
     @property({type: String}) projectId!: string;
     @property({type: String}) rerenderHack!: string;
 
@@ -138,6 +139,7 @@ export class Component extends LitElement {
                 timeout: this.timeout,
                 enableLogging: this.enableLogging,
                 path: response[this.status],
+                domains: this.domains
             }
         } else {
             delete this.activeMocks[this.activeMockId];

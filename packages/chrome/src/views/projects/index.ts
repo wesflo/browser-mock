@@ -1,16 +1,15 @@
-import {property, queryAll, state} from 'lit/decorators.js';
+import {property, state} from 'lit/decorators.js';
 import {html, LitElement} from 'lit';
 import {defaultStyle} from "../../util/style/defaultStyle";
 import {style} from "./style";
-import CollapseComponent from "../../component/collapse";
 import {textStyle} from "../../util/style/textStyle";
 import {VIEW_EDIT, VIEW_LIST, VIEW_NEW} from "./constant";
 import {IFormValues} from "./component/form/interface";
 import {jsonFileContent} from "../../util/jsonFileContent";
 import {Task} from "@lit/task";
 import {TView} from "./interface";
-import {STORAGE_MANIFEST_PREFIX, STORAGE_PROJECTS} from "../../constant";
-import {getStorageItem, mergeStorageItem, removeStorageItem, setStorageItem} from "../../util/storage";
+import {STORAGE_ACTIVE_PROJECTS, STORAGE_MANIFEST_PREFIX, STORAGE_PROJECTS} from "../../constant";
+import {getStorageItem, removeStorageItem, setStorageItem} from "../../util/storage";
 import {ifDefined} from "lit-html/directives/if-defined.js";
 import "../../component/button";
 import "../../component/progress";
@@ -21,8 +20,6 @@ import {updateStorageProject} from "../../util/updateStorageProject";
 
 export class Component extends LitElement {
     @property({type: String}) error: string = '';
-
-    @queryAll('wf-collapse') collapses: NodeListOf<CollapseComponent>;
 
     @state() selectedProject?: IProject;
     @state() view: TView = VIEW_LIST;
@@ -36,7 +33,7 @@ export class Component extends LitElement {
             <header>
                 <h1>Projects</h1>
                 <div class="buttons">
-                    <wf-button @click="${this.addNewProject}">Add new Project</wf-button>
+                    <wf-button @onClick="${this.addNewProject}">Add new Project</wf-button>
                 </div>
             </header>
 
@@ -79,6 +76,11 @@ export class Component extends LitElement {
         const projects = await getStorageItem(STORAGE_PROJECTS) || {};
         delete projects[id];
         await setStorageItem(STORAGE_PROJECTS, projects);
+
+        const activeProjects = await getStorageItem(STORAGE_ACTIVE_PROJECTS) || {};
+        delete activeProjects[id];
+        await setStorageItem(STORAGE_ACTIVE_PROJECTS, activeProjects);
+
         await removeStorageItem(STORAGE_MANIFEST_PREFIX + id)
         this.toast.add('Project deleted', 'success');
         this.setView(VIEW_LIST);
