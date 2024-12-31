@@ -7,6 +7,7 @@
   ],
   "requests": [
     {
+      "name": "Get Dummy Data",
       "url": "/api/v1/health",
       "method": "GET",
       "response": {
@@ -16,7 +17,8 @@
       }
     },
     {
-      "url": "/api/v2/foo/[\\d]{1,10}",
+      "name": "Post Dummy Data",
+      "url": "/api/v2/foo/[\\d]{5,10}",
       "method": "POST",
       "response": {
         "200": "./mock/health.json",
@@ -24,6 +26,7 @@
       }
     },
     {
+      "name": "Put Dummy Data",
       "url": "/api/v1/return/[\\d]{4,10}/[\\d]{2,10}",
       "method": "PUT",
       "response": {
@@ -32,7 +35,8 @@
       }
     },
     {
-      "url": "/api/v1/return/[\\d]{4,10}/[\\d]{2,10}",
+      "name": "Delete Dummy Data",
+      "url": "/api/v1/health",
       "method": "DELETE",
       "response": {
         "200": "./mock/health.json",
@@ -40,7 +44,8 @@
       }
     },
     {
-      "url": "/api/v1/return/[\\d]{4,10}/[\\d]{2,10}",
+      "name": "Patch Dummy Data",
+      "url": "/api/v1/health",
       "method": "PATCH",
       "response": {
         "200": "./mock/health.json",
