@@ -69,7 +69,7 @@ export class BrowserMock extends LitElement {
     });
 
     renderTabLink = (tab: TCurrentView) => html`
-        <a href="javascript:void(0)" class="tab-link${classMap({active: this.currentView === tab})}" @click="${() => this.currentView = tab}">${i18n.tab[tab]}</a>
+        <a href="#" class="tab-link${classMap({active: this.currentView === tab})}" @click="${() => this.currentView = tab}">${i18n.tab[tab]}</a>
     `
 
     renderButtons = (checked) => html`
