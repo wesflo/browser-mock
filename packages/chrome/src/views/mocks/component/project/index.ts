@@ -93,7 +93,7 @@ export class Component extends LitElement {
             }
 
         });
-        // this.projectTask.run()
+
         this.requestUpdate()
         await mergeStorageItem(STORAGE_ACTIVE_REQUESTS, {
             [this.project.id]: this.activeMocks,

@@ -102,12 +102,14 @@ export class Component extends LitElement {
     protected update(changedProperties: PropertyValues) {
         super.update(changedProperties);
 
-        this.active = !!this.activeMocks[this.activeMockId];
+        if(changedProperties.has('rerenderHack')) {
+            this.active = !!this.activeMocks[this.activeMockId];
+        }
     }
 
 
-    handleRequestToggle = async ({detail}: CustomEvent) => {
-        this.active = detail;
+    handleRequestToggle = async (checked: boolean) => {
+        this.active = checked;
         await this.saveActiveMock()
     }
 
@@ -121,8 +123,8 @@ export class Component extends LitElement {
         await this.saveActiveMock()
     }
 
-    handleRequestLogging = async (log: string) => {
-        this.enableLogging = !!log.length;
+    handleRequestLogging = async ({detail}: CustomEvent) => {
+        this.enableLogging = !!detail.length;
         await this.saveActiveMock()
     }
 
