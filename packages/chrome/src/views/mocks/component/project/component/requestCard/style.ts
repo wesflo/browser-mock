@@ -4,9 +4,14 @@ export const style = css`
     header {
         margin-bottom: 16px;
         display: flex;
+        flex-wrap: wrap;
         justify-content: left;
-        gap: 16px;
+        gap: 8px 16px;
         align-items: center;
+        
+        h4 {
+            flex: 0 1 100%;
+        }
 
         wf-switch {
             margin-left: auto;

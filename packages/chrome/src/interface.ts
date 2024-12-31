@@ -13,6 +13,7 @@ export interface IProjects {
 export type TRequestMethod = 'GET' | 'PUT' | 'DELETE' | 'POST' | 'PATCH';
 
 export interface IManifestRequest {
+    name: string;
     url: string;
     method: TRequestMethod;
     response: {

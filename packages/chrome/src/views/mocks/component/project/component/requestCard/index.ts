@@ -38,9 +38,12 @@ export class Component extends LitElement {
             <div class="card">
                 <header>
                     <h4>
+                        ${req.name ? req.name : 'Unnamed'}
+                    </h4>
+                    <h6>
                         <span class="flag ${req.method.toLowerCase()}">${req.method.toUpperCase()}</span>
                         ${req.url}
-                    </h4>
+                    </h6>
                     <wf-switch
                             ?checked="${this.active}"
                             @onChange="${({detail}: CustomEvent) => this.handleRequestToggle(detail, req)}"
@@ -53,7 +56,7 @@ export class Component extends LitElement {
                             label="Status"
                             value="${this.status}"
                             ?disabled="${!this.active}"
-                            @onChange="${({detail}: CustomEvent) => this.handleRequestStatus(detail, req)}"
+                            @onChange="${this.handleRequestStatus}"
                     >
                         ${this.statusArr.map((status) => html`
                             <wf-option value="${status}">${status}</wf-option>
@@ -66,11 +69,11 @@ export class Component extends LitElement {
                             label="timeout" 
                             value="${ifDefined(this.timeout)}"
                             ?disabled="${!this.active}"
-                            @onChange="${({detail}: CustomEvent) => this.handleRequestTimeout(detail, req)}"
+                            @onChange="${this.handleRequestTimeout}"
                     ></wf-input>
                     <wf-options
                             ?disabled="${!this.active}"
-                            @onChange="${({detail}: CustomEvent) => this.handleRequestLogging(detail, req)}"
+                            @onChange="${this.handleRequestLogging}"
                             multiple
                     >
                         <wf-option value="1">enable Log</wf-option>
@@ -103,18 +106,18 @@ export class Component extends LitElement {
     }
 
 
-    handleRequestToggle = async (active: boolean) => {
-        this.active = active;
+    handleRequestToggle = async ({detail}: CustomEvent) => {
+        this.active = detail;
         await this.saveActiveMock()
     }
 
-    handleRequestStatus = async (status: string) => {
-        this.status = Number(status);
+    handleRequestStatus = async ({detail}: CustomEvent) => {
+        this.status = Number(detail);
         await this.saveActiveMock()
     }
 
-    handleRequestTimeout = async (timeout: string) => {
-        this.timeout = Number(timeout);
+    handleRequestTimeout = async ({detail}: CustomEvent) => {
+        this.timeout = Number(detail);
         await this.saveActiveMock()
     }
 
