@@ -46,12 +46,17 @@ export const style = css`
         margin-bottom: 16px;
     }
 
+    h6 {
+        font-weight: normal;
+    }
+    
     .flag {
         display: inline-block;
         padding: 4px 8px;
         margin-right: 16px;
         border: 1px solid;
         border-radius: 999em;
+        font-weight: bold;
 
         &.get {
             color: #1fa900;

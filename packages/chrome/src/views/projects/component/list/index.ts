@@ -7,6 +7,7 @@ import {getStorageItem} from "../../../../util/storage";
 import {STORAGE_PROJECTS} from "../../../../constant";
 import {IProject, IProjects} from "../../../../interface";
 import "../../../../component/progress";
+import "../../../../component/no-project";
 import "../../../../component/button";
 import "../../../error";
 import {Task} from "@lit/task";
@@ -22,7 +23,13 @@ export class Component extends LitElement {
                 ${this.projectsTask.render({
                     pending: () => html`
                     <wf-progress></wf-progress>`,
-                    complete: (projects: IProjects) => Object.values(projects).map(this.renderProject),
+                    complete: (projects: IProjects) => {
+                        const values = Object.values(projects);
+                        if(values.length) {
+                            return values.map(this.renderProject);
+                        }
+                        return html`<wf-no-project></wf-no-project>`;
+                    },
                     error: (e) => html`
                     <wf-error error="${e}"></wf-error>`,
                 })}
