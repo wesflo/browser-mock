@@ -26,7 +26,14 @@ export class Component extends LitElement {
                     complete: (projects: IProjects) => {
                         const values = Object.values(projects);
                         if(values.length) {
-                            return values.map(this.renderProject);
+                            return [
+                                values.map(this.renderProject),
+                                html`
+                                    <li>
+                                        <wf-button @onClick="${this.handleResetApp}" appearance="danger-outline">delete all projects</wf-button>
+                                    </li>
+                                `,
+                            ];
                         }
                         return html`<wf-no-project></wf-no-project>`;
                     },
@@ -34,8 +41,6 @@ export class Component extends LitElement {
                     <wf-error error="${e}"></wf-error>`,
                 })}
             </ul>
-
-            <wf-button @onClick="${flushStorage}" appearance="danger-outline" style="margin-top: 40px">flush storage</wf-button>
         `;
     }
 
@@ -46,7 +51,7 @@ export class Component extends LitElement {
 
     renderProject = (project: IProject) => {
         return html`
-            <li @click="${() => this.editProject(project)}">
+            <li @click="${() => this.editProject(project)}" class="project">
                 <span>${project.name}</span>
                 <wf-button appearance="primary" size="inherit" >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
@@ -66,6 +71,13 @@ export class Component extends LitElement {
 
     editProject = (project: IProject) => {
         this.dispatchEvent(new CustomEvent('onEdit', {detail: project}));
+    }
+
+    handleResetApp = async () => {
+        await flushStorage();
+        window.dispatchEvent(new CustomEvent('wfReloadApp', {
+            bubbles: true,
+        }));
     }
 }
 

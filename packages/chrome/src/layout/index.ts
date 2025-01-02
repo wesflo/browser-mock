@@ -45,6 +45,16 @@ export class BrowserMock extends LitElement {
         ];
     }
 
+    connectedCallback() {
+        super.connectedCallback();
+        window.addEventListener('wfReloadApp', this.handleReloadApp);
+    }
+
+    disconnectedCallback() {
+        window.removeEventListener('wfReloadApp', this.handleReloadApp);
+        super.disconnectedCallback();
+    }
+
     viewsMap = {
         [TAB_PROJECTS]: async () => {
             await import("../views/projects");
@@ -73,7 +83,6 @@ export class BrowserMock extends LitElement {
     `
 
     renderButtons = (checked) => {
-        console.log( checked )
         return html`
         <wf-switch @onChange="${this.handleToggleBm}" inverse ?checked="${checked}"></wf-switch>
     `
@@ -82,6 +91,10 @@ export class BrowserMock extends LitElement {
     handleToggleBm = () => {
         this.bmIsActive = !this.bmIsActive;
         setStorageItem(STORAGE_ACTIVE, this.bmIsActive)
+    }
+
+    handleReloadApp = () => {
+        this.viewLoadTask.run()
     }
 }
 
