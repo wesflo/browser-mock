@@ -25,19 +25,26 @@ const buildRule = (activeRequests: IActiveMocks, partials: string[], pIndex: num
 }
 
 const buildRuleset = (activeRequest: IActiveMock, partials: string[], sIndex: number, pIndex: number): Rule[] => {
-
-    return activeRequest.domains.map((domain: string, index: number) => ( {
-        id: Number(`${pIndex + 1}00${sIndex + 1}00${index + 1}`),
-        priority: 1,
-        action: {
-            type: RuleActionType.REDIRECT,
-            redirect: {
-                url: `https://localhost:8080?mock=${activeRequest.path}&partials=${partials.join('/')}`
+    return activeRequest.domains.map((domain: string, index: number) => {
+        const params = [
+                `status=${activeRequest.status}`,
+                `to=${activeRequest.timeout || 0}`,
+                `path=${activeRequest.path.replace('/', '%2B')}`,
+                `pDir=${partials.join('%2B')}`,
+        ]
+        return {
+            id: Number(`${pIndex + 1}00${sIndex + 1}00${index + 1}`),
+            priority: 1,
+            action: {
+                type: RuleActionType.REDIRECT,
+                redirect: {
+                    url: `http://127.0.0.1:1323/latest/mock?${params.join('&')}`
+                }
+            },
+            condition: {
+                requestMethods: [RequestMethod[activeRequest.method]],
+                regexFilter: domain + activeRequest.url
             }
-        },
-        condition: {
-            requestMethods: [RequestMethod[activeRequest.method]],
-            regexFilter: domain + activeRequest.url
         }
-    }))
+    })
 }

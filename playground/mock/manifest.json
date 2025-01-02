@@ -11,9 +11,9 @@
       "url": "/api/v1/health",
       "method": "GET",
       "response": {
-        "200": "./mock/health.json",
-        "201": "",
-        "400": "./mock/badRequest.json"
+        "200": "./health.json",
+        "204": "",
+        "400": "./badRequest.json"
       }
     },
     {
@@ -21,8 +21,8 @@
       "url": "/api/v2/foo/[\\d]{5,10}",
       "method": "POST",
       "response": {
-        "200": "./mock/health.json",
-        "400": "./mock/badRequest.json"
+        "200": "../mock/health-post.json",
+        "400": "./badRequest.json"
       }
     },
     {
@@ -30,8 +30,8 @@
       "url": "/api/v1/return/[\\d]{4,10}/[\\d]{2,10}",
       "method": "PUT",
       "response": {
-        "200": "./mock/health.json",
-        "400": "./mock/badRequest.json"
+        "200": "../mock/health-put.json",
+        "400": "./badRequest.json"
       }
     },
     {
@@ -39,8 +39,8 @@
       "url": "/api/v1/health",
       "method": "DELETE",
       "response": {
-        "200": "./mock/health.json",
-        "400": "./mock/badRequest.json"
+        "200": "./health-delete.json",
+        "400": "./badRequest.json"
       }
     },
     {
@@ -48,8 +48,8 @@
       "url": "/api/v1/health",
       "method": "PATCH",
       "response": {
-        "200": "./mock/health.json",
-        "400": "./mock/badRequest.json"
+        "200": "./health-patch.json",
+        "400": "./badRequest.json"
       }
     }
   ]

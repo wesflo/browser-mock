@@ -1,9 +1,8 @@
 import express from 'express';
-import {ROUTE_MOCK} from "./constants";
-import {mock} from "./controller/mock";
+import {mockController} from "./controller/mockController";
 
 const router = express.Router();
 
-router.route(ROUTE_MOCK).get(mock);
+router.route(/^\/mock/).all(mockController);
 
 export default router;
