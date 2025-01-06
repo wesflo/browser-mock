@@ -64,9 +64,7 @@ export default class Component extends LitElement {
 
     changeHandlerMap: {[key: string]: (value: string) => void} = {
         radio: (value) => {
-            if(value !== this.value) {
-                this.value = value;
-            }
+            this.value = value;
         },
         checkbox: (value) => {
             const index = this.value.indexOf(value);
