@@ -12,6 +12,7 @@ import "../../../../component/button";
 import "./component/requestCard";
 import "../../../error";
 import {generateRequestId} from "../../../../util/generateRequestId";
+import {ifDefined} from "lit-html/directives/if-defined.js";
 
 
 export class Component extends LitElement {
@@ -22,7 +23,6 @@ export class Component extends LitElement {
     manifest!: IManifest;
     enableAll: boolean = false;
     initActiveMocks!: IActiveMock;
-    rerenderHack = 0;
 
     static styles = [defaultStyle, textStyle, style];
 
@@ -48,27 +48,32 @@ export class Component extends LitElement {
                             toggle all
                         </wf-button>
                     </header>
-                    ${manifest.requests.map((request) => html`
+                    ${manifest.requests.map((request) => {
+                        const id = generateRequestId(request);
+                        const activeMock = this.activeMocks[id]
+                        
+                        return html`
                         <wf-mock-project-request-card
-                                .rerenderHack="${this.rerenderHack++}"
                                 .req="${request}"
-                                .activeMocks="${this.activeMocks}"
-                                .domains="${this.manifest.domains}"
-                                projectId="${this.project.id}"
+                                .activeMock="${activeMock}"
+                                ?active="${ifDefined(activeMock)}"
+                                @onChange="${({detail}: CustomEvent) => this.handleRequestChange(id, request, detail)}"
                         ></wf-mock-project-request-card>
-                    `)}
+                    `
+                    })}
                 `,
                 error: (e) => html`
                     <wf-error error="${e}"></wf-error>`,
             });
     }
 
-    projectTask: Task<[IProject]> = new Task(this, {
+    projectTask: Task<[string]> = new Task(this, {
         task: async ([id]) => {
             const [manifest, allActiveMocks] = await Promise.all([
                 getStorageItem(STORAGE_MANIFEST_PREFIX + id),
                 getStorageItem(STORAGE_ACTIVE_REQUESTS)
             ]);
+
             this.manifest = manifest;
             this.activeMocks = allActiveMocks[id] || {};
             this.initActiveMocks = {...this.activeMocks};
@@ -79,6 +84,17 @@ export class Component extends LitElement {
         args: () => [this.project.id],
     });
 
+    handleRequestChange = (activeMockId: string, request: IManifestRequest, detail: {key: string, value: number | string | boolean}) => {
+        const data = this.buildActiveMockObj(activeMockId, request);
+        if(detail.key === 'active') {
+            return this.saveSingleMock(detail.value as boolean, activeMockId, data)
+        }
+
+        data[detail.key] = detail.value;
+
+        return this.saveSingleMock(!!this.activeMocks[activeMockId], activeMockId, data)
+    }
+
     handleCancel = () => {
         this.dispatchEvent(new CustomEvent('onCancel'));
     }
@@ -86,31 +102,34 @@ export class Component extends LitElement {
     handleToggleAll = async () => {
         this.manifest.requests.forEach((req: IManifestRequest) => {
             const activeMockId = generateRequestId(req);
-
-            if(this.enableAll) {
-                this.activeMocks[activeMockId] = this.buildActiveMockObj(activeMockId, req)
-            } else {
-                delete this.activeMocks[activeMockId];
-            }
-
+            const data = this.buildActiveMockObj(activeMockId, req);
+            this.saveSingleMock(this.enableAll, activeMockId, data)
         });
-
         this.requestUpdate()
-        await mergeStorageItem(STORAGE_ACTIVE_REQUESTS, {
-            [this.project.id]: this.activeMocks,
-        });
 
         this.enableAll = !this.enableAll;
     }
 
-    buildActiveMockObj = (activeMockId: string, req: IManifestRequest) => {
+    saveSingleMock = async (active: boolean, activeMockId?: string, data?: IActiveMock) => {
+        if(active) {
+            this.activeMocks[activeMockId] = data
+        } else {
+            delete this.activeMocks[activeMockId];
+        }
+
+        await mergeStorageItem(STORAGE_ACTIVE_REQUESTS, {
+            [this.project.id]: this.activeMocks,
+        });
+    }
+
+    buildActiveMockObj = (activeMockId: string, req: IManifestRequest): IActiveMock => {
         const initActiveMock = this.initActiveMocks[activeMockId];
 
         if(initActiveMock) {
-            return initActiveMock
+            return initActiveMock;
         }
 
-        const {url, method, response} = req;
+        const {url, method, response, timeout} = req;
         const statusArr = Object.keys(req.response);
         const status = statusArr[0];
 
@@ -120,8 +139,9 @@ export class Component extends LitElement {
             status: Number(status),
             path: response[status],
             domains: this.manifest.domains,
+            timeout: 0,
+            enableLogging: false,
         }
-
     }
 
 }

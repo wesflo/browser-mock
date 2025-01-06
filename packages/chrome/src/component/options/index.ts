@@ -10,7 +10,7 @@ import {renderFormInputHint} from "../../util/render/renderFormInputHint";
 
 export default class Component extends LitElement {
     @property({type: String}) label!: string;
-    @property({type: String}) value: string | string[] = [];
+    @property({type: Array}) value: string | string[] = [];
     @property({type: String}) name?: string;
     @property({type: Boolean}) disabled: boolean = false;
     @property({ type: Boolean }) required: boolean = false;
@@ -58,7 +58,8 @@ export default class Component extends LitElement {
     }
 
     connectedCallback() {
-        this.type = this.hasAttribute('multiple') ? 'checkbox' : 'radio'
+        const multiple = this.hasAttribute('multiple')
+        this.type = multiple ? 'checkbox' : 'radio';
         super.connectedCallback();
     }
 

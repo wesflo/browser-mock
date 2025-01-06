@@ -17,6 +17,7 @@ export default class Component extends LitElement {
     static styles = [defaultStyle, formHintStyle, formErrorStyle, labelStyle, style];
 
     render() {
+        console.log( this.checked )
         return html`
             <input type="checkbox" id="switch" ?checked="${this.checked}" @change="${this.handleChange}" />
             <label for="switch">

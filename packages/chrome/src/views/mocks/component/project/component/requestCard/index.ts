@@ -13,27 +13,24 @@ import {generateRequestId} from "../../../../../../util/generateRequestId";
 import {mergeStorageItem} from "../../../../../../util/storage";
 import {STORAGE_ACTIVE_REQUESTS} from "../../../../../../constant";
 import {ifDefined} from "lit-html/directives/if-defined.js";
+import SVGAnimatedBoolean from "happy-dom/lib/svg/SVGAnimatedBoolean";
 
 
 export class Component extends LitElement {
     @property({type: Object}) req!: IManifestRequest;
-    @property({type: Array}) activeMocks!: IActiveMocks;
-    @property({type: Array}) domains!: string[];
-    @property({type: String}) projectId!: string;
-    @property({type: String}) rerenderHack!: string;
+    @property({type: Object}) activeMock!: IActiveMock;
+    @property({type: Boolean}) active: boolean = false;
 
-    @state() active!: boolean;
     @state() enableLogging!: boolean;
     @state() status!: number;
     @state() timeout!: number;
 
     statusArr: string[];
-    activeMockId: string;
 
     static styles = [defaultStyle, textStyle, style];
 
     render() {
-        const {req, statusArr} = this;
+        const {req, statusArr, active, status, enableLogging, timeout} = this;
 
         return html`
             <div class="card">
@@ -46,8 +43,8 @@ export class Component extends LitElement {
                         ${req.url}
                     </h6>
                     <wf-switch
-                            ?checked="${this.active}"
-                            @onChange="${({detail}: CustomEvent) => this.handleRequestToggle(detail, req)}"
+                            .checked="${active}"
+                            @onChange="${({detail}: CustomEvent) => this.handleRequestToggle(detail)}"
                     >
                         enable
                     </wf-switch>
@@ -55,11 +52,11 @@ export class Component extends LitElement {
                 <div class="cnt">
                     <wf-select
                             label="Status"
-                            value="${this.status}"
-                            ?disabled="${!this.active}"
+                            .value="${status}"
+                            ?disabled="${!active}"
                             @onChange="${this.handleRequestStatus}"
                     >
-                        ${this.statusArr.map((status) => html`
+                        ${statusArr.map((status) => html`
                             <wf-option value="${status}">${status}</wf-option>
                         `)}
                         <wf-option value="500">500</wf-option>
@@ -68,12 +65,14 @@ export class Component extends LitElement {
                     <wf-input 
                             name="name" 
                             label="timeout" 
-                            value="${ifDefined(this.timeout)}"
-                            ?disabled="${!this.active}"
+                            value="${ifDefined(timeout)}"
+                            ?disabled="${!active}"
                             @onChange="${this.handleRequestTimeout}"
                     ></wf-input>
+
                     <wf-options
-                            ?disabled="${!this.active}"
+                            ?disabled="${!active}",
+                            .value="${enableLogging ? ['1'] : []}"
                             @onChange="${this.handleRequestLogging}"
                             multiple
                     >
@@ -89,66 +88,43 @@ export class Component extends LitElement {
 
         const {req} = this;
         const statusArr = Object.keys(req.response);
-        const activeMockId = generateRequestId(req);
-        const activeMocks: IActiveMock | null = this.activeMocks[activeMockId];
-
-        this.activeMockId = activeMockId;
-        this.status = activeMocks?.status || Number(statusArr[0])
-        this.active = !!activeMocks;
-        this.enableLogging = activeMocks?.enableLogging;
-        this.timeout = activeMocks?.timeout;
+        this.status = this.activeMock?.status || Number(statusArr[0])
+        this.enableLogging = this.activeMock?.enableLogging;
+        this.timeout = this.activeMock?.timeout;
         this.statusArr = statusArr;
     }
 
-    protected update(changedProperties: PropertyValues) {
-        super.update(changedProperties);
-
-        if(changedProperties.has('rerenderHack')) {
-            this.active = !!this.activeMocks[this.activeMockId];
-        }
-    }
-
-
     handleRequestToggle = async (checked: boolean) => {
-        this.active = checked;
-        await this.saveActiveMock()
+        this.handleChange( {
+            key: 'active',
+            value: checked,
+        });
     }
 
     handleRequestStatus = async ({detail}: CustomEvent) => {
-        this.status = Number(detail);
-        await this.saveActiveMock()
+        this.handleChange( {
+            key: 'status',
+            value: Number(detail),
+        });
     }
 
     handleRequestTimeout = async ({detail}: CustomEvent) => {
-        this.timeout = Number(detail);
-        await this.saveActiveMock()
+        this.handleChange( {
+            key: 'timeout',
+            value: Number(detail),
+        });
     }
 
     handleRequestLogging = async ({detail}: CustomEvent) => {
-        this.enableLogging = !!detail.length;
-        await this.saveActiveMock()
-    }
-
-    saveActiveMock = async () => {
-        if(this.active) {
-            const {url, method, response} = this.req;
-            this.activeMocks[this.activeMockId] = {
-                url,
-                method,
-                status: this.status,
-                timeout: this.timeout,
-                enableLogging: this.enableLogging,
-                path: response[this.status],
-                domains: this.domains
-            }
-        } else {
-            delete this.activeMocks[this.activeMockId];
-        }
-
-        await mergeStorageItem(STORAGE_ACTIVE_REQUESTS, {
-            [this.projectId]: this.activeMocks,
+        this.handleChange( {
+            key: 'enableLogging',
+            value: !!detail.length,
         });
     }
+
+    handleChange = (detail) => this.dispatchEvent(new CustomEvent('onChange', {
+        detail
+    }))
 }
 
 if (!customElements.get('wf-mock-project-request-card')) {
