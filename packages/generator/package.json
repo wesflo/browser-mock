@@ -1,0 +1,47 @@
+{
+  "name": "wf-mock-generator",
+  "version": "0.0.1",
+  "description": "Generates mock json files from swagger yml",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "wf-mock-generator": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prebuild": "rm -rf ./dist/",
+    "dev": "tsc --watch",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch --coverage=false"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/electronicpartnerio/browser-mock.git"
+  },
+  "author": "Florian Wessner",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/electronicpartnerio/browser-mock/issues"
+  },
+  "homepage": "https://github.com/electronicpartnerio/browser-mock#readme",
+  "nodemonConfig": {
+    "ignore": [
+      "node_modules"
+    ]
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "openapi3-ts": "^4.4.0",
+    "promptly": "^3.2.0",
+    "swagger-combine": "^1.4.0",
+    "tslib": "^2.8.1"
+  },
+  "devDependencies": {
+    "@types/promptly": "^3.0.5",
+    "@types/jest": "^29.5.14",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.10.3",
+    "jest": "^29.7.0",
+    "typescript": "^5.7.2"
+  }
+}
