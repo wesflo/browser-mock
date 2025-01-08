@@ -6,4 +6,5 @@
 /packages/chrome/dist/
 /packages/chrome/out-tsc/
 /packages/chrome/tsconfig.tsbuildinfo
-/packages/mock-server/dist/
+/packages/server/dist/
+/packages/generator/dist/
