@@ -6,6 +6,7 @@
   "private": "true",
   "scripts": {
     "dev": "rm -rf ./node_modules/.vite && vite",
+    "dev:popup": "vite build --watch",
     "build": "npm run clean && npm run build:popup && npm run build:sw",
     "build:popup": "vite build --config ./vite.config.ts",
     "build:sw": "vite build --config ./vite.config.sw.ts",

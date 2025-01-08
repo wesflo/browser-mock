@@ -27,7 +27,7 @@ export class BrowserMock extends LitElement {
                 <nav>
                     ${TABS.map(this.renderTabLink)}
                     ${this.buttonTask.render({
-                        complete: this.renderButtons
+                        complete: this.renderSwitch
                     })}
                 </nav>
             `,
@@ -74,7 +74,12 @@ export class BrowserMock extends LitElement {
     });
 
     buttonTask = new Task(this, {
-        task: async () => await getStorageItem(STORAGE_ACTIVE, false),
+        task: async () => {
+            const bmIsActive = await getStorageItem(STORAGE_ACTIVE, false);
+            this.bmIsActive = bmIsActive;
+
+            return bmIsActive;
+        },
         args: () => [],
     });
 
@@ -82,7 +87,8 @@ export class BrowserMock extends LitElement {
         <a href="#" class="tab-link${classMap({active: this.currentView === tab})}" @click="${() => this.currentView = tab}">${i18n.tab[tab]}</a>
     `
 
-    renderButtons = (checked) => {
+    renderSwitch = (checked) => {
+        console.log( checked )
         return html`
         <wf-switch @onChange="${this.handleToggleBm}" inverse ?checked="${checked}"></wf-switch>
     `

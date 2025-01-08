@@ -44,9 +44,7 @@ export class Component extends LitElement {
                                 <dd>${manifest.domains.join(', ')}</dd>
                             </dl>
                         </div>
-                        <wf-button appearance="primary" size="m" @onClick="${this.handleToggleAll}">
-                            toggle all
-                        </wf-button>
+
                     </header>
                     ${manifest.requests.map((request) => {
                         const id = generateRequestId(request);
@@ -66,7 +64,11 @@ export class Component extends LitElement {
                     <wf-error error="${e}"></wf-error>`,
             });
     }
-
+/*
+                        <wf-button appearance="primary" size="m" @onClick="${this.handleToggleAll}">
+                            toggle all
+                        </wf-button>
+ */
     projectTask: Task<[string]> = new Task(this, {
         task: async ([id]) => {
             const [manifest, allActiveMocks] = await Promise.all([

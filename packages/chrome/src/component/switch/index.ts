@@ -8,7 +8,7 @@ import {renderFormInputHint} from "../../util/render/renderFormInputHint";
 import {renderAsterisks} from "../../util/render/renderAsterisks";
 
 export default class Component extends LitElement {
-    @property({ type: Boolean, reflect: true }) checked?: boolean;
+    @property({ type: Boolean, reflect: true }) checked: boolean = false;
     @property({ type: Boolean }) disabled: boolean = false;
     @property({ type: Boolean }) required: boolean = false;
     @property({ type: String }) error?: string;
@@ -17,7 +17,6 @@ export default class Component extends LitElement {
     static styles = [defaultStyle, formHintStyle, formErrorStyle, labelStyle, style];
 
     render() {
-        console.log( this.checked )
         return html`
             <input type="checkbox" id="switch" ?checked="${this.checked}" @change="${this.handleChange}" />
             <label for="switch">
