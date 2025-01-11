@@ -23,6 +23,7 @@ const generator = async () => {
     const responses: TResponses[] = getResponses(cnt);
     const mockData = responses.map(generateMockData);
 
+    await writeFileSync(`${targetPath}/responses.json`, JSON.stringify({responses}, null, 4));
     await writeFileSync(`${targetPath}/tmp.json`, JSON.stringify({mockData}, null, 4));
 
 

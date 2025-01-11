@@ -122,7 +122,9 @@ components:
         value:
           type: integer
         type:
-          type: integer
+          type: string
+          enum:
+            - "integer"
       required:
         - value
         - type

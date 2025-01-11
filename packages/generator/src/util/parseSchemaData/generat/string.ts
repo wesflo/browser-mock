@@ -2,10 +2,16 @@ import {SchemaObject} from "openapi3-ts/oas30";
 import {getMinCount} from "../util/getMinCount";
 import {getMaxCount} from "../util/getMaxCount";
 
-export const generateString = (schema: SchemaObject, chance): any[] => {
-    if(schema.format) {
-        const str = getStringByType(schema.format, chance);
+export const generateString = (schema: SchemaObject, chance): any => {
+    const {format, enum: selection} = schema;
+    if(format) {
+        const str = getStringByType(format, chance);
         if(str) return str;
+    }
+
+    if(selection) {
+        const index = chance.integer({min: 0, max: selection.length - 1});
+        return selection[index];
     }
 
     const min = getMinCount(schema as SchemaObject) || 4;
