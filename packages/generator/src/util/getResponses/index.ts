@@ -15,12 +15,12 @@ export const getResponses = (obj: OpenAPIObject): TResponses[] => {
             for (const status in responses) {
                 const { content } = responses[status];
 
-                const {schema, example, examples} = content ? content[APPLICATION_JSON] : {};
+                const {schema, example, examples} = content ? content[APPLICATION_JSON] || {} : {};
 
                 resp.push({
                     path,
                     method,
-                    status,
+                    status: Number(status),
                     schema,
                     example,
                     examples,

@@ -8,8 +8,9 @@ export const generateArray = (schema: SchemaObject, chance): any[] => {
     const {items, oneOf} = schema;
 
     if(items) {
-        let i = getMinCount(oneOf[0] as SchemaObject);
-        const l = getMaxCount(oneOf[0] as SchemaObject, chance);
+        const countObj = oneOf?.[0] || {};
+        let i = getMinCount(countObj as SchemaObject);
+        const l = getMaxCount(countObj as SchemaObject, chance);
 
         for (; i < l; i++) {
             const item = parseSchemaData(items as SchemaObject, chance);

@@ -7,7 +7,6 @@ export const parseSchemaData = (schema: SchemaObject, chance ): any => {
 
     if(!type && oneOf) {
         const rndSchema = getOneOf(schema, chance);
-        console.log(  rndSchema )
         return parseSchemaData(rndSchema, chance);
     }
 
