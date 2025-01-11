@@ -5,22 +5,25 @@ import {APPLICATION_JSON} from "../../constant";
 
 export const getResponses = (obj: OpenAPIObject): TResponses[] => {
     const resp: TResponses[] = [];
-
-    for (const path in obj) {
-        const methods: PathItemObject = obj[path];
+    const {paths} = obj;
+    for (const path in paths) {
+        const methods: PathItemObject = paths[path];
 
         for (const method in methods) {
             const { responses } = methods[method]
 
             for (const status in responses) {
                 const { content } = responses[status];
-                const schema = content[APPLICATION_JSON];
+
+                const {schema, example, examples} = content ? content[APPLICATION_JSON] : {};
 
                 resp.push({
-                    schema,
                     path,
                     method,
                     status,
+                    schema,
+                    example,
+                    examples,
                 })
             }
         }

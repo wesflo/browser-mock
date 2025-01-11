@@ -32,9 +32,28 @@ paths:
                     items:
                       oneOf:
                         - type: string
+                          minLength: 3
+                          maxLength: 20
                         - type: integer
                         - $ref: "#/components/schemas/IString"
                         - $ref: "#/components/schemas/INumber"
+                    oneOf:
+                      - minItems: 0
+                        maxItems: 20
+              examples: # Child of media type
+                Jessica: # Example 1
+                  value:
+                    id: 10
+                    name: Jessica Smith
+                    children: Horst
+                Ron: # Example 2
+                  value:
+                    id: 11
+                    name: Ron Stewart
+                    children: Hilde
+
+        "204": # status code
+          description: A error string
 
         "500": # status code
           description: A error string

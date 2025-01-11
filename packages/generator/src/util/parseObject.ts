@@ -1,6 +1,7 @@
+/*
 import {isReferenceObject, ReferenceObject, SchemaObject, SchemasObject} from "openapi3-ts/oas30";
 import {handleReferenceObject} from "./handleReferenceObject";
-import {getSchemaType} from "./getSchemaType";
+import {getSchemaType} from "../../getSchemaType";
 import {mergeAllOf} from "./mergeAllOf";
 import {pickOneOf} from "./pickOneOf";
 import {parseArray} from "./parseArray";
@@ -31,5 +32,5 @@ const schemaMap = {
     allOf: mergeAllOf,
     oneOf: pickOneOf,
     array: parseArray,
-    object: parseObject,
-}
+    // object: parseObject,
+}*/

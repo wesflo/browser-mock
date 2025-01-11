@@ -2,9 +2,10 @@
 import {writeFileSync} from "node:fs";
 import * as swaggerCombine from "swagger-combine";
 import * as pkg from "../package.json";
-import {getComponentSchemas} from "./util/getComponentSchemas";
 import {getResponses} from "./util/getResponses";
 import * as chalk from "chalk";
+import {generateMockData} from "./util/generateMockData";
+import {TResponses} from "./util/getResponses/interface";
 
 const log = console.log;
 const generator = async () => {
@@ -19,10 +20,10 @@ const generator = async () => {
     const targetPath = './mocks';
 
     const cnt = await swaggerCombine(swaggerPath, {format: 'yaml'});
-    const responses = getResponses(cnt);
-    // const schemas = getComponentSchemas(cnt);
+    const responses: TResponses[] = getResponses(cnt);
+    const mockData = responses.map(generateMockData);
 
-    await writeFileSync(`${targetPath}/tmp.json`, JSON.stringify({responses, }));
+    await writeFileSync(`${targetPath}/tmp.json`, JSON.stringify({mockData}, null, 4));
 
 
     log(chalk.redBright(swaggerPath, targetPath));
