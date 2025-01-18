@@ -8,3 +8,4 @@
 /packages/chrome/tsconfig.tsbuildinfo
 /packages/server/dist/
 /packages/generator/dist/
+*.tgz
