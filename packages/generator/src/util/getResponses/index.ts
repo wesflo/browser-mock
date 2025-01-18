@@ -1,5 +1,5 @@
 import {OpenAPIObject, PathItemObject} from "openapi3-ts/oas30";
-import { TResponses} from "./interface";
+import { TResponses} from "../../interface";
 import {APPLICATION_JSON} from "../../constant";
 
 

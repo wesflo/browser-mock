@@ -3,6 +3,7 @@ import {generateArray} from "./generat/array";
 import {generateInteger} from "./generat/integer";
 import {generateString} from "./generat/string";
 import {generateNull} from "./generat/null";
+import {generateBoolean} from "./generat/boolean";
 
 export const GENERATOR_MAP = {
     object: generateObject,
@@ -10,6 +11,6 @@ export const GENERATOR_MAP = {
     string: generateString,
     integer: generateInteger,
     number: generateInteger,
-    boolean: generateArray,
+    boolean: generateBoolean,
     null: generateNull,
 }

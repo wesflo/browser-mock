@@ -1,8 +1,9 @@
 import {SchemaObject} from "openapi3-ts/oas30";
 import {getMinCount} from "../util/getMinCount";
 import {getMaxCount} from "../util/getMaxCount";
+import {TMapping} from "../../../interface";
 
-export const generateString = (schema: SchemaObject, chance): any => {
+export const generateString = (schema: SchemaObject, mapping: TMapping, chance): any => {
     const {format, enum: selection} = schema;
     if(format) {
         const str = getStringByType(format, chance);
@@ -14,8 +15,8 @@ export const generateString = (schema: SchemaObject, chance): any => {
         return selection[index];
     }
 
-    const min = getMinCount(schema as SchemaObject) || 4;
-    const max = getMaxCount(schema as SchemaObject, chance);
+    const min = getMinCount(schema.minLength) || 4;
+    const max = getMaxCount(schema.maxLength, chance);
 
     if(min === max) {
         return chance.word({ length: max })
