@@ -42,3 +42,10 @@ export type IMappingObj = IMappingObjBase | IMappingObjString | IMappingObjNumbe
 export type TMapping = {
     [key: string]: IMappingObj
 }
+
+export type TPgkConfig = {
+    swagger?: string;
+    target?: string;
+    mapping?: string;
+    mappings?: string[];
+}

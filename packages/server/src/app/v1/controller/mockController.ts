@@ -26,7 +26,9 @@ export const mockHandler = async (req: Request, res: Response, next): Promise<vo
 
             await req.setTimeout(Number(to))
 
-            res.status(Number(status)).json(JSON.parse(fileCnt));
+            const respObj = typeof fileCnt.value === 'object' && Object.keys(fileCnt).length === 1 ? fileCnt.value : fileCnt
+
+            res.status(Number(status)).json(JSON.parse(respObj));
             return
         }
 

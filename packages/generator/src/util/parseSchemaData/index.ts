@@ -11,10 +11,10 @@ export const parseSchemaData = (schema: WFSchemaObject, mapping: TMapping, chanc
         return parseSchemaData(rndSchema, mapping, chance);
     }
 
-    const example = getExample(schema, chance);
-    if(example) {
-        return example;
-    }
+    // const example = getExample(schema, chance);
+    // if(example) {
+    //     return example;
+    // }
 
     const generator = GENERATOR_MAP[type as string];
 

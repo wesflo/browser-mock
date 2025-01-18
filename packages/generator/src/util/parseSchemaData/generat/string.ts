@@ -2,6 +2,7 @@ import {getMinCount} from "../util/getMinCount";
 import {getMaxCount} from "../util/getMaxCount";
 import {IMappingObjString, TMapping, WFSchemaObject} from "../../../interface";
 import {getMockMapping} from "../../getMockMapping";
+import {getExample} from "../util/getExample";
 
 export const generateString = (schema: WFSchemaObject, mapping: TMapping, chance): any => {
     const {
@@ -16,6 +17,11 @@ export const generateString = (schema: WFSchemaObject, mapping: TMapping, chance
 
     if(defaultVal) {
         return defaultVal;
+    }
+
+    const example = getExample(schema, chance)
+    if(example) {
+        return example;
     }
 
     if(format) {

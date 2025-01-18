@@ -6,7 +6,7 @@ import * as pkg from "../package.json";
 import {getResponses} from "./util/getResponses";
 import * as chalk from "chalk";
 import {generateMockData} from "./util/generateMockData";
-import {TMapping, TResponses} from "./interface";
+import {TMapping, TPgkConfig, TResponses} from "./interface";
 import {generateMockFileName} from "./util/generateMockFileName";
 import {prompt} from "promptly";
 import {getMappings} from "./util/getMappings";
@@ -15,7 +15,7 @@ import * as path from "node:path";
 const log = console.log;
 const generator = async () => {
     const appRoot = process.cwd();
-    let wfGeneratorOptions;
+    let wfGeneratorOptions: TPgkConfig = {};
 
     try {
         const appPkgStr = readFileSync(path.resolve(appRoot , 'package.json'), { encoding: 'utf8'})
@@ -50,9 +50,9 @@ const generator = async () => {
 
 
     const cnt = await swaggerCombine(swaggerPath, {format: 'yaml'});
-    const mapping: TMapping = await getMappings(mappingPath, appRoot)
+    const mapping: TMapping = mappingPath && await getMappings(mappingPath, appRoot)
     const responses: TResponses[] = getResponses(cnt);
-    const mockData = responses.map(resp => generateMockData(resp, mapping));
+    const mockData = responses.map(resp => generateMockData(resp, mapping || {}));
 
     if (!existsSync(mockTargetPath)){
         mkdirSync(mockTargetPath, { recursive: true });
@@ -68,7 +68,7 @@ const generator = async () => {
                     && (!responseStatus || Number(responseStatus) === status)
                 ) {
                     const filename = `${mockTargetPath}/${generateMockFileName(path,method , status)}.json`;
-                    await writeFileSync(filename, JSON.stringify(resp.mock, null, 4));
+                    await writeFileSync(filename, JSON.stringify({value: resp.mock}, null, 4));
                     log(chalk.green(`Generate mock: ${chalk.bold(filename)}`));
                 }
             }

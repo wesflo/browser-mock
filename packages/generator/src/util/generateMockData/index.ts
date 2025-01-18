@@ -8,8 +8,7 @@ export const generateMockData = (responseObj: TResponses, mapping: TMapping): TR
     const chance = new Chance();
 
     if (schema) {
-        const example = getExample(responseObj, chance);
-        responseObj.mock = example || parseSchemaData(schema, mapping, chance);
+        responseObj.mock = parseSchemaData(schema, mapping, chance);
     }
 
     return responseObj;
