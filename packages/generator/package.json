@@ -9,8 +9,10 @@
     "wf-mock-generator": "./dist/index.js"
   },
   "scripts": {
-    "build": "tsc",
-    "prebuild": "rm -rf ./dist/",
+    "build": "npm run prebuild && tsc",
+    "prebuild": "rm -rf dist && mkdir dist",
+    "build:canary": "npm run build && npm publish",
+    "build:local": "npm run build && npm pack",
     "dev": "tsc --watch",
     "test": "jest --coverage",
     "test:watch": "jest --watch --coverage=false"
