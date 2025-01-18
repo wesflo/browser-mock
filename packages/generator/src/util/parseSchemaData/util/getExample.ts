@@ -1,6 +1,6 @@
-import {SchemaObject} from "openapi3-ts/oas30";
+import {WFSchemaObject} from "../../../interface";
 
-export const getExample = (schema: SchemaObject, chance) => {
+export const getExample = (schema: WFSchemaObject, chance) => {
     if(schema.example) {
         return schema.example;
     }

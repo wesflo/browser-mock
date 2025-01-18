@@ -1,5 +1,5 @@
 /*
-import {isReferenceObject, ReferenceObject, SchemaObject, SchemasObject} from "openapi3-ts/oas30";
+import {isReferenceObject, ReferenceObject, WFSchemaObject, SchemasObject} from "openapi3-ts/oas30";
 import {handleReferenceObject} from "./handleReferenceObject";
 import {getSchemaType} from "../../getSchemaType";
 import {mergeAllOf} from "./mergeAllOf";
@@ -8,16 +8,16 @@ import {parseArray} from "./parseArray";
 
 
 
-export const parseObject = (obj: SchemaObject, schemas: SchemasObject): any => {
+export const parseObject = (obj: WFSchemaObject, schemas: SchemasObject): any => {
     if (obj.example) return obj.example;
 
     const resp = {};
     const props = obj.properties || {}
 
     for(const key in props) {
-        const schema: SchemaObject | ReferenceObject = props[key];
+        const schema: WFSchemaObject | ReferenceObject = props[key];
         if (isReferenceObject(schema)) {
-            resp[key] = <SchemaObject>handleReferenceObject(schema, schemas);
+            resp[key] = <WFSchemaObject>handleReferenceObject(schema, schemas);
             return schemas;
         }
         const type = getSchemaType(schema);

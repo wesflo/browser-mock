@@ -1,10 +1,9 @@
-import {SchemaObject} from "openapi3-ts/oas30";
 import {GENERATOR_MAP} from "./constant";
 import {getOneOf} from "./util/getOneOf";
 import {getExample} from "./util/getExample";
-import {TMapping} from "../../interface";
+import {TMapping, WFSchemaObject} from "../../interface"
 
-export const parseSchemaData = (schema: SchemaObject, mapping: TMapping, chance ): any => {
+export const parseSchemaData = (schema: WFSchemaObject, mapping: TMapping, chance ): any => {
     const {type, oneOf} = schema;
 
     if(!type && oneOf) {

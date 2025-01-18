@@ -1,14 +1,37 @@
-import {SchemaObject} from "openapi3-ts/oas30";
 import {getMinCount} from "../util/getMinCount";
 import {getMaxCount} from "../util/getMaxCount";
-import {TMapping} from "../../../interface";
+import {IMappingObjNumber,  TMapping, WFSchemaObject} from "../../../interface";
+import {getMockMapping} from "../../getMockMapping";
 
-export const generateInteger = (schema: SchemaObject, mapping: TMapping, chance): any[] => {
-    const min = getMinCount(schema.minLength) || 4;
-    const max = getMaxCount(schema.maxLength, chance);
+export const generateInteger = (schema: WFSchemaObject, mapping: TMapping, chance): number | string => {
+    const {
+        key,
+        enum: selection,
+        default: defaultVal,
+    } = schema;
+    const map = (getMockMapping(key, mapping)  || {}) as IMappingObjNumber;
 
-    return chance.integer({min, max})
+    if(defaultVal) {
+        return defaultVal;
+    }
+
+    const arr = selection || map.values;
+    if(arr) {
+        const index = chance.integer({min: 0, max: arr.length - 1});
+        return arr[index];
+    }
+
+    const min = map.min ?? getMinCount(schema.minLength);
+    const max = map.max ?? getMaxCount(schema.maxLength, chance);
+    const step = map.step || 1;
+    const rand = Math.floor(Math.random() * Math.floor((max - min) / step) + 1);
+    const number = min + rand * step;
+
+    return map.type === 'string' ? String(number) : number;
 }
 
 
 
+const randomInt = (a: number, b: number) => {
+    return Math.floor(Math.random() * (b - a + 1) + a);
+}

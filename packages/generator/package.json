@@ -35,7 +35,8 @@
     "openapi3-ts": "^4.4.0",
     "promptly": "^3.2.0",
     "swagger-combine": "^1.4.0",
-    "tslib": "^2.8.1"
+    "tslib": "^2.8.1",
+    "yaml": "^2.7.0"
   },
   "devDependencies": {
     "@types/chance": "^1.1.6",

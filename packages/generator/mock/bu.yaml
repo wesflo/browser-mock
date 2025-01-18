@@ -13,262 +13,6 @@ servers:
     description: Production server
 
 paths:
-  /v1/order:
-    post:
-      summary: get the order(s) of a member
-      description: get the order(s) of a member
-      operationId: order/overview
-      x-ep-lambda:
-        vpc: true
-        timeout: 30
-        secrets:
-          - order-service
-          - aurora-db-infonet
-      tags:
-        - Order
-      responses:
-        '200':
-          description: ok
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/orderResponse"
-        '400':
-          $ref: "#/components/responses/badRequest"
-        '403':
-          $ref: "#/components/responses/forbidden"
-        '404':
-          $ref: '#/components/responses/notFound'
-        '500':
-          $ref: "#/components/responses/internalServerError"
-
-  /v1/order/{orderNumber}/details:
-    get:
-      summary: get the whole details of an order
-      description: get the whole details of a order categorized by position numbers
-      operationId: order/details
-      x-ep-lambda:
-        timeout: 10
-        vpc: true
-        secrets:
-          - order-service
-          - aurora-db-infonet
-      tags:
-        - Order
-        - Details
-      parameters:
-        - $ref: "#/components/parameters/orderNumberParameter"
-      responses:
-        '200':
-          description: ok
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/orderDetailsResponse"
-        '400':
-          $ref: "#/components/responses/badRequest"
-        '403':
-          $ref: "#/components/responses/forbidden"
-        '404':
-          $ref: '#/components/responses/notFound'
-        '500':
-          $ref: "#/components/responses/internalServerError"
-
-  /v1/order/{orderNumber}/{positionNumber}:
-    delete:
-      summary: cancel an order position
-      description: cancel an order position
-      operationId: order/position/cancel
-      x-ep-lambda:
-        timeout: 10
-        vpc: true
-        secrets:
-          - order-service
-          - aurora-db-infonet
-      tags:
-        - Order
-        - Cancel
-      parameters:
-        - $ref: "#/components/parameters/orderNumberParameter"
-        - $ref: "#/components/parameters/positionNumberParameter"
-      responses:
-        '204':
-          $ref: "#/components/responses/noContent"
-        '400':
-          $ref: "#/components/responses/badRequest"
-        '403':
-          $ref: "#/components/responses/forbidden"
-        '404':
-          $ref: '#/components/responses/notFound'
-        '409':
-          $ref: '#/components/responses/conflict'
-        '500':
-          $ref: "#/components/responses/internalServerError"
-
-  /v1/order/mark/{orderNumber}/{positionNumber}/{delivered}:
-    put:
-      summary: change the delivered status of an order position
-      description: change the delivered status of an order position
-      operationId: order/markDelivered
-      x-ep-lambda:
-        vpc: true
-        timeout: 10
-        secrets:
-          - order-service
-          - aurora-db-infonet
-      tags:
-        - Order
-        - Mark
-      parameters:
-        - $ref: '#/components/parameters/orderNumberParameter'
-        - $ref: '#/components/parameters/positionNumberParameter'
-        - $ref: '#/components/parameters/deliveredParameter'
-      responses:
-        '200':
-          description: ok
-        '400':
-          $ref: "#/components/responses/badRequest"
-        '403':
-          $ref: "#/components/responses/forbidden"
-        '404':
-          $ref: '#/components/responses/notFound'
-        '500':
-          $ref: "#/components/responses/internalServerError"
-
-  /v1/return:
-    post:
-      summary: submit infos to the return form
-      description: saves the submitted infos from the return form into the database
-      operationId: return/post
-      x-ep-lambda:
-        vpc: true
-        timeout: 10
-        secrets:
-          - order-service
-          - aurora-db-infonet
-      tags:
-        - Order
-        - Return
-        - Form
-        - Save
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/returnReq"
-      responses:
-        '201':
-          description: retoure Id
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RetoureId"
-        '400':
-          $ref: "#/components/responses/badRequest"
-        '403':
-          $ref: "#/components/responses/forbidden"
-        '404':
-          $ref: '#/components/responses/notFound'
-        '409':
-          $ref: '#/components/responses/conflict'
-        '500':
-          $ref: "#/components/responses/internalServerError"
-
-  /v1/return/{orderNumber}/{positionNumber}:
-    get:
-      summary: get the infos for the return form
-      description: get the infos for the return form
-      operationId: return/get
-      parameters:
-        - $ref: "#/components/parameters/orderNumberParameter"
-        - $ref: '#/components/parameters/positionNumberParameter'
-      x-ep-lambda:
-        vpc: true
-        timeout: 10
-        secrets:
-          - order-service
-          - aurora-db-infonet
-      tags:
-        - Order
-        - Return
-        - EmptyForm
-      responses:
-        '200':
-          description: ok
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/returnForm"
-        '400':
-          $ref: "#/components/responses/badRequest"
-        '403':
-          $ref: "#/components/responses/forbidden"
-        '404':
-          $ref: '#/components/responses/notFound'
-        '500':
-          $ref: "#/components/responses/internalServerError"
-
-  /v1/return/reasons:
-    post:
-      summary: get the eligible return reason(s) for a receipt (& positions)
-      description: get the eligible return reason(s) for a receipt (& positions)
-      operationId: return/reasons
-      x-ep-lambda:
-        vpc: true
-        timeout: 30
-        secrets:
-          - order-service
-          - infonet-auftragsverwaltung
-      tags:
-        - Return
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/returnReasonsRequest"
-            examples:
-              successful:
-                value:
-                  belegNummer: "8009477477"
-                  artikelNummer: "0747877"
-                  positionsNummer: "00010"
-                  menge: 1
-              notFound:
-                value:
-                  belegNummer: "8009477477"
-                  artikelNummer: "0747877"
-                  positionsNummer: "00010"
-                  menge: 10000
-              forbidden:
-                value:
-                  belegNummer: "8009477477"
-                  artikelNummer: "0747877"
-                  positionsNummer: "00010"
-                  menge: 1
-              internalServerError:
-                value:
-                  belegNummer: "8010655033"
-                  artikelNummer: "0802501"
-                  positionsNummer: "00020"
-                  menge: 1
-      responses:
-        '200':
-          description: ok
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/returnReasonsResponse"
-        '400':
-          $ref: "#/components/responses/badRequest"
-        '403':
-          $ref: "#/components/responses/forbidden"
-        '404':
-          $ref: '#/components/responses/notFound'
-        '500':
-          $ref: "#/components/responses/internalServerError"
-
   /v1/return/fees:
     post:
       summary: get the return fees for artikel
@@ -279,7 +23,6 @@ paths:
         timeout: 30
         secrets:
           - infonet-auftragsverwaltung
-          - aurora-db-infonet
           - JWT
       tags:
         - Return
@@ -307,20 +50,10 @@ paths:
                   artikelNummer: "0802501"
                   menge: 1
       responses:
-        '200':
-          description: ok
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/returnFeesResponse"
-        '400':
-          $ref: "#/components/responses/badRequest"
         '403':
           $ref: "#/components/responses/forbidden"
         '404':
           $ref: '#/components/responses/notFound'
-        '500':
-          $ref: "#/components/responses/internalServerError"
 
 components:
   securitySchemes:
@@ -487,8 +220,6 @@ components:
           $ref: '#/components/schemas/INumber'
         artikelNummer:
           $ref: '#/components/schemas/IString'
-        downloadLink:
-          $ref: '#/components/schemas/LinkDataGrid'
         bestellreferenz:
           $ref: '#/components/schemas/IString'
         positionsText:
@@ -1048,6 +779,7 @@ components:
           description: "Text for the tooltip"
         src:
           type: string
+
     IString:
       type: object
       additionalProperties: false
@@ -1162,14 +894,6 @@ components:
           type: string
         text:
           type: string
-
-    RetoureId:
-      type: object
-      properties:
-        retoureId:
-          $ref: '#/components/schemas/IString'
-      required:
-        - retoureId
 
     returnForm:
       type: object

@@ -1,14 +1,18 @@
-import {SchemaObject} from "openapi3-ts/oas30";
 import {parseSchemaData} from "../index";
-import {TMapping} from "../../../interface";
+import {TMapping, WFSchemaObject} from "../../../interface";
 
-export const generateObject = (schema: SchemaObject, mapping: TMapping, chance): any => {
+export const generateObject = (schema: WFSchemaObject, mapping: TMapping, chance): any => {
     const resp = {}
     const {properties} = schema;
 
+    const {key: parentKey} = schema
+
     if(properties) {
         for (let key in properties) {
-            resp[key] = parseSchemaData(properties[key] as SchemaObject, mapping, chance)
+            const obj: WFSchemaObject = properties[key] as WFSchemaObject;
+            obj.key = [parentKey, key].join('.');
+
+            resp[key] = parseSchemaData(obj as WFSchemaObject, mapping, chance)
         }
     }
 

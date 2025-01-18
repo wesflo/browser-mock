@@ -1,4 +1,3 @@
-import {SchemaObject} from "openapi3-ts/oas30";
-import {TMapping} from "../../../interface";
+import {TMapping, WFSchemaObject} from "../../../interface";
 
-export const generateBoolean = (schema: SchemaObject, mapping: TMapping, chance): any[] => chance.bool()
+export const generateBoolean = (schema: WFSchemaObject, mapping: TMapping, chance): any[] => chance.bool()
