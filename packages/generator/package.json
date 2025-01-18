@@ -1,6 +1,6 @@
 {
-  "name": "wf-mock-generator",
-  "version": "0.0.1",
+  "name": "@wesflo/generator",
+  "version": "0.0.2",
   "description": "Generates mock json files from swagger yml",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -11,7 +11,7 @@
   "scripts": {
     "build": "npm run prebuild && tsc",
     "prebuild": "rm -rf dist && mkdir dist",
-    "build:canary": "npm run build && npm publish",
+    "publish": "npm run build && npm publish --access=public",
     "build:local": "npm run build && npm pack",
     "dev": "tsc --watch",
     "test": "jest --coverage",
