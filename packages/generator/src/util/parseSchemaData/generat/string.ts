@@ -13,10 +13,7 @@ export const generateString = (schema: WFSchemaObject, mapping: TMapping, chance
         default: defaultVal,
     } = schema;
     const map = (getMockMapping(key, mapping)  || {}) as IMappingObjString;
-if(key.includes('downloadLink.value')) {
-    console.log( schema )
-    console.log( map )
-}
+
     if(defaultVal) {
         return defaultVal;
     }
