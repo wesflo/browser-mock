@@ -38,7 +38,7 @@ const buildRuleset = (activeRequest: IActiveMock, partials: string[], sIndex: nu
             action: {
                 type: RuleActionType.REDIRECT,
                 redirect: {
-                    url: `http://127.0.0.1:1323/latest/mock?${params.join('&')}`
+                    url: `http://127.0.0.1:2313/latest/mock?${params.join('&')}`
                 }
             },
             condition: {

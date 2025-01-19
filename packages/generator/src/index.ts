@@ -68,7 +68,7 @@ const generator = async () => {
                     && (!responseStatus || Number(responseStatus) === status)
                 ) {
                     const filename = `${mockTargetPath}/${generateMockFileName(path,method , status)}.json`;
-                    await writeFileSync(filename, JSON.stringify({value: resp.mock}, null, 4));
+                    await writeFileSync(filename, JSON.stringify(resp.mock, null, 4));
                     log(chalk.green(`Generate mock: ${chalk.bold(filename)}`));
                 }
             }
