@@ -1,7 +1,7 @@
-import express from 'express';
+import {Router} from 'express';
 import {mockController} from "./controller/mockController";
 
-const router = express.Router();
+const router = Router();
 
 router.route(/^\/mock/).all(mockController);
 

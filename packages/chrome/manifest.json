@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "wesflo Mock Proxy",
-  "version": "1.0",
-  "description": "Proxy für API responses auf statischen mock",
+  "version": "0.0.1",
+  "description": "Proxy für REST API requests die an einen lokalen node (express) server umgeleitet werden.",
   "permissions": [
     "activeTab",
     "scripting",

@@ -1,9 +1,9 @@
-import express from 'express';
-import helmet from 'helmet';
-import compression from 'compression';
-import cors from 'cors';
+import * as express from "express";
+import helmet from "helmet";
+import * as cors from "cors";
+import * as bodyParser from "body-parser";
+import * as compression from "compression";
 import router_v1 from './v1';
-import bodyParser from "body-parser";
 
 const app = express();
 app.use((req, res, next) => {
@@ -32,13 +32,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/v1', router_v1);
 app.use('/latest', router_v1);
-app.use((req, res, next) => {
-    res.status(404).send('Mock not found');
-});
 app.get('/ping', async (req, res) => {
     res.status(200).json({
-        status: 'healthy  -jeyyy!',
+        status: 'pong',
     })
+});
+app.use((req, res, next) => {
+    res.status(404).send('Mock not found!');
 });
 
 export default app;

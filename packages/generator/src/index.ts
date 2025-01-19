@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import {writeFileSync, readFileSync, existsSync, mkdirSync} from "node:fs";
 import * as swaggerCombine from "swagger-combine";
-import { parse } from "yaml"
 import * as pkg from "../package.json";
 import {getResponses} from "./util/getResponses";
 import * as chalk from "chalk";
