@@ -5,7 +5,6 @@ import {Request, Response} from "express";
 import {ERROR_MSG_NOTHING_FOUND} from "../../../constants";
 import {generateFilePath} from "../util/generateFilePath";
 import {readFileSync} from "node:fs";
-import {toPromise} from "../util/toPromise";
 
 interface IReqParams {
     status: string,
@@ -15,32 +14,28 @@ interface IReqParams {
 }
 
 export const mockHandler = async (req: Request, res: Response, next): Promise<void> => {
-    try {
-        const {status, to, path, pDir}: IReqParams = req.query;
-        if(path.length) {
-            const mockPath = generateFilePath(path, pDir);
-            const [fileCnt] = await Promise.all([
-                readFileSync(mockPath, 'utf8'),
-                toPromise(to)
-            ])
+    const {status, to, path, pDir}: IReqParams = req.query;
+    const mockPath = path.length ? generateFilePath(path, pDir) : null;
+    let fileCnt;
 
-            await req.setTimeout(Number(to))
-
-            const respObj = typeof fileCnt.value === 'object' && Object.keys(fileCnt).length === 1 ? fileCnt.value : fileCnt
-
-            res.status(Number(status)).json(JSON.parse(respObj));
-            return
+    if (mockPath) {
+        try {
+            fileCnt = readFileSync(mockPath, 'utf8');
+        } catch (err) {
+            apiError({
+                res,
+                err,
+                status: 404,
+                msg: ERROR_MSG_NOTHING_FOUND,
+            });
         }
-
-        res.status(Number(status)).send();
-    } catch (err) {
-        apiError({
-            res,
-            err,
-            status: 404,
-            msg: ERROR_MSG_NOTHING_FOUND,
-        });
     }
+
+    await res.setTimeout(Number(to));
+    res.status(Number(status))
+    fileCnt && res.json(JSON.parse(fileCnt))
+
+    res.send();
 };
 
 export const mockController = catchAsync(mockHandler);
