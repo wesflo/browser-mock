@@ -10,7 +10,7 @@ import {renderFormInputHint} from "../../util/render/renderFormInputHint";
 
 export default class Component extends LitElement {
     @property({type: String}) label!: string;
-    @property({type: String}) value: string | string[] = [];
+    @property({type: Array}) value: string | string[] = [];
     @property({type: String}) name?: string;
     @property({type: Boolean}) disabled: boolean = false;
     @property({ type: Boolean }) required: boolean = false;
@@ -41,34 +41,31 @@ export default class Component extends LitElement {
         const value = item.getAttribute('value');
         const checked = this.value.includes(value);
         return html`
-            <div>
-                <input
-                    id="${id}"
-                    type="${this.type}"
-                    name="${this.name}"
-                    value="${value}"
-                    ?disabled="${this.disabled}"
-                    ?checked="${checked}"
-                    @change="${this.handleChange}"
-                />
-                <label for="${id}">
-                    <span></span>
-                    ${item.innerHTML}
-                </label>
-            </div>
+            <input
+                id="${id}"
+                type="${this.type}"
+                name="${this.name}"
+                value="${value}"
+                ?disabled="${this.disabled}"
+                ?checked="${checked}"
+                @change="${this.handleChange}"
+            />
+            <label for="${id}">
+                <span></span>
+                ${item.innerHTML}
+            </label>
         `
     }
 
     connectedCallback() {
-        this.type = this.hasAttribute('multiple') ? 'checkbox' : 'radio'
+        const multiple = this.hasAttribute('multiple')
+        this.type = multiple ? 'checkbox' : 'radio';
         super.connectedCallback();
     }
 
-    changeHandlerMap: {[key: typeof this.type]: (value: string) => void} = {
+    changeHandlerMap: {[key: string]: (value: string) => void} = {
         radio: (value) => {
-            if(value !== this.value) {
-                this.value = value;
-            }
+            this.value = value;
         },
         checkbox: (value) => {
             const index = this.value.indexOf(value);

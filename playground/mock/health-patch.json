@@ -1,0 +1,7 @@
+{
+  "method": "PATCH",
+  "healthy": true,
+  "message": "I'm healthy!",
+  "version": "1.0.0",
+  "uptime": "1 day, 2 hours, 3 minutes, 4 seconds"
+}

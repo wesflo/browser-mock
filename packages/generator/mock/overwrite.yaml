@@ -1,0 +1,3 @@
+vertriebsauftragsNummer.value:
+  type: number
+  length: 100

@@ -20,7 +20,7 @@ export default class Component extends LitElement {
             <div class="cnt">
                 <slot></slot>
             </div>
-            <wf-button appearance="none" size="xs" .onClick="${this.handleCloseClick}">
+            <wf-button appearance="clean" size="xs" .onClick="${this.handleCloseClick}">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                     <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
                 </svg>
@@ -29,7 +29,7 @@ export default class Component extends LitElement {
     }
 
     renderIcon = (appearance: TNotificationTypes) => {
-        const map: {[key: TNotificationTypes]: TemplateResult} = {
+        const map: {[key: string]: TemplateResult} = {
             success: html`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                 <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/>
             </svg>`,

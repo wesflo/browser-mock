@@ -3,3 +3,11 @@
 */coverage/
 */node_modules/
 .idea/
+/packages/chrome/dist/
+/packages/chrome/out-tsc/
+/packages/chrome/tsconfig.tsbuildinfo
+/packages/server/dist/
+/packages/generator/dist/
+*.tgz
+*.zip
+/packages/generator/tmp/

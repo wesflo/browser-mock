@@ -1,0 +1,18 @@
+{
+  "healthy": true,
+  "message": "I'm healthy!",
+  "version": "1.0.0",
+  "description": "This is a mock health check response",
+  "timestamp": "2021-07-01T00:00:00.000Z",
+  "uptime": "1 day, 2 hours, 3 minutes, 4 seconds",
+  "memory": {
+    "rss": "100 MB",
+    "heapTotal": "50 MB",
+    "heapUsed": "25 MB",
+    "external": "25 MB"
+  },
+    "cpu": {
+        "user": "10%",
+        "system": "5%"
+    }
+}

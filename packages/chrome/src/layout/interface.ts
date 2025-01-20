@@ -1,3 +1,3 @@
-import {TAB_CONFIG, TAB_PROJECTS} from "./constant";
+import {TAB_API_MOCKS, TAB_PROJECTS} from "./constant";
 
-export type TCurrentView = typeof TAB_PROJECTS | typeof TAB_CONFIG;
+export type TCurrentView = typeof TAB_PROJECTS | typeof TAB_API_MOCKS;

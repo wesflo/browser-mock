@@ -24,7 +24,7 @@ export const style = css`
         border: 1px solid var(--grey-5);
         padding-top: 20px;
         padding-bottom: 4px;
-        padding-inline: 16px 40px;
+        padding-inline: 16px 60px;
         min-height: 54px;
         width: 100%;
         max-width: 100%;
@@ -48,15 +48,12 @@ export const style = css`
 
     wf-button {
         position: absolute;
-        top: 50%;
-        right: 8px;
-        transform: translateY(-50%);
+        top: 1px;
+        right: 1px;
         
-        svg {
-            width: 24px;
-            height: 24px;
-            fill: var(--primary);
-        }
+        height: 52px;
+        width: 52px;
+        border-radius: 0 var(--border-radius) var(--border-radius) 0;
         
         &:focus-visible,
         &:focus {

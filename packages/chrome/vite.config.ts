@@ -11,7 +11,6 @@ export default defineConfig({
     plugins: [
     ],
     build: {
-
+        emptyOutDir: false,
     },
-
 });

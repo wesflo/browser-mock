@@ -1,5 +1,5 @@
 import {property} from 'lit/decorators.js';
-import {html, LitElement, nothing} from 'lit';
+import {html, LitElement} from 'lit';
 import {defaultStyle} from "../../util/style/defaultStyle";
 import {formErrorStyle, formHintStyle, formStyle, labelStyle} from "../../util/style/formStyle";
 import {style} from "./style";
@@ -7,13 +7,12 @@ import {classMap} from "lit-html/directives/class-map.js";
 import {renderFormErrorMsg} from "../../util/render/renderFormErrorMsg";
 import {renderFormInputHint} from "../../util/render/renderFormInputHint";
 import {renderAsterisks} from "../../util/render/renderAsterisks";
-import {capitalizeFirstLetter} from "../../util/string/capitalizeFirstLetter";
 import {FormFieldController} from "../../util/formField";
 
 export default class Component extends LitElement {
     @property({type: String}) label!: string;
     @property({type: String}) type: string = 'text';
-    @property({type: String}) value?: string;
+    @property({type: String}) value: string = '';
     @property({type: Boolean}) disabled: boolean = false;
     @property({ type: Boolean }) required: boolean = false;
     @property({ type: String }) error?: string;

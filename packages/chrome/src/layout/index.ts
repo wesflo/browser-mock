@@ -2,7 +2,7 @@ import {html, LitElement} from "lit";
 import {property} from "lit/decorators.js";
 import {classMap} from "lit-html/directives/class-map.js";
 import {Task} from '@lit/task';
-import {TAB_CONFIG, TAB_PROJECTS} from "./constant";
+import {TAB_API_MOCKS, TAB_PROJECTS, TABS} from "./constant";
 import {TCurrentView} from "./interface";
 import {style} from "./style";
 import i18n from "../i18n.json";
@@ -11,41 +11,24 @@ import {resetStyle} from "../util/style/resetStyle";
 import "../component/switch";
 import "../component/progress";
 import "../views/error";
+import {getStorageItem, setStorageItem} from "../util/storage";
+import {STORAGE_ACTIVE} from "../constant";
 
 export class BrowserMock extends LitElement {
     @property({type: Boolean, reflect: true}) bmIsActive: boolean = false;
 
-    @property({type: String}) currentView: TCurrentView = TAB_CONFIG; // Default view
-
-    tabs = [
-        TAB_PROJECTS,
-        TAB_CONFIG
-    ];
+    @property({type: String}) currentView: TCurrentView = TAB_API_MOCKS; // TAB_API_MOCKS; // TAB_PROJECTS //Default view
 
     static styles = [resetStyle, defaultStyle, style];
-    async connectedCallback() {
-        this.setInitialState();
-        window.addEventListener('updateToastMessage', this.handleToast);
-        super.connectedCallback();
-    }
-
-    disconnectedCallback() {
-        window.removeEventListener('updateToastMessage', this.handleToast);
-        super.disconnectedCallback();
-    }
-
-    setInitialState() {
-        // if (view) {
-        //     this.currentView = view;
-        // }
-    }
 
     render() {
         return [
             html`
                 <nav>
-                    ${this.tabs.map(this.renderTabLink)}
-                    ${this.renderButtons()}
+                    ${TABS.map(this.renderTabLink)}
+                    ${this.buttonTask.render({
+                        complete: this.renderSwitch
+                    })}
                 </nav>
             `,
             this.viewLoadTask.render({
@@ -55,12 +38,21 @@ export class BrowserMock extends LitElement {
                     <div class="tabs">
                         ${page}
                     </div>
-                    <wf-progress visible></wf-progress>
                 `,
                 error: (e) => html`
                     <wf-error error="${e}"></wf-error>`,
             }),
         ];
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
+        window.addEventListener('wfReloadApp', this.handleReloadApp);
+    }
+
+    disconnectedCallback() {
+        window.removeEventListener('wfReloadApp', this.handleReloadApp);
+        super.disconnectedCallback();
     }
 
     viewsMap = {
@@ -69,10 +61,10 @@ export class BrowserMock extends LitElement {
             return html`
                 <wf-view-projects></wf-view-projects>`;
         },
-        [TAB_CONFIG]: async () => {
-            await import("../views/config");
+        [TAB_API_MOCKS]: async () => {
+            await import("../views/mocks");
             return html`
-                <wf-view-config></wf-view-config>`;
+                <wf-view-mocks></wf-view-mocks>`;
         },
     }
 
@@ -81,23 +73,35 @@ export class BrowserMock extends LitElement {
         args: () => [this.currentView],
     });
 
+    buttonTask = new Task(this, {
+        task: async () => {
+            const bmIsActive = await getStorageItem(STORAGE_ACTIVE, false);
+            this.bmIsActive = bmIsActive;
+
+            return bmIsActive;
+        },
+        args: () => [],
+    });
+
     renderTabLink = (tab: TCurrentView) => html`
-        <a href="javascript:void(0)" class="tab-link${classMap({active: this.currentView === tab})}" @click="${() => this.currentView = tab}">${i18n.tab[tab]}</a>
+        <a href="#" class="tab-link${classMap({active: this.currentView === tab})}" @click="${() => this.currentView = tab}">${i18n.tab[tab]}</a>
     `
 
-    renderButtons = () => html`
-        <wf-switch .onChange="${this.handleToggleBm}" inverse>
-            ${this.bmIsActive ? 'Deaktivieren' : 'Aktivieren'}
-        </wf-switch>
+    renderSwitch = (checked) => {
+        console.log( checked )
+        return html`
+        <wf-switch @onChange="${this.handleToggleBm}" inverse ?checked="${checked}"></wf-switch>
     `
+    }
 
     handleToggleBm = () => {
         this.bmIsActive = !this.bmIsActive;
+        setStorageItem(STORAGE_ACTIVE, this.bmIsActive)
     }
 
-    handleToast = ({detail}: any) => {
-
-    };
+    handleReloadApp = () => {
+        this.viewLoadTask.run()
+    }
 }
 
 

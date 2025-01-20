@@ -1,22 +1,27 @@
 import {forEach} from "../nodeListHelper";
 import {errorMessages, inputFieldTypesChangeOnly} from "./constant";
-import {ICheckObj, IChecks, TChecks, TDefaultCheckAttributes} from "./interface";
+import {ICheckObj, TChecks, TCheckFn, TDefaultCheckAttributes} from "./interface";
 import {required} from "./validators/required";
 import {min} from "./validators/min";
 import {max} from "./validators/max";
 import {minLength} from "./validators/minLength";
 import {maxLength} from "./validators/maxLength";
+import {LitElement} from "lit";
 
-export class FormController<T, N> {
-    private host: N;
+declare class Form extends LitElement {
+    inputFields: NodeListOf<HTMLElement>;
+}
 
-    checks: IChecks<T>;
-    values: Partial<T>;
+export class FormController<T extends Form, N> {
+    private host: T;
+
+    checks: TChecks = {};
+    values: unknown = {};
     invalidFields: string[] = [];
 
     private _isValide: boolean = !this.invalidFields.length;
 
-    constructor(host: N, checks?: IChecks<T>) {
+    constructor(host: T, checks?: TChecks) {
         this.host = host;
         checks && (this.checks = checks);
 
@@ -25,7 +30,7 @@ export class FormController<T, N> {
 
     validateFormField = (value, item: HTMLElement): boolean => {
         const name = item.getAttribute('name');
-        const checks: TChecks = this.checks[name];
+        const checks: (TCheckFn | ICheckObj)[] = this.checks[name];
 
         if (!checks) {
             return true;
@@ -44,11 +49,11 @@ export class FormController<T, N> {
                 const key = checkFn.name;
                 !this.invalidFields.includes(name) && this.invalidFields.push(name);
                 errorMsg = errorMsg || errorMessages[key] as string;
-                const patterns = errorMsg.match(/\{(.*?)}/g);
+                const patterns = errorMsg && errorMsg.match(/\{(.*?)}/g);
                 patterns && patterns.forEach((pattern: string) => {
                     const attr: string = pattern.replace(/[{}]/g, '');
                     const val: string = item.getAttribute(attr) || 'n/a';
-                    errorMsg = errorMsg?.replace(pattern, val);
+                    errorMsg && (errorMsg = errorMsg.replace(pattern, val));
                 });
 
                 item.setAttribute('error', errorMsg);
@@ -61,12 +66,12 @@ export class FormController<T, N> {
         return true;
     }
 
-    handleInput: EventListener = (evt: CustomEvent) => {
-        // console.log('handleInput', evt.detail );
+    handleInput: EventListener = ({currentTarget, detail}: CustomEvent) => {
+        this.setValue(currentTarget, detail);
     };
 
-    handleChange: EventListener = (evt: CustomEvent) => {
-        // console.log('handleChange', evt.detail );
+    handleChange: EventListener = ({currentTarget, detail}: CustomEvent) => {
+        this.setValue(currentTarget, detail);
     };
 
     handleBlur: EventListener = (evt: CustomEvent) => {
@@ -98,7 +103,7 @@ export class FormController<T, N> {
         forEach(this.host.inputFields, (item: Element) => {
             const name = item.getAttribute('name');
             const defaults = this.getDefaultValidationAttributes(item);
-            const checks: TChecks[] = this.checks[name] || [];
+            const checks: (TCheckFn | ICheckObj)[] = this.checks[name] || [];
             defaults.forEach((key) => this.addCheckToArray(key, checks));
 
             this.checks[name] = checks;
@@ -113,7 +118,7 @@ export class FormController<T, N> {
         maxLength: maxLength,
     }
 
-    addCheckToArray = (key: string, checks: TChecks[]) => {
+    addCheckToArray = (key: string, checks: (TCheckFn | ICheckObj)[]) => {
         const check = this.defaultCheckMap[key];
 
         if (!checks.includes(check)) {
@@ -148,13 +153,29 @@ export class FormController<T, N> {
             const {value} = item as HTMLInputElement;
             this.validateFormField(value, item as HTMLElement);
         });
+        this._isValide = !this.invalidFields.length;
         return this.isValide();
+    }
+
+    getValues = () => this.values as Partial<N>;
+
+    setValue = (item, value) => {
+        const key: keyof N = item.getAttribute('name');
+        this.values[key] = value;
+    };
+
+    setInitialValues = () => {
+        forEach(this.host.inputFields, (item: Element) => {
+            const {value} = item as HTMLInputElement;
+            this.setValue(item as HTMLElement, value);
+        });
     }
 
     hostConnected() {
         setTimeout(() => {
             this.addEventListeners();
             this.setInitialChecks();
+            this.setInitialValues();
         }, 1);
     }
 

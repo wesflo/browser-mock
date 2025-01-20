@@ -1,0 +1,57 @@
+vertriebsauftragsNummer.value:
+  type: number
+  length: 10
+artikelNummer.value:
+  type: number
+  length: 8
+positionsNummer.value:
+  type: number
+  min: 10
+  max: 90
+  step: 10
+bestellreferenz.value:
+  type: paragraph
+  minLength: 50
+  maxLength: 256
+positionsText.value:
+  type: paragraph
+  minLength: 0
+  maxLength: 256
+marke.value:
+  type: string
+  minLength: 3
+  maxLength: 80
+produktName.value:
+  type: paragraph
+  minLength: 3
+  maxLength: 80
+produktBild.value:
+  type: image
+  width: 200
+  height: 400
+warengruppe.value:
+  type: paragraph
+  minLength: 0
+  maxLength: 60
+bezugsArt.key:
+  values:
+    - Lager
+    - Strecke
+    - Lager.Strecke
+lagerOrt.value:
+  type: paragraph
+  minLength: 0
+  maxLength: 60
+nettoEk.value:
+  type: currency
+  min: 6.99
+  max: 50000
+bestellMenge.value:
+  type: number
+  min: 0
+  max: 60
+downloadLink.value:
+  type: link
+  min: 0
+  max: 60
+

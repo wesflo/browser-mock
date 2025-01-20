@@ -8,7 +8,7 @@ import {renderFormInputHint} from "../../util/render/renderFormInputHint";
 import {renderAsterisks} from "../../util/render/renderAsterisks";
 
 export default class Component extends LitElement {
-    @property({ type: Boolean, reflect: true }) checked: boolean = true;
+    @property({ type: Boolean, reflect: true }) checked: boolean = false;
     @property({ type: Boolean }) disabled: boolean = false;
     @property({ type: Boolean }) required: boolean = false;
     @property({ type: String }) error?: string;

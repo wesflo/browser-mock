@@ -1,10 +1,13 @@
 {
   "manifest_version": 3,
-  "name": "wesflo Mock Proxy",
-  "version": "1.0",
-  "description": "Proxy für API responses auf statischen mock",
-  "permissions": ["activeTab", "scripting", "storage", "declarativeContent", "declarativeNetRequest", "alarms"],
-  "host_permissions": ["<all_urls>"],
+  "name": "wesflo MockProxy",
+  "version": "0.0.1",
+  "description": "MockProxy - Flexible Request Interception & Local Response Configuration",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "declarativeNetRequest"
+  ],
   "action": {
     "default_popup": "./dist/index.html",
     "default_icon": {
@@ -15,6 +18,7 @@
     }
   },
   "background": {
-    "service_worker": "./src/sw/background.js"
-  }
+    "service_worker": "./dist/sw/background.js"
+  },
+  "host_permissions": ["<all_urls>"]
 }

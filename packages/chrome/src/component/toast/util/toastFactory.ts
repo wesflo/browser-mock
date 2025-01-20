@@ -11,14 +11,14 @@ export const toastFactory = () => {
         toast.innerText = msg;
         toast.id = id;
 
-        toast.to = setTimeout(() => remove(id), 5000)
+        toast.to = setTimeout(() => remove(id), 4000)
         target.appendChild(toast)
     };
 
     const remove = (id) => {
         const toast = document.getElementById(id) as any;
         if(toast) {
-            toast.style.marginLeft = '-120%';
+            toast.classList.add('fade-out');
             clearTimeout(toast.to)
             setTimeout(() => toast.remove(), 500)
         }

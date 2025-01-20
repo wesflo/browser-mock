@@ -2,6 +2,12 @@ body,html {
     padding: 0;
     margin: 0;
 }
+
+body {
+    min-width: 760px;
+    min-height: 580px;
+}
+
 :root {
     --primary: #009CFD;
     --secondary: #A665F0;
@@ -17,11 +23,14 @@ body,html {
     --tertiary-inverse: #d9f3f8;
 
     --success: #007944;
-    --success-bg: #00c9a1;
+    --success-dark: #006038;
+    --success-bright: #00c9a1;
     --warning: #dc5c03;
-    --warning-bg: #ffab00;
+    --warning-dark: #a64700;
+    --warning-bright: #ffba9c;
     --error: #b41b1b;
-    --error-bg: #ff5457;
+    --error-dark: #8a1414;
+    --error-bright: #ff5457;
 
     --grey-0: #fff;
     --grey-1: #f1f1f1;
@@ -33,7 +42,7 @@ body,html {
     --grey-100: #000;
 
     --font-size: 14px;
-    --font-size-s: 12px;
+    --font-size-s: 10px;
     --font-size-l: 16px;
     --font-color: var(--grey-9);
     --font-color-iverse: var(--grey-1);

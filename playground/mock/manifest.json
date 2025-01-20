@@ -1,0 +1,56 @@
+{
+  "domains": [
+    "http://localhost:5174",
+    "https://api.dev.wesflo.de",
+    "https://api.preprod.wesflo.de",
+    "https://api.wesflo.de"
+  ],
+  "requests": [
+    {
+      "name": "Get Dummy Data",
+      "url": "/api/v1/health",
+      "method": "GET",
+      "response": {
+        "200": "./health.json",
+        "204": "",
+        "400": "./badRequest.json"
+      }
+    },
+    {
+      "name": "Post Dummy Data",
+      "url": "/api/v2/foo/[\\d]{5,10}",
+      "method": "POST",
+      "response": {
+        "200": "../mock/health-post.json",
+        "400": "./badRequest.json"
+      }
+    },
+    {
+      "name": "Put Dummy Data",
+      "url": "/api/v1/return/[\\d]{4,10}/[\\d]{2,10}",
+      "method": "PUT",
+      "response": {
+        "200": "../mock/health-put.json",
+        "400": "./badRequest.json"
+      }
+    },
+    {
+      "name": "Delete Dummy Data",
+      "url": "/api/v1/health",
+      "method": "DELETE",
+      "response": {
+        "200": "./health-delete.json",
+        "400": "./badRequest.json"
+      }
+    },
+    {
+      "name": "Patch Dummy Data",
+      "url": "/api/v1/health",
+      "method": "PATCH",
+      "response": {
+        "200": "./health-patch.json",
+        "400": "./badRequest.json"
+      }
+    }
+  ]
+}

@@ -1,0 +1,917 @@
+openapi: 3.0.3
+info:
+  title: Infonet-Auftragsverwaltung-API
+  description: Endpunkte fuer die Auftragsverwaltung im Infonet
+  version: 3.0.0
+
+servers:
+  - url: 'https://localhost'
+    description: Entwicklungs server
+  - url: 'https://infonet-auftragsverwaltung-api-test.dev.electronicpartner.io'
+    description: Dev server
+  - url: 'https://infonet-auftragsverwaltung-api.electronicpartner.io'
+    description: Production server
+
+paths:
+  /v1/order:
+    post:
+      summary: get the order(s) of a member
+      description: get the order(s) of a member
+      operationId: order/overview
+      x-ep-lambda:
+        vpc: true
+        timeout: 30
+        secrets:
+          - order-service
+          - aurora-db-infonet
+      tags:
+        - Order
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/orderResponse"
+        '400':
+          $ref: "#/components/responses/badRequest"
+        '403':
+          $ref: "#/components/responses/forbidden"
+        '404':
+          $ref: '#/components/responses/notFound'
+        '500':
+          $ref: "#/components/responses/internalServerError"
+
+  /v1/order/{orderNumber}/details:
+    get:
+      summary: get the whole details of an order
+      description: get the whole details of a order categorized by position numbers
+      operationId: order/details
+      x-ep-lambda:
+        timeout: 10
+        vpc: true
+        secrets:
+          - order-service
+          - aurora-db-infonet
+      tags:
+        - Order
+        - Details
+      parameters:
+        - $ref: "#/components/parameters/orderNumberParameter"
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/orderDetailsResponse"
+              examples:
+                Successful:
+                  value:
+                    auftrag:
+                      vertriebsauftragsNummer:
+                        value: 'xxxxxxxxx'
+                      benutzerId:
+                        value: '12346'
+                      foo:
+                        value: 132
+        '400':
+          $ref: "#/components/responses/badRequest"
+        '403':
+          $ref: "#/components/responses/forbidden"
+        '404':
+          $ref: '#/components/responses/notFound'
+        '500':
+          $ref: "#/components/responses/internalServerError"
+
+  /v1/order/{orderNumber}/{positionNumber}:
+    delete:
+      summary: cancel an order position
+      description: cancel an order position
+      operationId: order/position/cancel
+      x-ep-lambda:
+        timeout: 10
+        vpc: true
+        secrets:
+          - order-service
+          - aurora-db-infonet
+      tags:
+        - Order
+        - Cancel
+      parameters:
+        - $ref: "#/components/parameters/orderNumberParameter"
+        - $ref: "#/components/parameters/positionNumberParameter"
+      responses:
+        '204':
+          $ref: "#/components/responses/noContent"
+        '400':
+          $ref: "#/components/responses/badRequest"
+        '403':
+          $ref: "#/components/responses/forbidden"
+        '404':
+          $ref: '#/components/responses/notFound'
+        '409':
+          $ref: '#/components/responses/conflict'
+        '500':
+          $ref: "#/components/responses/internalServerError"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      x-ep-auth:
+        secrets:
+          - usermanager
+          - JWT
+        rights:
+          - bestellbestand
+          - warenkorb-debug
+          - bestell_lager
+          - geschaeftsfuehrung
+          - warenkorb-piloten
+  parameters:
+    orderNumberParameter:
+      name: orderNumber
+      in: path
+      description: orderNumber parameter for the details endpoint
+      required: true
+      schema:
+        type: string
+      examples:
+        successful:
+          value: "0023456789"
+        badRequest:
+          value: "9898525258"
+        forbidden:
+          value: "5615165651"
+        internalServerError:
+          value: "6654167521"
+    positionNumberParameter:
+      name: positionNumber
+      in: path
+      description: positionNumber parameter for the order
+      required: true
+      schema:
+        type: integer
+      examples:
+        successful:
+          value: 10
+        badRequest:
+          value: 00010
+        forbidden:
+          value: 00000
+        internalServerError:
+          value: 12345
+    deliveredParameter:
+      name: delivered
+      in: path
+      description: toggle flag for mark
+      required: true
+      schema:
+        type: boolean
+      examples:
+        successful:
+          value: true
+        notFound:
+          value: true
+        forbidden:
+          value: true
+        internalServerError:
+          value: true
+    invoiceNumberParameter:
+      name: invoiceNumber
+      in: path
+      description: invoice number
+      required: true
+      schema:
+        type: string
+      examples:
+        successful:
+          value: "8009209545"
+        notFound:
+          value: "1111111111"
+        forbidden:
+          value: "9999999999"
+        internalServerError:
+          value: "0000000000"
+
+    readParameter:
+      name: read
+      in: path
+      description: a flag indicating if the document shall be marked as read or as unread
+      required: true
+      schema:
+        type: boolean
+      examples:
+        successful:
+          value: true
+        notFound:
+          value: true
+        forbidden:
+          value: true
+        internalServerError:
+          value: true
+
+  schemas:
+    bezugsartFilter:
+      type: string
+      enum:
+        - bezugsart.Lager
+        - bezugsart.Strecke
+        - bezugsart.Virtuell
+    chBezugsartFilter:
+      type: string
+      enum:
+        - bezugsart.Eurolager
+        - bezugsart.Dietlikon
+        - bezugsart.Strecke
+    searchRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        filter:
+          type: object
+          additionalProperties: true
+          # type: string
+        sorts:
+          type: object
+          additionalProperties:
+            type: string
+        orderType:
+          type: string
+          enum:
+            - order
+            - standing
+            - return
+            - invoice
+        paginate:
+          $ref: '#/components/schemas/pagination'
+
+    orderResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        totalPages:
+          type: number
+        recordsTotal:
+          type: number
+        recordsFiltered:
+          type: number
+        details:
+          type: object
+          properties:
+            items:
+              $ref: '#/components/schemas/orders'
+
+    orders:
+      type: array
+      items:
+        $ref: '#/components/schemas/order'
+
+    order:
+      type: object
+      additionalProperties: false
+      properties:
+        vertriebsauftragsNummer:
+          $ref: '#/components/schemas/IString'
+        positionsNummer:
+          $ref: '#/components/schemas/INumber'
+        artikelNummer:
+          $ref: '#/components/schemas/IString'
+        downloadLink:
+          $ref: '#/components/schemas/LinkDataGrid'
+        bestellreferenz:
+          $ref: '#/components/schemas/IString'
+        positionsText:
+          $ref: '#/components/schemas/IString'
+        marke:
+          $ref: '#/components/schemas/IString'
+        produktName:
+          $ref: '#/components/schemas/IString'
+        produktBild:
+          $ref: "#/components/schemas/ImageData"
+        warengruppe:
+          $ref: '#/components/schemas/IString'
+        bezugsArt:
+          $ref: '#/components/schemas/II18n'
+        lagerOrt:
+          $ref: '#/components/schemas/II18n'
+        nettoEk:
+          $ref: '#/components/schemas/IPrice'
+        rechnungsNetto:
+          $ref: '#/components/schemas/IPrice'
+        bestellMenge:
+          $ref: '#/components/schemas/INumber'
+        zugeteilteMenge:
+          $ref: '#/components/schemas/INumber'
+        gelieferteMenge:
+          $ref: '#/components/schemas/INumber'
+        stornoMenge:
+          $ref: '#/components/schemas/INumber'
+        absageGrund:
+          $ref: '#/components/schemas/II18n'
+        rueckstaendigeMenge:
+          $ref: '#/components/schemas/INumber'
+        naechsteLieferung:
+          $ref: '#/components/schemas/IDate'
+        auftragsDatum:
+          $ref: '#/components/schemas/IDate'
+        warenausgangsDatum:
+          $ref: '#/components/schemas/IDate'
+        istGeliefert:
+          $ref: '#/components/schemas/IBool'
+        bestellbar:
+          $ref: '#/components/schemas/AddToCartButton'
+        stornierbar:
+          $ref: '#/components/schemas/IBool'
+        retournierbar:
+          $ref: '#/components/schemas/IBool'
+        produktLinie:
+          $ref: '#/components/schemas/IString'
+        geliefertMarkierenErlaubt:
+          $ref: '#/components/schemas/IBool'
+        istGeliefertMarkiert:
+          $ref: '#/components/schemas/IBool'
+        geplantesLieferdatum:
+          $ref: '#/components/schemas/IDate'
+        lieferKw:
+          $ref: '#/components/schemas/IString'
+        artikelHatBestand:
+          $ref: '#/components/schemas/IBool'
+        debug:
+          $ref: '#/components/schemas/IBool'
+        status:
+          $ref: '#/components/schemas/INumber'
+        warenkorbId:
+          $ref: '#/components/schemas/IString'
+
+    orderDetailsResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        auftrag:
+          $ref: "#/components/schemas/orderHeader"
+#        lieferant:
+#          $ref: "#/components/schemas/Lieferant"
+#        kef:
+#          $ref: "#/components/schemas/KefData"
+#        positionen:
+#          type: array
+#          items:
+#            $ref: '#/components/schemas/orderPosition'
+      required:
+#        - positionen
+        - auftrag
+
+    orderHeader:
+      type: object
+      additionalProperties: false
+      properties:
+        vertriebsauftragsNummer:
+          $ref: '#/components/schemas/IString'
+        foo:
+          $ref: '#/components/schemas/INumber'
+        auftragsDatum:
+          $ref: '#/components/schemas/IDate'
+        bestelltyp:
+          $ref: '#/components/schemas/II18n'
+        benutzerId:
+          $ref: '#/components/schemas/IString'
+        bezugsArt:
+          $ref: '#/components/schemas/II18n'
+        herkunft:
+          $ref: '#/components/schemas/IString'
+        lieferant:
+          $ref: '#/components/schemas/IString'
+        exportStatus:
+          $ref: '#/components/schemas/II18n'
+        auftraggeber:
+          $ref: '#/components/schemas/IString'
+        bestellreferenz:
+          $ref: '#/components/schemas/IString'
+        warenkorbId:
+          $ref: '#/components/schemas/IString'
+        debug:
+          $ref: '#/components/schemas/IBool'
+
+    orderPosition:
+      type: object
+      additionalProperties: false
+      properties:
+        positionsNummer:
+          $ref: '#/components/schemas/INumber'
+        artikelNummer:
+          $ref: '#/components/schemas/IString'
+        marke:
+          $ref: '#/components/schemas/IString'
+        herstellerBezeichnung:
+          $ref: '#/components/schemas/IString'
+        warengruppe:
+          $ref: '#/components/schemas/IString'
+        produktName:
+          $ref: '#/components/schemas/IString'
+        produktLinie:
+          $ref: '#/components/schemas/IString'
+        produktBild:
+          $ref: '#/components/schemas/ImageData'
+        produktLink:
+          $ref: '#/components/schemas/LinkDataGrid'
+        lieferant:
+          $ref: '#/components/schemas/IString'
+        lagerOrt:
+          $ref: '#/components/schemas/II18n'
+        bestellMenge:
+          $ref: '#/components/schemas/INumber'
+        gelieferteMenge:
+          $ref: '#/components/schemas/INumber'
+        rueckstaendigeMenge:
+          $ref: '#/components/schemas/INumber'
+        absageGrund:
+          $ref: '#/components/schemas/II18n'
+        zugeteilteMenge:
+          $ref: '#/components/schemas/INumber'
+        stornoMenge:
+          $ref: '#/components/schemas/INumber'
+        positionsText:
+          $ref: '#/components/schemas/IString'
+        retournierbar:
+          $ref: '#/components/schemas/IBool'
+        stornierbar:
+          $ref: '#/components/schemas/IBool'
+        bestellbar:
+          $ref: '#/components/schemas/AddToCartButton'
+        istGeliefert:
+          $ref: '#/components/schemas/IBool'
+        istGeliefertMarkiert:
+          $ref: '#/components/schemas/IBool'
+        geliefertMarkierenErlaubt:
+          $ref: '#/components/schemas/IBool'
+        geplantesLieferdatum:
+          $ref: '#/components/schemas/IDate'
+        lieferKw:
+          $ref: '#/components/schemas/IString'
+        artikelHatBestand:
+          $ref: '#/components/schemas/IBool'
+        lieferungen:
+          type: array
+          items:
+            $ref: '#/components/schemas/delivery'
+        status:
+          $ref: '#/components/schemas/INumber'
+
+    delivery:
+      type: object
+      additionalProperties: false
+      properties:
+        lieferscheinNummer:
+          $ref: '#/components/schemas/IString'
+        lieferPositionsNummer:
+          $ref: '#/components/schemas/IString'
+        artikelNummer:
+          $ref: '#/components/schemas/IString'
+        lieferMenge:
+          $ref: '#/components/schemas/INumber'
+        warenausgangsDatum:
+          $ref: '#/components/schemas/IDate'
+        lieferDatum:
+          $ref: '#/components/schemas/IDate'
+        lieferAdresse:
+          $ref: '#/components/schemas/Address'
+        kefAdresse:
+          $ref: '#/components/schemas/KefAddress'
+        belegNummer:
+          $ref: '#/components/schemas/IString'
+        rechnungsposition:
+          $ref: '#/components/schemas/IString'
+        rechnungsDatum:
+          $ref: '#/components/schemas/IDate'
+        sendungsNummer:
+          type: array
+          items:
+            $ref: '#/components/schemas/IString'
+        serienNummer:
+          type: array
+          items:
+            $ref: '#/components/schemas/IString'
+
+    Address:
+      type: object
+      additionalProperties: false
+      properties:
+        land:
+          $ref: '#/components/schemas/IString'
+        ort:
+          $ref: '#/components/schemas/IString'
+        plz:
+          $ref: '#/components/schemas/IString'
+        strasseHausnummer:
+          $ref: '#/components/schemas/IString'
+        name1:
+          $ref: '#/components/schemas/IString'
+        name2:
+          $ref: '#/components/schemas/IString'
+        name3:
+          $ref: '#/components/schemas/IString'
+
+    KefData:
+      type: object
+      additionalProperties: false
+      properties:
+        klient:
+          $ref: '#/components/schemas/KefAddress'
+        partner:
+          $ref: '#/components/schemas/KefPartner'
+      required: [
+        "klient",
+        "partner"
+      ]
+    KefAddress:
+      type: object
+      properties:
+        energieBerater:
+          $ref: '#/components/schemas/IString'
+        vorname:
+          $ref: '#/components/schemas/IString'
+        nachname:
+          $ref: '#/components/schemas/IString'
+        strasse:
+          $ref: '#/components/schemas/IString'
+        hausNummer:
+          $ref: '#/components/schemas/IString'
+        stiege:
+          $ref: '#/components/schemas/IString'
+        top:
+          $ref: '#/components/schemas/IString'
+        plz:
+          $ref: '#/components/schemas/IString'
+        ort:
+          $ref: '#/components/schemas/IString'
+        telefon:
+          $ref: '#/components/schemas/IString'
+        eMail:
+          $ref: '#/components/schemas/IString'
+        kontakt:
+          $ref: '#/components/schemas/II18n'
+        freiText:
+          $ref: '#/components/schemas/IString'
+      required: [
+        "energieBerater",
+        "vorname",
+        "nachname",
+        "strasse",
+        "hausNummer",
+        "plz",
+        "ort",
+        "kontakt"
+      ]
+    KefPartner:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/IString'
+        strasse:
+          $ref: '#/components/schemas/IString'
+        plz:
+          $ref: '#/components/schemas/IString'
+        ort:
+          $ref: '#/components/schemas/IString'
+        ansprechpartner:
+          $ref: '#/components/schemas/IString'
+        ansprechpartnerEmail:
+          type: array
+          items:
+            $ref: '#/components/schemas/IString'
+      required: [
+        "name",
+        "strasse",
+        "plz",
+        "ort",
+        "ansprechpartner"
+      ]
+
+    Lieferant:
+      type: object
+      additionalProperties: false
+      properties:
+        partnerNummer:
+          $ref: '#/components/schemas/IString'
+        name:
+          $ref: '#/components/schemas/IString'
+        webseite:
+          $ref: '#/components/schemas/IString'
+        email:
+          $ref: '#/components/schemas/IString'
+        telefon:
+          $ref: '#/components/schemas/IString'
+        fax:
+          $ref: '#/components/schemas/IString'
+        anschrift:
+          $ref: '#/components/schemas/Address'
+
+
+    AddToCartButton:
+      type: object
+      additionalProperties: false
+      properties:
+        value:
+          type: string
+          enum:
+            - "NoPermission"
+            - "NotAllowed"
+            - "Allowed"
+        hidden:
+          type: boolean
+
+    IPrice:
+      type: object
+      additionalProperties: false
+      properties:
+        value:
+          type: number
+        type:
+          type: string
+          enum:
+            - 'currency'
+        currency:
+          type: string
+          enum:
+            - 'EUR'
+            - 'CHF'
+        currency_position:
+          type: string
+          nullable: true
+          description: Position für die Anzeige der Währung
+          enum:
+            - 'left'
+            - 'right'
+        position:
+          $ref: '#/components/schemas/DatagridPosition'
+      required:
+        - value
+        - type
+        - currency
+
+    IDate:
+      type: object
+      additionalProperties: false
+      properties:
+        value:
+          type: number
+        type:
+          type: string
+          enum:
+            - 'date'
+        position:
+          $ref: '#/components/schemas/DatagridPosition'
+      required:
+        - value
+        - type
+
+    INumber:
+      type: object
+      additionalProperties: false
+      properties:
+        type:
+          type: string
+          default: "number"
+        step:
+          type: integer
+        min:
+          type: integer
+        max:
+          type: integer
+        value:
+          type: integer
+        position:
+          $ref: '#/components/schemas/DatagridPosition'
+
+    Ipercentage:
+      type: object
+      additionalProperties: false
+      properties:
+        value:
+          type: number
+        type:
+          type: string
+          default: "percentage"
+        min:
+          type: number
+        max:
+          type: number
+        position:
+          $ref: '#/components/schemas/DatagridPosition'
+
+    LinkDataGrid:
+      type: object
+      properties:
+        type:
+          type: string
+          default: "link"
+          enum:
+            - "link"
+        label:
+          type: string
+          description: "Label to display"
+        value:
+          type: string
+          description: "URL to special site"
+
+    ImageData:
+      type: object
+      additionalProperties: false
+      properties:
+        type:
+          type: string
+          default: "image"
+        value:
+          type: string
+          description: "Text for the tooltip"
+        src:
+          type: string
+    IString:
+      type: object
+      additionalProperties: false
+      properties:
+        value:
+          type: string
+          example:  "Lorem"
+
+        type:
+          type: string
+          enum:
+            - 'string'
+        position:
+          $ref: '#/components/schemas/DatagridPosition'
+      required:
+        - value
+        - type
+
+    II18n:
+      type: object
+      additionalProperties: true
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+        type:
+          type: string
+          enum:
+            - 'i18n'
+        position:
+          $ref: '#/components/schemas/DatagridPosition'
+      required:
+        - value
+        - type
+
+    IBool:
+      type: object
+      additionalProperties: false
+      properties:
+        value:
+          type: boolean
+        type:
+          type: string
+          enum:
+            - "boolean"
+        position:
+          $ref: '#/components/schemas/DatagridPosition'
+        hidden:
+          type: boolean
+      required:
+        - value
+        - type
+
+    DatagridPosition:
+      type: string
+      description: Position für die Anzeige des Feldinhalts
+      nullable: true
+      enum:
+        - 'start'
+        - 'middle'
+        - 'end'
+    pagination:
+      type: object
+      additionalProperties: false
+      properties:
+        pageSize:
+          type: number
+        currentPage:
+          type: number
+    ResponseHttpError:
+      type: object
+      additionalProperties: false
+      properties:
+        error:
+          type: string
+          description: Error message in case of failure
+      required:
+        - error
+    SelectBoxOptionDataGrid:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        properties:
+          key:
+            type: string
+          value:
+            type: string
+
+    SelectBoxDataGrid:
+      type: object
+      additionalProperties: false
+      properties:
+        type:
+          type: string
+          default: "select"
+        value:
+          type: string
+        options:
+          $ref: "#/components/schemas/SelectBoxOptionDataGrid"
+
+    SerialNumbers:
+      type: array
+      minItems: 0
+      items:
+        $ref: '#/components/schemas/SerialNumber'
+
+    SerialNumber:
+      type: object
+      additionalProperties: false
+      properties:
+        wert:
+          type: string
+        manuell:
+          type: boolean
+
+  responses:
+    created:
+      description: Created
+      content:
+        application/json:
+          examples:
+            Successful:
+              value: ""
+    noContent:
+      description: No Content
+      content:
+        application/json:
+          examples:
+            successful:
+              value: ""
+    badRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseHttpError'
+          examples:
+            badRequest:
+              value:
+                error: "Bad request message"
+    forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseHttpError'
+          examples:
+            forbidden:
+              value:
+                error: "Forbidden message"
+    notFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseHttpError'
+          examples:
+            notFound:
+              value:
+                error: "Not Found"
+    conflict:
+      description: Already Exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseHttpError'
+          examples:
+            notFound:
+              value:
+                error: "Already Exists"
+    internalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseHttpError'
+          examples:
+            internalServerError:
+              value:
+                error: "Internal Server Error"
+
+security:
+  - bearerAuth: [ ]

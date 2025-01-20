@@ -1,12 +1,19 @@
 {
-  "name": "browser-mock-chrome-ext",
+  "name": "@wesflo/chrome-mock-proxy",
   "version": "0.0.1",
   "description": "Browser Mock Extension",
   "type": "module",
   "private": "true",
   "scripts": {
     "dev": "rm -rf ./node_modules/.vite && vite",
-    "build": "rm -Rf ./dist && mkdir ./dist && vite build",
+    "dev:popup": "vite build --watch",
+    "build": "npm run clean && npm run build:popup && npm run build:sw",
+    "build:popup": "vite build --config ./vite.config.ts",
+    "build:sw": "vite build --config ./vite.config.sw.ts",
+    "publish": "npm run build && node publish.js",
+    "dev:sw": "vite build --config ./vite.config.sw.ts --watch",
+    "clean": "rm -rf ./dist && rm -f ./wesflo-chrome-mock.zip && mkdir ./dist",
+    "cem": "cem analyze",
     "tsc": "tsc",
     "preview": "vite preview",
     "test": "vitest"
@@ -28,11 +35,15 @@
     "tslib": "^2.8.1"
   },
   "devDependencies": {
+    "@custom-elements-manifest/analyzer": "^0.10.4",
     "@testing-library/dom": "^10.4.0",
+    "@types/chrome": "^0.0.287",
+    "archiver": "^7.0.1",
     "happy-dom": "^15.11.7",
     "jest-environment-jsdom": "^29.7.0",
     "typescript": "^5.7.2",
     "vite": "^5.4.11",
+    "vite-plugin-banner": "^0.8.0",
     "vitest": "^2.1.8"
   }
 }

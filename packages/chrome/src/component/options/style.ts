@@ -1,6 +1,23 @@
 import {css} from "lit";
 
 export const style = css`
+    :host {
+        position: relative;
+    }
+    
+    :host([disabled]) {
+        cursor: default;
+        pointer-events: none;
+        
+        .options label {
+            color: var(--grey-3);
+
+            span {
+                border-color: var(--grey-3);
+            }
+        }
+    }
+    
     label {
         position: unset;
         display: block;
@@ -55,6 +72,7 @@ export const style = css`
         opacity: 0;
         appearance: none;
         margin: 0;
+        position: absolute;
 
         &:focus-visible {
             outline: none;

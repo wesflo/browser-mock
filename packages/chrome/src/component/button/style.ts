@@ -24,51 +24,86 @@ export const style = css`
         cursor: pointer;
         border-radius: 999em;
         transition: all 300ms ease-in-out;
+        background-color: transparent;
     }
 
+    ::slotted(svg) {
+        width: 24px;
+        height: 24px;
+        fill: var(--grey-0);
+        transition: fill 300ms ease-in-out;
+    }
+    
+    .xs,
+    .s {
+        font-size: var(--font-size-s);
+
+        ::slotted(svg) {
+            width: 18px;
+            height: 18px;
+        }
+    }
     .xs {
         padding: 2px 8px;
-        font-size: var(--font-size-s);
     }
 
     .s {
         padding: 4px 12px;
-        font-size: var(--font-size-s);
     }
 
     .m {
         padding: 8px 16px;
     }
 
+    .l,
+    .xl {
+        font-size: var(--font-size-l);
+
+        ::slotted(svg) {
+            width: 32px;
+            height: 32px;
+        }
+    }
+
     .l {
         padding: 12px 24px;
-        font-size: var(--font-size-l);
     }
 
     .xl {
         padding: 16px 36px;
-        font-size: var(--font-size-l);
+    }
+
+    .inherit {
+        padding: inherit;
+        font-size: inherit;
+        width: inherit;
+        height: inherit;
+        border-radius: inherit;
     }
 
     .primary, .secondary, .tertiary {
-        color: #fff;
+        color: var(--grey-0);
     }
 
-    .none {
+    .clean {
         background-color: rgba(0,0,0, 0);
         border-color: rgba(0,0,0, 0);
-        
+
         &:hover,
         &:focus,
         &:focus-visible {
-            background-color: rgba(0,0,0, .1);
+            background-color: var(--primary-inverse);
+        }
+
+        ::slotted(svg) {
+            fill: var(--grey-7);
         }
     }
 
     .primary {
         background-color: var(--primary);
         border-color: var(--primary);
-        
+
         &:hover,
         &:focus,
         &:focus-visible {
@@ -101,58 +136,146 @@ export const style = css`
         }
     }
 
-    .primary-outline {
-        border-color: var(--primary);
-        color: var(--primary);
-    }
-
-    .secondary-outline {
-        border-color: var(--secondary);
-        color: var(--secondary);
-    }
-
-    .tertiary-outline {
-        border-color: var(--tertiary);
-        color: var(--tertiary);
-    }
-
     .primary-outline,
-    .secondary-outline,
-    .tertiary-outline {
-        &:hover,
-        &:focus,
-        &:focus-visible {
-            background-color: #f1f1f1;
-        }
-    }
-
     .primary-clean {
         color: var(--primary);
+
+        ::slotted(svg) {
+            fill: var(--primary);
+        }
 
         &:hover,
         &:focus,
         &:focus-visible {
             color: var(--primary-dark);
+
+            ::slotted(svg) {
+                fill: var(--primary-dark);
+            }
         }
     }
 
+    .primary-outline {
+        border-color: var(--primary);
+
+        &:hover,
+        &:focus,
+        &:focus-visible {
+            border-color: var(--primary-dark);
+        }
+    }
+
+    .secondary-outline,
     .secondary-clean {
         color: var(--secondary);
+
+        ::slotted(svg) {
+            fill: var(--secondary);
+        }
 
         &:hover,
         &:focus,
         &:focus-visible {
             color: var(--secondary-dark);
+
+            ::slotted(svg) {
+                fill: var(--secondary-dark);
+            }
+        }
+    }
+    
+    .secondary-outline {
+        border-color: var(--secondary);
+
+        &:hover,
+        &:focus,
+        &:focus-visible {
+            border-color: var(--secondary-dark);
         }
     }
 
+    .tertiary-outline,
     .tertiary-clean {
         color: var(--tertiary);
+
+        ::slotted(svg) {
+            fill: var(--tertiary);
+        }
 
         &:hover,
         &:focus,
         &:focus-visible {
             color: var(--tertiary-dark);
+            ::slotted(svg) {
+                fill: var(--tertiary-dark);
+            }
+        }
+    }
+    
+    .tertiary-outline {
+        border-color: var(--tertiary);
+
+        &:hover,
+        &:focus,
+        &:focus-visible {
+            border-color: var(--tertiary-dark);
+        }
+    }
+
+    .danger-outline,
+    .danger-clean {
+        color: var(--error);
+
+        ::slotted(svg) {
+            fill: var(--error);
+        }
+
+        &:hover,
+        &:focus,
+        &:focus-visible {
+            color: var(--error-dark);
+            
+            ::slotted(svg) {
+                fill: var(--error-dark);
+            }
+        }
+    }
+    
+    .danger-outline {
+        border-color: var(--error);
+
+        &:hover,
+        &:focus,
+        &:focus-visible {
+            border-color: var(--error-dark);
+        }
+    }
+
+    .success-outline,
+    .success-clean {
+        color: var(--success);
+
+        ::slotted(svg) {
+            fill: var(--success);
+        }
+
+        &:hover,
+        &:focus,
+        &:focus-visible {
+            color: var(--success-dark);
+            ::slotted(svg) {
+                fill: var(--success-dark);
+            }
+        }
+    }
+    
+    .success-outline {
+        border-color: var(--success);
+
+        &:hover,
+        &:focus,
+        &:focus-visible {
+            border-color: var(--success-dark);
         }
     }
 `
@@ -161,16 +284,13 @@ export const buttonsWrapperStyles = css`
     .buttons {
         display: flex;
         gap: 16px;
-    
+
         &.right {
             justify-content: right;
         }
-    
+
         &.center {
             justify-content: center;
         }
-    }
-    wf-button {
-        margin: 0 !important;
     }
 `

@@ -1,16 +1,14 @@
 import {css} from "lit";
 
 export const style = css`
-    :host * {
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    wf-button {
         margin-bottom: 16px;
-    }
-    ep-collapse {
-        margin-bottom: 8px;
-    }
-    :host *,
-    ep-collapse {
-        &:last-child {
-            margin-bottom: 0;
-        }
     }
 `
