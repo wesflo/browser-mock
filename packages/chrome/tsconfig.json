@@ -24,7 +24,7 @@
     "inlineSources": true,
     "rootDir": "./src",
     "incremental": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
   },
   "include": [
     "**/*.ts"

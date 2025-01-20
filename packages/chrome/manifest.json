@@ -1,15 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "wesflo Mock Proxy",
+  "name": "wesflo MockProxy",
   "version": "0.0.1",
-  "description": "Proxy für REST API requests die an einen lokalen node (express) server umgeleitet werden.",
+  "description": "MockProxy - Flexible Request Interception & Local Response Configuration",
   "permissions": [
     "activeTab",
-    "scripting",
     "storage",
-    "declarativeContent",
-    "declarativeNetRequest",
-    "alarms"
+    "declarativeNetRequest"
   ],
   "action": {
     "default_popup": "./dist/index.html",
