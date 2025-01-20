@@ -65,6 +65,16 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/orderDetailsResponse"
+              examples:
+                Successful:
+                  value:
+                    auftrag:
+                      vertriebsauftragsNummer:
+                        value: 'xxxxxxxxx'
+                      benutzerId:
+                        value: '12346'
+                      foo:
+                        value: 132
         '400':
           $ref: "#/components/responses/badRequest"
         '403':
@@ -102,223 +112,6 @@ paths:
           $ref: '#/components/responses/notFound'
         '409':
           $ref: '#/components/responses/conflict'
-        '500':
-          $ref: "#/components/responses/internalServerError"
-
-  /v1/order/mark/{orderNumber}/{positionNumber}/{delivered}:
-    put:
-      summary: change the delivered status of an order position
-      description: change the delivered status of an order position
-      operationId: order/markDelivered
-      x-ep-lambda:
-        vpc: true
-        timeout: 10
-        secrets:
-          - order-service
-          - aurora-db-infonet
-      tags:
-        - Order
-        - Mark
-      parameters:
-        - $ref: '#/components/parameters/orderNumberParameter'
-        - $ref: '#/components/parameters/positionNumberParameter'
-        - $ref: '#/components/parameters/deliveredParameter'
-      responses:
-        '200':
-          description: ok
-        '400':
-          $ref: "#/components/responses/badRequest"
-        '403':
-          $ref: "#/components/responses/forbidden"
-        '404':
-          $ref: '#/components/responses/notFound'
-        '500':
-          $ref: "#/components/responses/internalServerError"
-
-  /v1/return:
-    post:
-      summary: submit infos to the return form
-      description: saves the submitted infos from the return form into the database
-      operationId: return/post
-      x-ep-lambda:
-        vpc: true
-        timeout: 10
-        secrets:
-          - order-service
-          - aurora-db-infonet
-      tags:
-        - Order
-        - Return
-        - Form
-        - Save
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/returnReq"
-      responses:
-        '201':
-          description: retoure Id
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RetoureId"
-        '400':
-          $ref: "#/components/responses/badRequest"
-        '403':
-          $ref: "#/components/responses/forbidden"
-        '404':
-          $ref: '#/components/responses/notFound'
-        '409':
-          $ref: '#/components/responses/conflict'
-        '500':
-          $ref: "#/components/responses/internalServerError"
-
-  /v1/return/{orderNumber}/{positionNumber}:
-    get:
-      summary: get the infos for the return form
-      description: get the infos for the return form
-      operationId: return/get
-      parameters:
-        - $ref: "#/components/parameters/orderNumberParameter"
-        - $ref: '#/components/parameters/positionNumberParameter'
-      x-ep-lambda:
-        vpc: true
-        timeout: 10
-        secrets:
-          - order-service
-          - aurora-db-infonet
-      tags:
-        - Order
-        - Return
-        - EmptyForm
-      responses:
-        '200':
-          description: ok
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/returnForm"
-        '400':
-          $ref: "#/components/responses/badRequest"
-        '403':
-          $ref: "#/components/responses/forbidden"
-        '404':
-          $ref: '#/components/responses/notFound'
-        '500':
-          $ref: "#/components/responses/internalServerError"
-
-  /v1/return/reasons:
-    post:
-      summary: get the eligible return reason(s) for a receipt (& positions)
-      description: get the eligible return reason(s) for a receipt (& positions)
-      operationId: return/reasons
-      x-ep-lambda:
-        vpc: true
-        timeout: 30
-        secrets:
-          - order-service
-          - infonet-auftragsverwaltung
-      tags:
-        - Return
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/returnReasonsRequest"
-            examples:
-              successful:
-                value:
-                  belegNummer: "8009477477"
-                  artikelNummer: "0747877"
-                  positionsNummer: "00010"
-                  menge: 1
-              notFound:
-                value:
-                  belegNummer: "8009477477"
-                  artikelNummer: "0747877"
-                  positionsNummer: "00010"
-                  menge: 10000
-              forbidden:
-                value:
-                  belegNummer: "8009477477"
-                  artikelNummer: "0747877"
-                  positionsNummer: "00010"
-                  menge: 1
-              internalServerError:
-                value:
-                  belegNummer: "8010655033"
-                  artikelNummer: "0802501"
-                  positionsNummer: "00020"
-                  menge: 1
-      responses:
-        '200':
-          description: ok
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/returnReasonsResponse"
-        '400':
-          $ref: "#/components/responses/badRequest"
-        '403':
-          $ref: "#/components/responses/forbidden"
-        '404':
-          $ref: '#/components/responses/notFound'
-        '500':
-          $ref: "#/components/responses/internalServerError"
-
-  /v1/return/fees:
-    post:
-      summary: get the return fees for artikel
-      description: get the return fees for artikel
-      operationId: return/fees
-      x-ep-lambda:
-        vpc: true
-        timeout: 30
-        secrets:
-          - infonet-auftragsverwaltung
-          - aurora-db-infonet
-          - JWT
-      tags:
-        - Return
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/returnFeesRequest"
-            examples:
-              successful:
-                value:
-                  artikelNummer: "0747877"
-                  menge: 2
-              notFound:
-                value:
-                  artikelNummer: "0747877"
-                  menge: 1
-              forbidden:
-                value:
-                  artikelNummer: "0747877"
-                  menge: 1
-              internalServerError:
-                value:
-                  artikelNummer: "0802501"
-                  menge: 1
-      responses:
-        '200':
-          description: ok
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/returnFeesResponse"
-        '400':
-          $ref: "#/components/responses/badRequest"
-        '403':
-          $ref: "#/components/responses/forbidden"
-        '404':
-          $ref: '#/components/responses/notFound'
         '500':
           $ref: "#/components/responses/internalServerError"
 
@@ -560,16 +353,16 @@ components:
       properties:
         auftrag:
           $ref: "#/components/schemas/orderHeader"
-        lieferant:
-          $ref: "#/components/schemas/Lieferant"
-        kef:
-          $ref: "#/components/schemas/KefData"
-        positionen:
-          type: array
-          items:
-            $ref: '#/components/schemas/orderPosition'
+#        lieferant:
+#          $ref: "#/components/schemas/Lieferant"
+#        kef:
+#          $ref: "#/components/schemas/KefData"
+#        positionen:
+#          type: array
+#          items:
+#            $ref: '#/components/schemas/orderPosition'
       required:
-        - positionen
+#        - positionen
         - auftrag
 
     orderHeader:
@@ -578,6 +371,8 @@ components:
       properties:
         vertriebsauftragsNummer:
           $ref: '#/components/schemas/IString'
+        foo:
+          $ref: '#/components/schemas/INumber'
         auftragsDatum:
           $ref: '#/components/schemas/IDate'
         bestelltyp:
@@ -663,10 +458,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/delivery'
-        rechnungen:
-          type: array
-          items:
-            $ref: '#/components/schemas/invoice'
         status:
           $ref: '#/components/schemas/INumber'
 
@@ -704,115 +495,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/IString'
-
-    invoiceResponse:
-      type: object
-      additionalProperties: false
-      properties:
-        totalPages:
-          type: number
-        recordsTotal:
-          type: number
-        recordsFiltered:
-          type: number
-        details:
-          type: object
-          properties:
-            items:
-              $ref: '#/components/schemas/invoiceList'
-
-    invoiceList:
-      type: array
-      items:
-        $ref: '#/components/schemas/invoiceOverview'
-
-    invoice:
-      type: object
-      #additionalProperties: false
-      properties:
-        artikelNummer:
-          $ref: '#/components/schemas/IString'
-        belegNummer:
-          $ref: '#/components/schemas/IString'
-        netto:
-          $ref: '#/components/schemas/IPrice'
-        brutto:
-          $ref: '#/components/schemas/IPrice'
-        mwst:
-          $ref: '#/components/schemas/IPrice'
-        faelligkeitsDatum:
-          $ref: '#/components/schemas/IDate'
-        rechnungsDatum:
-          $ref: '#/components/schemas/IDate'
-
-    invoiceOverview:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/invoice'
-        - type: object
-          #additionalProperties: false
-          properties:
-            vertriebsauftragsNummer:
-              $ref: '#/components/schemas/IString'
-            downloadLink:
-              $ref: '#/components/schemas/LinkDataGrid'
-            gelesen:
-              $ref: '#/components/schemas/IBool'
-            mwstProzent:
-              $ref: '#/components/schemas/Ipercentage'
-
-    invoicesDetails:
-      type: array
-      items:
-        type: object
-        additionalProperties: false
-        properties:
-          belegNummer:
-            $ref: '#/components/schemas/IString'
-          vertriebsauftragsArt:
-            $ref: '#/components/schemas/IString'
-          vertriebsauftragsNummer:
-            $ref: '#/components/schemas/IString'
-          positionsNummer:
-            $ref: '#/components/schemas/INumber'
-          artikelNummer:
-            $ref: '#/components/schemas/IString'
-          marke:
-            $ref: '#/components/schemas/IString'
-          produktName:
-            $ref: '#/components/schemas/IString'
-          produktBild:
-            $ref: '#/components/schemas/ImageData'
-          warengruppe:
-            $ref: '#/components/schemas/IString'
-          produktLinie:
-            $ref: '#/components/schemas/IString'
-          menge:
-            $ref: '#/components/schemas/INumber'
-          netto:
-            $ref: '#/components/schemas/IPrice'
-          brutto:
-            $ref: '#/components/schemas/IPrice'
-          mwst:
-            $ref: '#/components/schemas/IPrice'
-          mwstProzent:
-            $ref: '#/components/schemas/Ipercentage'
-          fakturaDatum:
-            $ref: '#/components/schemas/IDate'
-          faelligkeitsDatum:
-            $ref: '#/components/schemas/IDate'
-
-    invoiceDownloadReq:
-      description: Liste der Belegnummern
-      type: array
-      minItems: 1
-      items:
-        type: string
-
-    invoiceMarkReq:
-      description: Liste der Belegnummern
-      allOf:
-        - $ref: '#/components/schemas/invoiceDownloadReq'
 
     Address:
       type: object
@@ -1054,6 +736,8 @@ components:
       properties:
         value:
           type: string
+          example:  "Lorem"
+
         type:
           type: string
           enum:
@@ -1125,146 +809,6 @@ components:
           description: Error message in case of failure
       required:
         - error
-
-    returnReasonsRequest:
-      type: object
-      additionalProperties: false
-      properties:
-        belegNummer:
-          type: string
-        artikelNummer:
-          type: string
-        positionsNummer:
-          type: string
-        menge:
-          type: integer
-      required:
-        - belegNummer
-        - artikelNummer
-        - positionsNummer
-        - menge
-
-    returnReasonsResponse:
-      type: object
-      properties:
-        returnReasons:
-          $ref: "#/components/schemas/retourenGruende"
-
-    retourenGruende:
-      type: array
-      items:
-        $ref: "#/components/schemas/retourenGrund"
-
-    retourenGrund:
-      type: object
-      properties:
-        code:
-          type: string
-        text:
-          type: string
-
-    RetoureId:
-      type: object
-      properties:
-        retoureId:
-          $ref: '#/components/schemas/IString'
-      required:
-        - retoureId
-
-    returnForm:
-      type: object
-      additionalProperties: false
-      properties:
-        vertriebsauftragsNummer:
-          $ref: '#/components/schemas/IString'
-        auftragsDatum:
-          $ref: '#/components/schemas/IDate'
-        bestellTyp:
-          $ref: '#/components/schemas/II18n'
-        bestellreferenz:
-          $ref: '#/components/schemas/IString'
-        positionsNummer:
-          $ref: '#/components/schemas/IString'
-        artikelNummer:
-          $ref: '#/components/schemas/IString'
-        positionsText:
-          $ref: '#/components/schemas/IString'
-        marke:
-          $ref: '#/components/schemas/IString'
-        produktName:
-          $ref: '#/components/schemas/IString'
-        warengruppe:
-          $ref: '#/components/schemas/IString'
-        produktBild:
-          $ref: '#/components/schemas/ImageData'
-        bestellMenge:
-          $ref: '#/components/schemas/INumber'
-        lieferungen:
-          type: array
-          items:
-            $ref: '#/components/schemas/delivery'
-
-    returnReq:
-      type: object
-      additionalProperties: false
-      properties:
-        auftragsNummer:
-          type: string
-        positionsNummer:
-          type: string
-        retourenmenge:
-          type: integer
-        anzahlkartons:
-          type: integer
-        retourengrund:
-          type: string
-        detailbeschreibung:
-          type: string
-        liefermitglied:
-          type: string
-        ansprechpartner:
-          type: string
-        ansprechpartnerMail:
-          type: string
-        telefon:
-          type: string
-        referenz:
-          type: string
-        seriennummer:
-          $ref: '#/components/schemas/SerialNumbers'
-
-    returnFeesRequest:
-      type: object
-      additionalProperties: false
-      properties:
-        artikelNummer:
-          type: string
-        menge:
-          type: integer
-      required:
-        - artikelNummer
-        - menge
-
-    returnFeesResponse:
-      $ref: "#/components/schemas/returnFees"
-
-    returnFees:
-      type: object
-      properties:
-        menge:
-          $ref: '#/components/schemas/INumber'
-        einzelGebuehr:
-          type: object
-          properties:
-            lieferung:
-              $ref: '#/components/schemas/IPrice'
-            retoure:
-              $ref: '#/components/schemas/IPrice'
-            gesamt:
-              $ref: '#/components/schemas/IPrice'
-        gesamt:
-          $ref: '#/components/schemas/IPrice'
-
     SelectBoxOptionDataGrid:
       type: array
       items:

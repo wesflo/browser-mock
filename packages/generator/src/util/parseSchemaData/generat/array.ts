@@ -3,7 +3,7 @@ import {getMinCount} from "../util/getMinCount";
 import {getMaxCount} from "../util/getMaxCount";
 import {TMapping, WFSchemaObject} from "../../../interface";
 
-export const generateArray = (schema: WFSchemaObject, mapping: TMapping, chance): any[] => {
+export const generateArray = (schema: WFSchemaObject, mapping: TMapping, example: object, chance): any[] => {
     const resp = []
     const {items, oneOf} = schema;
 
@@ -13,7 +13,7 @@ export const generateArray = (schema: WFSchemaObject, mapping: TMapping, chance)
         const l = getMaxCount((countObj as WFSchemaObject).maxItems, chance);
 
         for (; i < l; i++) {
-            const item = parseSchemaData(items as WFSchemaObject, mapping, chance);
+            const item = parseSchemaData(items as WFSchemaObject, mapping, example, chance);
             resp.push(item)
         }
     }

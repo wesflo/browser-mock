@@ -2,23 +2,26 @@ import {getMinCount} from "../util/getMinCount";
 import {getMaxCount} from "../util/getMaxCount";
 import {IMappingObjNumber,  TMapping, WFSchemaObject} from "../../../interface";
 import {getMockMapping} from "../../getMockMapping";
-import {getExample} from "../util/getExample";
+import {getExampleValue} from "../util/getExampleValue";
 
-export const generateInteger = (schema: WFSchemaObject, mapping: TMapping, chance): number | string => {
+export const generateInteger = (schema: WFSchemaObject, mapping: TMapping, example: object, chance): number | string => {
     const {
-        key,
+        keyPath,
         enum: selection,
         default: defaultVal,
     } = schema;
-    const map = (getMockMapping(key, mapping)  || {}) as IMappingObjNumber;
+    const map = (getMockMapping(keyPath, mapping)  || {}) as IMappingObjNumber;
 
     if(defaultVal) {
         return defaultVal;
     }
 
-    const example = getExample(schema, chance)
     if(example) {
-        return example;
+        const resp = (typeof example === 'number') ? example : getExampleValue(keyPath, example);
+
+        if(resp) {
+            return resp;
+        }
     }
 
     const arr = selection || map.values;

@@ -35,18 +35,21 @@ const generator = async () => {
         default: './mocks'
     });
 
-    const responsePath = await prompt('request path to update (empty for all)', {
-        default: ''
-    });
+    // const responsePath = await prompt('request path to update (empty for all)', {
+    //     default: ''
+    // });
+    //
+    // const responseMethode = responsePath ? await prompt('request method to update (empty for all)', {
+    //     default: ''
+    // }) : null;
+    //
+    // const responseStatus = responseMethode ? await prompt('request status to update (empty for all)', {
+    //     default: ''
+    // }) : null;
 
-    const responseMethode = responsePath ? await prompt('request method to update (empty for all)', {
-        default: ''
-    }) : null;
-
-    const responseStatus = responseMethode ? await prompt('request status to update (empty for all)', {
-        default: ''
-    }) : null;
-
+    const responsePath = '/v1/order/{orderNumber}/details';
+    const responseMethode = 'get';
+    const responseStatus = '200';
 
     const cnt = await swaggerCombine(swaggerPath, {format: 'yaml'});
     const mapping: TMapping = mappingPath && await getMappings(mappingPath, appRoot)
@@ -63,10 +66,11 @@ const generator = async () => {
                 const {path, method, status} = resp;
                 if(
                     (!responsePath || responsePath === path)
-                    && (!responseMethode || responseMethode === method)
+                    && (!responseMethode || responseMethode.toLowerCase() === method)
                     && (!responseStatus || Number(responseStatus) === status)
                 ) {
-                    const filename = `${mockTargetPath}/${generateMockFileName(path,method , status)}.json`;
+
+                    const filename = `${mockTargetPath}/${generateMockFileName(path, responseMethode.toLowerCase(), status)}.json`;
                     await writeFileSync(filename, JSON.stringify(resp.mock, null, 4));
                     log(chalk.green(`Generate mock: ${chalk.bold(filename)}`));
                 }

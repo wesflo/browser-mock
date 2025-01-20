@@ -10,3 +10,4 @@
 /packages/generator/dist/
 *.tgz
 *.zip
+/packages/generator/tmp/

@@ -1,6 +1,7 @@
 import {SchemaObject, SchemasObject} from "openapi3-ts/oas30";
 
 export interface WFSchemaObject extends SchemaObject {
+    keyPath?: string;
     key?: string;
 }
 

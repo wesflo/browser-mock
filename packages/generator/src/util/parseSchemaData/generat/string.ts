@@ -3,25 +3,32 @@ import {getMaxCount} from "../util/getMaxCount";
 import {IMappingObjString, TMapping, WFSchemaObject} from "../../../interface";
 import {getMockMapping} from "../../getMockMapping";
 import {getExample} from "../util/getExample";
+import {getExampleValue} from "../util/getExampleValue";
 
-export const generateString = (schema: WFSchemaObject, mapping: TMapping, chance): any => {
+export const generateString = (schema: WFSchemaObject, mapping: TMapping, example: object, chance): any => {
     const {
         format,
         key,
+        keyPath,
         minLength,
         maxLength,
         enum: selection,
         default: defaultVal,
     } = schema;
-    const map = (getMockMapping(key, mapping)  || {}) as IMappingObjString;
+    const map = (getMockMapping(keyPath, mapping)  || {}) as IMappingObjString;
 
     if(defaultVal) {
         return defaultVal;
     }
 
-    const example = getExample(schema, chance)
+    example = getExample(schema, chance) || example;
+
     if(example) {
-        return example;
+        const resp = (typeof example === 'string') ? example : getExampleValue(keyPath, example);
+
+        if(resp) {
+            return resp;
+        }
     }
 
     if(format) {
