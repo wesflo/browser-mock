@@ -87,9 +87,9 @@ For more details on the mock data generator, please refer to the [Generator READ
 
 ## Further Documentation
 
-- [Mock Server README](./mock-server/README.md)
-- [Browser Plugin README](./browser-plugin/README.md)
-- [Mock Data Generator README](./generator/README.md)
+- [Mock Server README](./packages/server/README.md)
+- [Browser Plugin README](./packages/chrome/README.md)
+- [Mock Data Generator README](./packages/generator/README.md)
 
 By following these steps and using the provided tools, you can simulate various server responses and test your application as if it were communicating with a real backend.
 
