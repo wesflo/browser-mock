@@ -9,5 +9,4 @@
 /packages/server/dist/
 /packages/generator/dist/
 *.tgz
-*.zip
 /packages/generator/tmp/
