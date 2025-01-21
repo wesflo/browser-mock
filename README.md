@@ -42,7 +42,7 @@ Or if you've installed it globally, you can run it directly:
 wesflo-ms
 ```
 
-For more details on the mock server, please refer to the [Mock Server README](./mock-server/README.md).
+For more details on the mock server, please refer to the [Mock Server README](./packages/server/README.md).
 
 ### 2. Chrome Extension
 
@@ -53,7 +53,7 @@ The Chrome extension makes HTTP requests to the mock server based on the paramet
 - Install the extension from the Chrome Web Store or by loading the unpacked extension.
 - The extension will send requests to the mock server running on your local machine and process the mock responses.
 
-For more details on the browser plugin, please refer to the [Browser Plugin README](./browser-plugin/README.md).
+For more details on the browser plugin, please refer to the [Browser Plugin README](./packages/chrome/README.md).
 
 ### 3. Mock Data Generator
 
@@ -64,7 +64,7 @@ The generator is used to create mock JSON files that the mock server will serve 
 - The generator helps you create mock data files which can be stored in the directory the mock server is serving from.
 - The mock server will read the appropriate file and return it when the browser plugin makes a request.
 
-For more details on the mock data generator, please refer to the [Generator README](./generator/README.md).
+For more details on the mock data generator, please refer to the [Generator README](./packages/generator/README.md).
 
 ## Interaction Flow
 
@@ -93,3 +93,6 @@ For more details on the mock data generator, please refer to the [Generator READ
 
 By following these steps and using the provided tools, you can simulate various server responses and test your application as if it were communicating with a real backend.
 
+## Feedback and Support
+
+If you encounter any issues or have feature suggestions, feel free to open an issue on https://github.com/wesflo/browser-mock/issues or join the discussion here: https://github.com/wesflo/browser-mock/discussions.

@@ -111,7 +111,7 @@ This project is licensed under the MIT License.
 
 ## Feedback and Support
 
-If you encounter any issues or have feature suggestions, feel free to open an issue or join the discussion here: https://github.com/yourusername/mockproxy/issues.
+If you encounter any issues or have feature suggestions, feel free to open an issue or join the discussion here: https://github.com/wesflo/browser-mock/discussions.
 
 ## Acknowledgments
 
