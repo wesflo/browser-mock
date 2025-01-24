@@ -84,27 +84,18 @@ export class Component extends LitElement {
 
     handleRequestToggle = async (checked: boolean) => {
         this.active = checked;
-        this.saveActiveMock();
+        await this.saveActiveMock();
     };
 
     handleRequestStatus = async ({detail}: CustomEvent) => {
         this.status = Number(detail)
-        this.saveActiveMock();
+        await this.saveActiveMock();
     };
 
     handleRequestTimeout = async ({detail}: CustomEvent) => {
         this.timeout = Number(detail);
-        this.saveActiveMock();
+        await this.saveActiveMock();
     };
-
-    // handleChange = () => this.dispatchEvent(new CustomEvent('onChange', {
-    //     detail: {
-    //         active: this.active,
-    //         uid: this.uid,
-    //         data: this.buildActiveMockObj()
-    //     }
-    // }));
-
 
     buildActiveMockObj = (): Partial<IActiveMock> => {
         const {req, status, timeout, domains} = this;
