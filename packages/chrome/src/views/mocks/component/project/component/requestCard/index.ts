@@ -10,7 +10,7 @@ import "../../../../../../component/switch";
 import "../../../../../../component/select";
 import "../../../../../../component/options";
 import {ifDefined} from "lit-html/directives/if-defined.js";
-import {getStorageItem, mergeStorageItem} from "../../../../../../util/storage";
+import {getStorageItem, setStorageItem} from "../../../../../../util/storage";
 import {STORAGE_ACTIVE_REQUESTS} from "../../../../../../constant";
 
 
@@ -121,7 +121,8 @@ export class Component extends LitElement {
             delete activeMocks[uid];
         }
 
-        await mergeStorageItem(STORAGE_ACTIVE_REQUESTS, {
+        await setStorageItem(STORAGE_ACTIVE_REQUESTS, {
+            ...allActiveMocks,
             [pid]: activeMocks,
         });
     }
