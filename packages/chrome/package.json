@@ -1,6 +1,6 @@
 {
   "name": "@wesflo/chrome-mock-proxy",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Browser Mock Extension",
   "type": "module",
   "private": "true",
