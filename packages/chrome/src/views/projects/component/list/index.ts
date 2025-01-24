@@ -1,6 +1,5 @@
-import { state} from 'lit/decorators.js';
 import {html, LitElement} from 'lit';
-import {defaultStyle} from "../../../../util/style/defaultStyle";
+import {defaultStyle} from "../../../../style/defaultStyle";
 import {style} from "./style";
 import {buttonsWrapperStyles} from "../../../../component/button/style";
 import {flushStorage, getStorageItem} from "../../../../util/storage";
@@ -13,8 +12,6 @@ import "../../../error";
 import {Task} from "@lit/task";
 
 export class Component extends LitElement {
-    @state() projects!: IProjects;
-
     static styles = [defaultStyle, buttonsWrapperStyles, style];
 
     render() {
@@ -44,14 +41,9 @@ export class Component extends LitElement {
         `;
     }
 
-    async connectedCallback() {
-        this.projects = await getStorageItem(STORAGE_PROJECTS) || {};
-        super.connectedCallback();
-    }
-
     renderProject = (project: IProject) => {
         return html`
-            <li @click="${() => this.editProject(project)}" class="project">
+            <li @click="${() => this.editProject(project.id)}" class="project">
                 <span>${project.name}</span>
                 <wf-button appearance="primary" size="inherit" >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
@@ -69,8 +61,8 @@ export class Component extends LitElement {
         args: () => [],
     });
 
-    editProject = (project: IProject) => {
-        this.dispatchEvent(new CustomEvent('onEdit', {detail: project}));
+    editProject = (id: string) => {
+        this.dispatchEvent(new CustomEvent('onEdit', {detail: id}));
     }
 
     handleResetApp = async () => {

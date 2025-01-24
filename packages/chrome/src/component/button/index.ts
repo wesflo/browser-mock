@@ -1,7 +1,7 @@
 import { property, query } from 'lit/decorators.js';
 import { html, LitElement } from 'lit';
 import {TAppearance, TSize, TType} from "./interface";
-import {defaultStyle} from "../../util/style/defaultStyle";
+import {defaultStyle} from "../../style/defaultStyle";
 import {style} from "./style";
 
 export default class Component extends LitElement {

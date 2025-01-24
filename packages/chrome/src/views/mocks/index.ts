@@ -1,28 +1,23 @@
 import {property, state} from 'lit/decorators.js';
 import {html, LitElement} from 'lit';
-import {defaultStyle} from "../../util/style/defaultStyle";
-import {textStyle} from "../../util/style/textStyle";
+import {defaultStyle} from "../../style/defaultStyle";
+import {textStyle} from "../../style/textStyle";
 import {style} from "./style";
 import "../../component/button";
 import {Task} from "@lit/task";
 import {TView} from "./interface";
 import {VIEW_PROJECT, VIEW_PROJECTS} from "./constant";
 import {IProject} from "../../interface";
+import {getViewId} from "../../util/getViewId";
+import {STORAGE_VIEW, VIEW_LVL_1, VIEW_LVL_2, VIEW_LVL_3} from "../../constant";
+import {mergeStorageItem, setStorageItem} from "../../util/storage";
+import {TAB_API_MOCKS} from "../../layout/constant";
 
 export class Component extends LitElement {
     @property({type: String}) error: string = '';
 
-    @state() view: TView = VIEW_PROJECTS;
-    @state() selectedProject?: IProject;
-
-    // @state() view: TView = VIEW_PROJECT; // VIEW_PROJECTS;
-    // @state() selectedProject?: IProject = {
-    //     id: "m52a0k6iixlc4j928pr",
-    //     name: "Test Projekt 1",
-    //     path: "/Users/d_wessner/projects/wesflo/browser-mock/playground/mock/manifest.json",
-    //     pathPartials: ["", "Users", "d_wessner", "projects", "wesflo", "browser-mock", "playground", "mock"],
-    //     active: true
-    // };
+    @state() currentView: TView = VIEW_PROJECTS;
+    @state() selectedProjectId?: string;
 
     static styles = [defaultStyle, textStyle, style];
 
@@ -36,6 +31,12 @@ export class Component extends LitElement {
         })
     }
 
+    async connectedCallback () {
+        const view = await getViewId(VIEW_LVL_2);
+        view && (this.currentView = view);
+        super.connectedCallback();
+    }
+
     views = {
         [VIEW_PROJECTS]: () => {
             import("./component/projects");
@@ -45,29 +46,37 @@ export class Component extends LitElement {
         [VIEW_PROJECT]: () => {
             import("./component/project");
             return html`
-                <wf-mock-project .project="${this.selectedProject}" @onCancel="${this.showList}"></wf-mock-project>`;
+                <wf-mock-project uid="${this.selectedProjectId}" @onCancel="${this.showList}"></wf-mock-project>`;
         }
     }
 
     viewTask: Task<[TView]> = new Task(this, {
         task: async ([view]) => {
             if (this.views[view]) {
-                return this.views[this.view]();
+                return this.views[this.currentView]();
             }
 
             return html`
                 <wf-error></wf-error>`;
         },
-        args: () => [this.view],
+        args: () => [this.currentView],
     });
 
-    handleOpenProject = ({detail}: CustomEvent) => {
-        this.selectedProject = detail;
-        this.view = VIEW_PROJECT;
+    handleOpenProject = async ({detail}: CustomEvent) => {
+        await mergeStorageItem(STORAGE_VIEW, {
+            [VIEW_LVL_2]: VIEW_PROJECT,
+            [VIEW_LVL_3]: detail,
+        });
+        this.currentView = VIEW_PROJECT;
+        this.selectedProjectId = detail;
     }
 
-    showList = () => {
-        this.view = VIEW_PROJECTS;
+    showList = async () => {
+        this.currentView = VIEW_PROJECTS;
+        await setStorageItem(STORAGE_VIEW, {
+            [VIEW_LVL_1]: TAB_API_MOCKS,
+            [VIEW_LVL_2]: VIEW_PROJECTS}
+        );
     }
 }
 

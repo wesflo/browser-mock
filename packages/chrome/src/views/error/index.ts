@@ -12,6 +12,7 @@ export class ErrorAsync extends LitElement {
     `;
 
     render() {
+        console.error(this.error);
         return html`
             <div>
                 <h5>Üpsii! Da ist was schiefgelaufen...</h5>

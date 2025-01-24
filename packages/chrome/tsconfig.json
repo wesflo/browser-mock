@@ -11,12 +11,14 @@
     ],
     "types": [
       "vitest/globals",
-      "@types/chrome"
+      "@types/chrome",
+      "@lit/task"
     ],
     "strict": false,
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "useDefineForClassFields": false,
     "experimentalDecorators": true,
     "importHelpers": true,
     "outDir": "out-tsc",

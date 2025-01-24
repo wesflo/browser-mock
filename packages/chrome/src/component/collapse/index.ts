@@ -1,6 +1,6 @@
 import { property, query } from 'lit/decorators.js';
 import {html, LitElement, PropertyValues} from 'lit';
-import {defaultStyle} from "../../util/style/defaultStyle";
+import {defaultStyle} from "../../style/defaultStyle";
 import {style} from "./style";
 import {styleMap} from "lit-html/directives/style-map.js";
 import {resizeHandler} from "../../util/windowEventHandler";

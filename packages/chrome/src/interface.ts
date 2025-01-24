@@ -1,3 +1,5 @@
+import {VIEW_LVL_1, VIEW_LVL_2} from "./constant";
+
 export interface IProject {
     id: string;
     name: string;
@@ -20,9 +22,9 @@ export interface IManifestRequest {
         [key: string]: string;
     }
 }
-
+export type TManifestDomains = string[];
 export interface IManifest {
-    domains: string[];
+    domains: TManifestDomains;
     requests: IManifestRequest[];
 }
 
@@ -32,10 +34,11 @@ export interface IActiveMock {
     status: number;
     path: string;
     timeout?: number;
-    enableLogging?: boolean;
     domains: string[];
 }
 
 export interface IActiveMocks {
-        [key: string]: IActiveMock
+    [key: string]: IActiveMock
 }
+
+export type TLvl = typeof VIEW_LVL_1 | typeof VIEW_LVL_2

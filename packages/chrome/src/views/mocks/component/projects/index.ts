@@ -1,7 +1,7 @@
 import {html, LitElement} from 'lit';
-import {defaultStyle} from "../../../../util/style/defaultStyle";
+import {defaultStyle} from "../../../../style/defaultStyle";
 import {style} from "./style";
-import {textStyle} from "../../../../util/style/textStyle";
+import {textStyle} from "../../../../style/textStyle";
 import {state} from "lit/decorators.js";
 import {IProject, IProjects} from "../../../../interface";
 import {getStorageItem, setStorageItem} from "../../../../util/storage";
@@ -18,7 +18,7 @@ import "../../../error";
 
 export class Component extends LitElement {
     @state() projects!: IProjects;
-    @state() activeProjects!: string[];
+    @state() activeProjects!: string[] = [];
 
     static styles = [defaultStyle, textStyle, style];
 
@@ -43,9 +43,10 @@ export class Component extends LitElement {
     }
 
     renderProject = (project: IProject) => {
+        console.log( this.activeProjects )
         return html`
             <li>
-                <div class="cta" @click="${() => this.openProject(project)}">
+                <div class="cta" @click="${() => this.openProject(project.id)}">
                     <span>${project.name}</span>
                     <wf-button appearance="primary" size="inherit" >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
@@ -75,11 +76,11 @@ export class Component extends LitElement {
     toggleProject = async (checked: boolean, project: IProject) => {
         const {id} = project;
         checked ? this.activeProjects.push(id) : this.activeProjects.splice(this.activeProjects.indexOf(id), 1);
-        setStorageItem(STORAGE_ACTIVE_PROJECTS, this.activeProjects)
+        await setStorageItem(STORAGE_ACTIVE_PROJECTS, this.activeProjects)
     }
 
-    openProject = async (project: IProject) => {
-        this.dispatchEvent(new CustomEvent('onOpenProject', {detail: project}));
+    openProject = async (uid: string) => {
+        this.dispatchEvent(new CustomEvent('onOpenProject', {detail: uid}));
     }
 
 }
