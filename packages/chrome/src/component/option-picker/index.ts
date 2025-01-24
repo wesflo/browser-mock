@@ -1,6 +1,6 @@
 import {property} from 'lit/decorators.js';
 import {html, LitElement} from 'lit';
-import {defaultStyle} from "../../util/style/defaultStyle";
+import {defaultStyle} from "../../style/defaultStyle";
 import {style} from "./style";
 import {filter} from "../../util/nodeListHelper";
 import {ifDefined} from "lit-html/directives/if-defined.js";

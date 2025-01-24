@@ -19,19 +19,28 @@ export const formStyle = css`
         border-radius: var(--border-radius);
         border: 1px solid var(--grey-5);
         background-color: var(--main-bg);
-        padding-top: 20px;
-        padding-bottom: 4px;
+        padding-top: 16px;
+        padding-bottom: 2px;
         padding-inline: 16px 40px;
-        height: 54px;
+        height: 48px;
         width: 100%;
         max-width: 100%;
         font-size: var(--font-size-l);
         outline: none;
+        transition:
+                border-left-color 140ms ease-out,
+                border-right-color 140ms ease-out,
+                border-right-width 140ms ease-out,
+                border-top-color 140ms ease-out,
+                border-top-width 140ms ease-out,
+                border-bottom-color 140ms ease-out,
+                border-bottom-width 140ms ease-out;
 
         &:focus-visible, 
         &:focus {
             border-color: var(--secondary);
             border-width: 2px;
+            padding-inline: 15px 40px;
         }
 
         &:disabled {
@@ -51,7 +60,7 @@ export const formStyle = css`
         &:focus {
             + label {
                 font-size: var(--font-size-s);
-                top: 8px;
+                top: 2px;
             }
         }
     }
@@ -60,20 +69,22 @@ export const formStyle = css`
 export const labelStyle = css`
     label {
         position: absolute;
-        top: 20px;
+        top: 16px;
         font-size: var(--font-size-l);
-        inset-inline-start: 16px;
+        inset-inline-start: 12px;
+        padding: 4px;
         max-width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         transition: all 240ms ease-out;
         color: var(--grey-7);
+        background: var(--main-bg);
     }
     
     label.active {
         font-size: var(--font-size-s);
-        top: 8px;
+        top: 2px;
     }
 
     :host([inverse]) {

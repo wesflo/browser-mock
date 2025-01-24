@@ -1,8 +1,8 @@
 import { property, query } from 'lit/decorators.js';
 import {html, LitElement, nothing} from 'lit';
-import {defaultStyle} from "../../util/style/defaultStyle";
+import {defaultStyle} from "../../style/defaultStyle";
 import {style} from "./style";
-import {formErrorStyle, formHintStyle, labelStyle} from "../../util/style/formStyle";
+import {formErrorStyle, formHintStyle, labelStyle} from "../../style/formStyle";
 import {renderFormErrorMsg} from "../../util/render/renderFormErrorMsg";
 import {renderFormInputHint} from "../../util/render/renderFormInputHint";
 import {renderAsterisks} from "../../util/render/renderAsterisks";

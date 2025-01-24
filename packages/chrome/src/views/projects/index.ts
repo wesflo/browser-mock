@@ -1,8 +1,8 @@
 import {property, state} from 'lit/decorators.js';
 import {html, LitElement} from 'lit';
-import {defaultStyle} from "../../util/style/defaultStyle";
+import {defaultStyle} from "../../style/defaultStyle";
 import {style} from "./style";
-import {textStyle} from "../../util/style/textStyle";
+import {textStyle} from "../../style/textStyle";
 import {VIEW_EDIT, VIEW_LIST, VIEW_NEW} from "./constant";
 import {Task} from "@lit/task";
 import {TView} from "./interface";

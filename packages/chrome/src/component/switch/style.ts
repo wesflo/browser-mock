@@ -1,7 +1,6 @@
 import {css} from "lit";
 
 export const style = css`
-    
     input {
         position: absolute;
         opacity: 0;
@@ -37,6 +36,7 @@ export const style = css`
         transform: unset;
         inset-inline-start: unset;
         overflow: visible;
+        background: transparent;
     }
 
     span {

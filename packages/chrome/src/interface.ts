@@ -22,9 +22,9 @@ export interface IManifestRequest {
         [key: string]: string;
     }
 }
-
+export type TManifestDomains = string[];
 export interface IManifest {
-    domains: string[];
+    domains: TManifestDomains;
     requests: IManifestRequest[];
 }
 
@@ -34,7 +34,6 @@ export interface IActiveMock {
     status: number;
     path: string;
     timeout?: number;
-    enableLogging?: boolean;
     domains: string[];
 }
 

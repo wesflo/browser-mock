@@ -1,130 +1,140 @@
 import {property, state} from 'lit/decorators.js';
-import {html, LitElement, PropertyValues} from 'lit';
-import {defaultStyle} from "../../../../../../util/style/defaultStyle";
+import {html, LitElement} from 'lit';
+import {defaultStyle} from "../../../../../../style/defaultStyle";
 import {style} from "./style";
-import {textStyle} from "../../../../../../util/style/textStyle";
-import {IActiveMock, IActiveMocks, IManifestRequest} from "../../../../../../interface";
+import {textStyle} from "../../../../../../style/textStyle";
+import {IActiveMock, IManifestRequest, TManifestDomains} from "../../../../../../interface";
 import "../../../../../../component/input";
 import "../../../../../../component/button";
 import "../../../../../../component/switch";
 import "../../../../../../component/select";
 import "../../../../../../component/options";
-import {generateRequestId} from "../../../../../../util/generateRequestId";
-import {mergeStorageItem} from "../../../../../../util/storage";
-import {STORAGE_ACTIVE_REQUESTS} from "../../../../../../constant";
 import {ifDefined} from "lit-html/directives/if-defined.js";
-import SVGAnimatedBoolean from "happy-dom/lib/svg/SVGAnimatedBoolean";
+import {getStorageItem, mergeStorageItem} from "../../../../../../util/storage";
+import {STORAGE_ACTIVE_REQUESTS} from "../../../../../../constant";
 
 
 export class Component extends LitElement {
+    @property({type: String}) uid!: IManifestRequest;
+    @property({type: String}) pid!: IManifestRequest;
+    @property({type: Array}) domains!: TManifestDomains;
     @property({type: Object}) req!: IManifestRequest;
     @property({type: Object}) activeMock!: IActiveMock;
-    @property({type: Boolean}) active: boolean = false;
 
-    @state() enableLogging!: boolean;
     @state() status!: number;
     @state() timeout!: number;
+    @state() active!: boolean;
 
     statusArr: string[];
 
     static styles = [defaultStyle, textStyle, style];
 
     render() {
-        const {req, statusArr, active, status, enableLogging, timeout} = this;
+        const {req, statusArr, active, status, timeout} = this;
 
         return html`
-            <div class="card">
-                <header>
-                    <h4>
-                        ${req.name ? req.name : 'Unnamed'}
-                    </h4>
-                    <h6>
-                        <span class="flag ${req.method.toLowerCase()}">${req.method.toUpperCase()}</span>
-                        ${req.url}
-                    </h6>
-                    <wf-switch
-                            .checked="${active}"
-                            @onChange="${({detail}: CustomEvent) => this.handleRequestToggle(detail)}"
-                    >
-                        enable
-                    </wf-switch>
-                </header>
-                <div class="cnt">
-                    <wf-select
-                            label="Status"
-                            .value="${status}"
-                            ?disabled="${!active}"
-                            @onChange="${this.handleRequestStatus}"
-                    >
-                        ${statusArr.map((status) => html`
-                            <wf-option value="${status}">${status}</wf-option>
-                        `)}
-                        <wf-option value="500">500</wf-option>
-                    </wf-select>
+            <header>
+                <span class="flag ${req.method.toLowerCase()}">${req.method.toUpperCase()}</span>
+                <h5>
+                    <strong>${req.name ? req.name : 'Unnamed'}</strong>${req.url}
+                </h5>
+            </header>
+            <div class="cnt">
+                <wf-select
+                        label="Status"
+                        value="${status}"
+                        ?disabled="${!active}"
+                        @onChange="${this.handleRequestStatus}"
+                >
+                    ${statusArr.map((status) => html`
+                        <wf-option value="${status}">${status}</wf-option>
+                    `)}
+                    <wf-option value="500">500</wf-option>
+                </wf-select>
 
-                    <wf-input 
-                            name="name" 
-                            label="timeout" 
-                            value="${ifDefined(timeout)}"
-                            ?disabled="${!active}"
-                            @onChange="${this.handleRequestTimeout}"
-                    ></wf-input>
+                <wf-input
+                        name="name"
+                        label="timeout"
+                        value="${ifDefined(timeout)}"
+                        ?disabled="${!active}"
+                        @onChange="${this.handleRequestTimeout}"
+                ></wf-input>
 
-                    <wf-options
-                            ?disabled="${!active}",
-                            .value="${enableLogging ? ['1'] : []}"
-                            @onChange="${this.handleRequestLogging}"
-                            multiple
-                    >
-                        <wf-option value="1">enable Log</wf-option>
-                    </wf-options>
-                </div>
+                <wf-switch
+                        .checked="${active}"
+                        @onChange="${({detail}: CustomEvent) => this.handleRequestToggle(detail)}"
+                >
+                    ${active ? 'active' : 'inactive'}
+                </wf-switch>
             </div>
         `;
     }
 
     connectedCallback() {
-        super.connectedCallback();
-
         const {req} = this;
         const statusArr = Object.keys(req.response);
+
+        this.active = !!this.activeMock;
         this.status = this.activeMock?.status || Number(statusArr[0])
-        this.enableLogging = this.activeMock?.enableLogging;
-        this.timeout = this.activeMock?.timeout;
+        this.timeout = this.activeMock?.timeout || 0;
         this.statusArr = statusArr;
+
+        super.connectedCallback();
     }
 
     handleRequestToggle = async (checked: boolean) => {
-        this.handleChange( {
-            key: 'active',
-            value: checked,
-        });
-    }
+        this.active = checked;
+        this.saveActiveMock();
+    };
 
     handleRequestStatus = async ({detail}: CustomEvent) => {
-        this.handleChange( {
-            key: 'status',
-            value: Number(detail),
-        });
-    }
+        this.status = Number(detail)
+        this.saveActiveMock();
+    };
 
     handleRequestTimeout = async ({detail}: CustomEvent) => {
-        this.handleChange( {
-            key: 'timeout',
-            value: Number(detail),
+        this.timeout = Number(detail);
+        this.saveActiveMock();
+    };
+
+    // handleChange = () => this.dispatchEvent(new CustomEvent('onChange', {
+    //     detail: {
+    //         active: this.active,
+    //         uid: this.uid,
+    //         data: this.buildActiveMockObj()
+    //     }
+    // }));
+
+
+    buildActiveMockObj = (): Partial<IActiveMock> => {
+        const {req, status, timeout, domains} = this;
+        const {url, method, response} = req;
+
+        return {
+            domains,
+            url,
+            method,
+            status,
+            path: response[status],
+            timeout,
+        }
+    }
+    saveActiveMock = async () => {
+        const {uid, pid, buildActiveMockObj} = this;
+        const allActiveMocks = await getStorageItem(STORAGE_ACTIVE_REQUESTS);
+        const activeMocks = allActiveMocks[pid] || {};
+
+        if (this.active) {
+            activeMocks[uid] = buildActiveMockObj();
+        } else {
+            delete activeMocks[uid];
+        }
+
+        await mergeStorageItem(STORAGE_ACTIVE_REQUESTS, {
+            [pid]: activeMocks,
         });
     }
 
-    handleRequestLogging = async ({detail}: CustomEvent) => {
-        this.handleChange( {
-            key: 'enableLogging',
-            value: !!detail.length,
-        });
-    }
-
-    handleChange = (detail) => this.dispatchEvent(new CustomEvent('onChange', {
-        detail
-    }))
 }
 
 if (!customElements.get('wf-mock-project-request-card')) {

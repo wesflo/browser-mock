@@ -1,5 +1,5 @@
 import {html, LitElement} from 'lit';
-import {defaultStyle} from "../../../../util/style/defaultStyle";
+import {defaultStyle} from "../../../../style/defaultStyle";
 import {style} from "./style";
 import {buttonsWrapperStyles} from "../../../../component/button/style";
 import {flushStorage, getStorageItem} from "../../../../util/storage";

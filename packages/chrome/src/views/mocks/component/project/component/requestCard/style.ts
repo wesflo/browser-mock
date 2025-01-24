@@ -1,45 +1,30 @@
 import {css} from "lit";
 
 export const style = css`
-    header {
-        margin-bottom: 16px;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: left;
-        gap: 8px 16px;
-        align-items: center;
-        
-        h4 {
-            flex: 0 1 100%;
-        }
-
-        wf-switch {
-            margin-left: auto;
-        }
-
-        wf-button svg {
-            fill: var(--primary);
-        }
-    }
-
     :host {
-        padding: 16px;
-        border: 1px solid var(--grey-5);
-        border-radius: var(--border-radius);
-        margin-bottom: 20px;
-
-       
+        padding: 12px;
+        margin-bottom: 12px;
+        border-bottom: 1px solid var(--grey-5);
     }
-
+    
     header {
-        padding-bottom: 8px;
-        border-bottom: 1px solid var(--grey-1);
+        display: grid;
+        grid-template-columns: 80px 1fr;
+        gap: 16px;
+        align-items: center;
+        margin-bottom: 8px;
+
+        strong {
+            font-weight: bold;
+            margin-right: 16px;
+        }
     }
 
     .cnt {
         display: grid;
         gap: 16px;
         grid-template-columns: repeat(3, 1fr);
+        align-items: center;
     }
 
     dl {
@@ -51,9 +36,9 @@ export const style = css`
     }
     
     .flag {
-        display: inline-block;
+        display: inline-flex;
+        justify-content: center;
         padding: 4px 8px;
-        margin-right: 16px;
         border: 1px solid;
         border-radius: 999em;
         font-weight: bold;

@@ -1,7 +1,7 @@
 import {property, state} from 'lit/decorators.js';
 import {html, LitElement} from 'lit';
-import {defaultStyle} from "../../util/style/defaultStyle";
-import {textStyle} from "../../util/style/textStyle";
+import {defaultStyle} from "../../style/defaultStyle";
+import {textStyle} from "../../style/textStyle";
 import {style} from "./style";
 import "../../component/button";
 import {Task} from "@lit/task";
