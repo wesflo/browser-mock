@@ -11,13 +11,14 @@ import {resetStyle} from "../util/style/resetStyle";
 import "../component/switch";
 import "../component/progress";
 import "../views/error";
-import {getStorageItem, setStorageItem} from "../util/storage";
-import {STORAGE_ACTIVE} from "../constant";
+import {getStorageItem, mergeStorageItem, setStorageItem} from "../util/storage";
+import {STORAGE_ACTIVE, STORAGE_VIEW, VIEW_LVL_1} from "../constant";
+import {getViewId} from "../util/getViewId";
 
 export class BrowserMock extends LitElement {
     @property({type: Boolean, reflect: true}) bmIsActive: boolean = false;
 
-    @property({type: String}) currentView: TCurrentView = TAB_API_MOCKS; // TAB_API_MOCKS; // TAB_PROJECTS //Default view
+    @property({type: String}) currentView: TCurrentView = TAB_API_MOCKS;
 
     static styles = [resetStyle, defaultStyle, style];
 
@@ -45,7 +46,10 @@ export class BrowserMock extends LitElement {
         ];
     }
 
-    connectedCallback() {
+    async connectedCallback () {
+        const view = await getViewId(VIEW_LVL_1);
+        view && (this.currentView = view);
+
         super.connectedCallback();
         window.addEventListener('wfReloadApp', this.handleReloadApp);
     }
@@ -83,20 +87,22 @@ export class BrowserMock extends LitElement {
         args: () => [],
     });
 
-    renderTabLink = (tab: TCurrentView) => html`
-        <a href="#" class="tab-link${classMap({active: this.currentView === tab})}" @click="${() => this.currentView = tab}">${i18n.tab[tab]}</a>
+    renderTabLink = (view: TCurrentView) => html`
+        <a href="#" class="tab-link${classMap({active: this.currentView === view})}" @click="${() => this.handleMainNavClick(view)}">${i18n.view[view]}</a>
     `
 
-    renderSwitch = (checked) => {
-        console.log( checked )
-        return html`
+    renderSwitch = (checked) => html`
         <wf-switch @onChange="${this.handleToggleBm}" inverse ?checked="${checked}"></wf-switch>
     `
+
+    handleMainNavClick = async (view: TCurrentView) => {
+        this.currentView = view;
+        await setStorageItem(STORAGE_VIEW,{[VIEW_LVL_1]: view})
     }
 
     handleToggleBm = () => {
         this.bmIsActive = !this.bmIsActive;
-        setStorageItem(STORAGE_ACTIVE, this.bmIsActive)
+        mergeStorageItem(STORAGE_ACTIVE, this.bmIsActive)
     }
 
     handleReloadApp = () => {

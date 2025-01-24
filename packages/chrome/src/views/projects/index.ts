@@ -4,36 +4,33 @@ import {defaultStyle} from "../../util/style/defaultStyle";
 import {style} from "./style";
 import {textStyle} from "../../util/style/textStyle";
 import {VIEW_EDIT, VIEW_LIST, VIEW_NEW} from "./constant";
-import {IFormValues} from "./component/form/interface";
-import {jsonFileContent} from "../../util/jsonFileContent";
 import {Task} from "@lit/task";
 import {TView} from "./interface";
-import {STORAGE_ACTIVE_PROJECTS, STORAGE_MANIFEST_PREFIX, STORAGE_PROJECTS} from "../../constant";
-import {getStorageItem, removeStorageItem, setStorageItem} from "../../util/storage";
-import {ifDefined} from "lit-html/directives/if-defined.js";
+import {
+    STORAGE_VIEW,
+    VIEW_LVL_2, VIEW_LVL_3
+} from "../../constant";
 import "../../component/button";
 import "../../component/progress";
 import "../error";
-import {toastFactory} from "../../component/toast/util/toastFactory";
-import {IProject} from "../../interface";
-import {updateStorageProject} from "../../util/updateStorageProject";
+import {getViewId} from "../../util/getViewId";
+import {ifDefined} from "lit-html/directives/if-defined.js";
+import {mergeStorageItem} from "../../util/storage";
 
 export class Component extends LitElement {
     @property({type: String}) error: string = '';
 
-    @state() selectedProject?: IProject;
-    @state() view: TView = VIEW_LIST;
+    @state() selectedProjectId?: string;
+    @state() currentView: TView = VIEW_LIST;
 
     static styles = [defaultStyle, textStyle, style];
-
-    toast = toastFactory();
 
     render() {
         return html`
             <header>
                 <h1>Projects</h1>
                 <div class="buttons">
-                    <wf-button @onClick="${this.addNewProject}">Add new Project</wf-button>
+                    <wf-button @onClick="${() => this.setView(VIEW_NEW)}">Add new Project</wf-button>
                 </div>
             </header>
 
@@ -47,65 +44,32 @@ export class Component extends LitElement {
         `;
     }
 
-    editProject = ({detail}: CustomEvent) => {
-        this.selectedProject = detail;
-        this.setView(VIEW_EDIT);
+    async connectedCallback () {
+        const view = await getViewId(VIEW_LVL_2);
+        view && (this.currentView = view);
+        super.connectedCallback();
     }
 
-    handleFormSubmit = async ({detail: formValues}: CustomEvent<IFormValues>) => {
-        const {name, configFile, id, path} = formValues;
-        const pathPartials = path.replace('/manifest.json', '').split('/');
-
-        updateStorageProject(id, {
-            id,
-            name,
-            path,
-            pathPartials,
-        });
-
-        if (configFile && configFile.length !== 0) {
-            const manifest = await jsonFileContent(configFile[0]);
-            await setStorageItem(STORAGE_MANIFEST_PREFIX + id, manifest);
-        }
-
-        this.setView(VIEW_LIST);
-        this.toast.add('Project saved', 'success');
-    }
-
-    handleDeleteProject = async ({detail: id}: CustomEvent) => {
-        const projects = await getStorageItem(STORAGE_PROJECTS) || {};
-        delete projects[id];
-        await setStorageItem(STORAGE_PROJECTS, projects);
-
-        const activeProjects = await getStorageItem(STORAGE_ACTIVE_PROJECTS) || {};
-        delete activeProjects[id];
-        await setStorageItem(STORAGE_ACTIVE_PROJECTS, activeProjects);
-
-        await removeStorageItem(STORAGE_MANIFEST_PREFIX + id)
-        this.toast.add('Project deleted', 'success');
-        this.setView(VIEW_LIST);
-    }
-
-    addNewProject = () => {
-        this.setView(VIEW_NEW);
-    }
-
-    handleCancel = () => {
-        this.setView(VIEW_LIST);
+    editProject = async ({detail}: CustomEvent) => {
+        this.selectedProjectId = detail;
+        this.currentView = VIEW_EDIT;
+        await mergeStorageItem(STORAGE_VIEW, {
+            [VIEW_LVL_2]: VIEW_EDIT,
+            [VIEW_LVL_3]: detail,
+        })
     }
 
     views = {
         [VIEW_NEW]: () => {
             import("./component/form");
             return html`
-                <wf-projects-form @onSubmit="${this.handleFormSubmit}"></wf-projects-form>`;
+                <wf-projects-form @setView="${({detail}) => this.setView(detail)}"></wf-projects-form>`
         },
         [VIEW_EDIT]: () => {
+            console.log( 1 )
             import("./component/form");
             return html`
-                <wf-projects-form @onSubmit="${this.handleFormSubmit}" @onCancel="${this.handleCancel}"
-                                 @onDelete="${this.handleDeleteProject}" .values="${ifDefined(this.selectedProject)}"
-                                 isUpdate></wf-projects-form>`
+                <wf-projects-form @setView="${({detail}) => this.setView(detail)}" uid="${ifDefined(this.selectedProjectId)}"></wf-projects-form>`
         },
         [VIEW_LIST]: () => {
             import("./component/list");
@@ -114,20 +78,22 @@ export class Component extends LitElement {
         }
     }
 
-    setView = (view: typeof VIEW_NEW | typeof VIEW_EDIT | typeof VIEW_LIST) => {
-        this.view = view;
+    setView = async (view: typeof VIEW_NEW | typeof VIEW_EDIT | typeof VIEW_LIST) => {
+        this.currentView = view;
+
+        await mergeStorageItem(STORAGE_VIEW, {[VIEW_LVL_2]: view});
     }
 
     viewTask: Task<[TView]> = new Task(this, {
         task: async ([view]) => {
             if (this.views[view]) {
-                return this.views[this.view]();
+                return this.views[this.currentView]();
             }
 
             return html`
                 <wf-error></wf-error>`;
         },
-        args: () => [this.view],
+        args: () => [this.currentView],
     });
 }
 

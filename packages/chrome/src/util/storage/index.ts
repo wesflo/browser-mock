@@ -35,6 +35,12 @@ export const mergeStorageItem = async (key: string, obj: Object) => {
     });
 }
 
+export const deleteFromStorageItem = async (sKey: string, oKeys: string[]) => {
+    const obj = await getStorageItem(sKey);
+    oKeys.forEach((oKey: string) => delete obj[oKey]);
+    await setStorageItem(sKey, obj);
+}
+
 export const removeStorageItem = async (key: string) => {
     if(import.meta.env.MODE === MODE_DEV) {
         return window.sessionStorage.removeItem(key);

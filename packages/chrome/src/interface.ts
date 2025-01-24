@@ -1,3 +1,5 @@
+import {VIEW_LVL_1, VIEW_LVL_2} from "./constant";
+
 export interface IProject {
     id: string;
     name: string;
@@ -37,5 +39,7 @@ export interface IActiveMock {
 }
 
 export interface IActiveMocks {
-        [key: string]: IActiveMock
+    [key: string]: IActiveMock
 }
+
+export type TLvl = typeof VIEW_LVL_1 | typeof VIEW_LVL_2

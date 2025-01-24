@@ -6,19 +6,21 @@ import {textStyle} from "../../../../util/style/textStyle";
 import {getStorageItem, mergeStorageItem} from "../../../../util/storage";
 import {IActiveMock, IManifest, IManifestRequest, IProject} from "../../../../interface";
 import {Task} from "@lit/task";
-import {STORAGE_ACTIVE_REQUESTS, STORAGE_MANIFEST_PREFIX} from "../../../../constant";
+import {STORAGE_ACTIVE_REQUESTS, STORAGE_MANIFEST_PREFIX, STORAGE_PROJECTS, VIEW_LVL_3} from "../../../../constant";
 import "../../../../component/progress";
 import "../../../../component/button";
 import "./component/requestCard";
 import "../../../error";
 import {generateRequestId} from "../../../../util/generateRequestId";
 import {ifDefined} from "lit-html/directives/if-defined.js";
+import {getViewId} from "../../../../util/getViewId";
 
 
 export class Component extends LitElement {
-    @property({type: Object}) project!: IProject;
+    @property({type: String}) uid: string;
 
     @state() activeMocks!: IActiveMock;
+    @state() project!: IProject;
 
     manifest!: IManifest;
     enableAll: boolean = false;
@@ -64,18 +66,23 @@ export class Component extends LitElement {
                     <wf-error error="${e}"></wf-error>`,
             });
     }
-/*
-                        <wf-button appearance="primary" size="m" @onClick="${this.handleToggleAll}">
-                            toggle all
-                        </wf-button>
- */
+
+    async connectedCallback() {
+        const view = await getViewId(VIEW_LVL_3);
+        view && (this.uid = view);
+console.log( view, this.uid )
+        super.connectedCallback();
+    }
+
     projectTask: Task<[string]> = new Task(this, {
         task: async ([id]) => {
             const [manifest, allActiveMocks] = await Promise.all([
                 getStorageItem(STORAGE_MANIFEST_PREFIX + id),
                 getStorageItem(STORAGE_ACTIVE_REQUESTS)
             ]);
-
+            const obj = await getStorageItem(STORAGE_PROJECTS);
+            this.project = obj[id];
+console.log( id, obj )
             this.manifest = manifest;
             this.activeMocks = allActiveMocks[id] || {};
             this.initActiveMocks = {...this.activeMocks};
@@ -83,7 +90,10 @@ export class Component extends LitElement {
 
             return manifest
         },
-        args: () => [this.project.id],
+        args: () => {
+            console.log( this.uid )
+            return [this.uid]
+        },
     });
 
     handleRequestChange = (activeMockId: string, request: IManifestRequest, detail: {key: string, value: number | string | boolean}) => {
@@ -91,7 +101,6 @@ export class Component extends LitElement {
         if(detail.key === 'active') {
             return this.saveSingleMock(detail.value as boolean, activeMockId, data)
         }
-
         data[detail.key] = detail.value;
 
         return this.saveSingleMock(!!this.activeMocks[activeMockId], activeMockId, data)

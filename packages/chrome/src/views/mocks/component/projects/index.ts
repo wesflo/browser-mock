@@ -45,7 +45,7 @@ export class Component extends LitElement {
     renderProject = (project: IProject) => {
         return html`
             <li>
-                <div class="cta" @click="${() => this.openProject(project)}">
+                <div class="cta" @click="${() => this.openProject(project.id)}">
                     <span>${project.name}</span>
                     <wf-button appearance="primary" size="inherit" >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
@@ -78,8 +78,8 @@ export class Component extends LitElement {
         setStorageItem(STORAGE_ACTIVE_PROJECTS, this.activeProjects)
     }
 
-    openProject = async (project: IProject) => {
-        this.dispatchEvent(new CustomEvent('onOpenProject', {detail: project}));
+    openProject = async (uid: string) => {
+        this.dispatchEvent(new CustomEvent('onOpenProject', {detail: uid}));
     }
 
 }
