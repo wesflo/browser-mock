@@ -29,7 +29,7 @@ const buildRuleset = (activeRequest: IActiveMock, partials: string[], sIndex: nu
         const params = [
                 `status=${activeRequest.status}`,
                 `to=${activeRequest.timeout || 0}`,
-                `path=${activeRequest.path.replace('/', '%2B')}`,
+                `path=${activeRequest.mockPath.replace('/', '%2B')}`,
                 `pDir=${partials.join('%2B')}`,
         ]
         return {
@@ -43,7 +43,7 @@ const buildRuleset = (activeRequest: IActiveMock, partials: string[], sIndex: nu
             },
             condition: {
                 requestMethods: [RequestMethod[activeRequest.method]],
-                regexFilter: domain + activeRequest.url
+                regexFilter: domain + activeRequest.path
             }
         }
     })

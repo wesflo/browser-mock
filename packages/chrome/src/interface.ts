@@ -16,7 +16,7 @@ export type TRequestMethod = 'GET' | 'PUT' | 'DELETE' | 'POST' | 'PATCH';
 
 export interface IManifestRequest {
     name: string;
-    url: string;
+    path: string;
     method: TRequestMethod;
     response: {
         [key: string]: string;
@@ -29,10 +29,10 @@ export interface IManifest {
 }
 
 export interface IActiveMock {
-    url: string;
+    path: string;
     method: TRequestMethod;
     status: number;
-    path: string;
+    mockPath: string;
     timeout?: number;
     domains: string[];
 }

@@ -36,7 +36,7 @@ export class Component extends LitElement {
             <header>
                 <span class="flag ${req.method.toLowerCase()}">${req.method.toUpperCase()}</span>
                 <h5>
-                    <strong>${req.name ? req.name : 'Unnamed'}</strong>${req.url}
+                    <strong>${req.name ? req.name : 'Unnamed'}</strong>${req.path}
                 </h5>
             </header>
             <div class="cnt">
@@ -99,14 +99,14 @@ export class Component extends LitElement {
 
     buildActiveMockObj = (): Partial<IActiveMock> => {
         const {req, status, timeout, domains} = this;
-        const {url, method, response} = req;
+        const {path, method, response} = req;
 
         return {
             domains,
-            url,
+            path,
             method,
             status,
-            path: response[status],
+            mockPath: response[status],
             timeout,
         }
     }
