@@ -1,4 +1,4 @@
-export const generateMockFileName = (path: string, method: string, status: number) => {
+export const generateMockFileName = (path: string, method: string, status: number | string) => {
     let cleanPath = path.replace(/\//g, '-')
         .replace(/[^\w-]/g, '');
 
@@ -6,5 +6,5 @@ export const generateMockFileName = (path: string, method: string, status: numbe
         cleanPath = cleanPath.substring(1);
     }
 
-    return `${cleanPath}_${method}_${status}`
+    return `${cleanPath}_${method}_${status}.json`
 }

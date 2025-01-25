@@ -1,49 +1,63 @@
 #!/usr/bin/env node
-import {writeFileSync, readFileSync, existsSync, mkdirSync} from "node:fs";
+import {existsSync, mkdirSync, readFileSync, writeFileSync} from "node:fs";
 import * as swaggerCombine from "swagger-combine";
 import * as pkg from "../package.json";
 import {getResponses} from "./util/getResponses";
 import * as chalk from "chalk";
 import {generateMockData} from "./util/generateMockData";
-import {TMapping, TPgkConfig, TResponses} from "./interface";
+import {
+    IManifest,
+    IManifestRequest,
+    IPromptOptions,
+    TMapping,
+    TPgkConfig,
+    TRequestMethod,
+    TResponses
+} from "./interface";
 import {generateMockFileName} from "./util/generateMockFileName";
 import {prompt} from "promptly";
 import {getMappings} from "./util/getMappings";
 import * as path from "node:path";
+import {generateManifest} from "./util/generateManifest";
+import {OpenAPIObject} from "openapi3-ts/oas30";
+import {generateMockFiles} from "./util/generateMockFiles";
 
 const log = console.log;
+
 const generator = async () => {
     const appRoot = process.cwd();
     let wfGeneratorOptions: TPgkConfig = {};
 
     try {
-        const appPkgStr = readFileSync(path.resolve(appRoot , 'package.json'), { encoding: 'utf8'})
+        const appPkgStr = readFileSync(path.resolve(appRoot, 'package.json'), {encoding: 'utf8'})
         wfGeneratorOptions = JSON.parse(appPkgStr).wfGenerator;
     } catch (e) {
         log(chalk.red('can\'t find/read package.json'));
     }
 
-    const swaggerPath = wfGeneratorOptions.swagger || await prompt('path to swagger.yml (mock/swagger.yaml)', {
-        default: '../mock/swagger.yaml'
+    const promptOptions: Partial<IPromptOptions> = {}
+
+    promptOptions.swaggerPath = wfGeneratorOptions.swagger || await prompt('path to swagger.yml (mock/swagger.yaml)', {
+        default: './api/swagger.yaml'
     });
 
-    const mappingPath: string|string[] = wfGeneratorOptions.mapping || wfGeneratorOptions.mappings || await prompt('path to mapping yaml (empty if noc mapping exists)', {
+    promptOptions.mappingPath = wfGeneratorOptions.mapping || wfGeneratorOptions.mappings || await prompt('path to mapping yaml (empty if noc mapping exists)', {
         default: ''
     });
 
-    const mockTargetPath = wfGeneratorOptions.target || await prompt('path where to extract mock files (mock)', {
+    promptOptions.mockTargetPath = wfGeneratorOptions.target || await prompt('path where to extract mock files (mock)', {
         default: './mocks'
     });
 
-    const responsePath = await prompt('request path to update (empty for all)', {
+    promptOptions.responsePath = await prompt('request path to update (empty for all)', {
         default: ''
     });
 
-    const responseMethode = responsePath ? await prompt('request method to update (empty for all)', {
+    promptOptions.responseMethode = promptOptions.responsePath ? await prompt('request method to update (empty for all)', {
         default: ''
     }) : null;
 
-    const responseStatus = responseMethode ? await prompt('request status to update (empty for all)', {
+    promptOptions.responseStatus = promptOptions.responseMethode ? await prompt('request status to update (empty for all)', {
         default: ''
     }) : null;
 
@@ -51,38 +65,22 @@ const generator = async () => {
     // const responseMethode = 'get';
     // const responseStatus = '200';
 
-    const cnt = await swaggerCombine(swaggerPath, {format: 'yaml'});
-    const mapping: TMapping = mappingPath && await getMappings(mappingPath, appRoot)
-    const responses: TResponses[] = getResponses(cnt);
-    const mockData = responses.map(resp => generateMockData(resp, mapping || {}));
+    const {mappingPath, swaggerPath, mockTargetPath} = promptOptions;
 
-    if (!existsSync(mockTargetPath)){
-        mkdirSync(mockTargetPath, { recursive: true });
+    const swaggerCnt: OpenAPIObject = await swaggerCombine(swaggerPath, {format: 'yaml'});
+    const mapping: TMapping = mappingPath && await getMappings(mappingPath, appRoot);
+    const responses: TResponses[] = getResponses(swaggerCnt);
+    const mockData: TResponses[] = responses.map(resp => generateMockData(resp, mapping || {}));
+
+    if (!existsSync(mockTargetPath)) {
+        mkdirSync(mockTargetPath, {recursive: true});
     }
 
-    for (const resp of mockData) {
-        try {
-            if(resp.mock ) {
-                const {path, method, status} = resp;
-                if(
-                    (!responsePath || responsePath === path)
-                    && (!responseMethode || responseMethode.toLowerCase() === method)
-                    && (!responseStatus || Number(responseStatus) === status)
-                ) {
+    await generateMockFiles(mockData, promptOptions as IPromptOptions)
+    await generateManifest(swaggerCnt, mockTargetPath);
 
-                    const filename = `${mockTargetPath}/${generateMockFileName(path, method, status)}.json`;
-                    await writeFileSync(filename, JSON.stringify(resp.mock, null, 4));
-                    log(chalk.green(`Generate mock: ${chalk.bold(filename)}`));
-                }
-            }
-        } catch (e) {
-            log(chalk.red('Something went wrong! Can\'t write File'));
-            log(chalk.red(e));
-        }
-    }
-
-    log(chalk.blueBright('Done with:'));
-    log(chalk.blueBright(swaggerPath, mockTargetPath));
+    log(chalk.blueBright('Done with config:'));
+    log(chalk.blueBright(JSON.stringify(promptOptions, null, 2)));
 }
 
 (async () => {

@@ -50,3 +50,29 @@ export type TPgkConfig = {
     mapping?: string;
     mappings?: string[];
 }
+
+
+export type TRequestMethod = 'GET' | 'PUT' | 'DELETE' | 'POST' | 'PATCH';
+
+export interface IManifestRequest {
+    name?: string;
+    url: string;
+    method: TRequestMethod;
+    response: {
+        [key: string]: string;
+    }
+}
+export type TManifestDomains = string[];
+export interface IManifest {
+    domains: TManifestDomains;
+    requests: IManifestRequest[];
+}
+
+export interface IPromptOptions {
+    swaggerPath: string;
+    mappingPath: string | string[];
+    mockTargetPath: string ;
+    responsePath: string;
+    responseMethode: string | null;
+    responseStatus: string | null;
+}
