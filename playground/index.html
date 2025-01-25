@@ -58,9 +58,19 @@
     })
 
     const handleButtonClick = async ({url, method, label}) => {
-        const response = await fetch(`https://api.dev.wesflo.de${url}`, {
-            method
-        }).then(resp => resp.json())
+        const reqInit = {
+            method,
+        }
+
+        if(['POST', 'PUT', 'PATCH'].includes(method)) {
+            reqInit.body = JSON.stringify({
+                method,
+                data: 'Lorem',
+                config,
+            })
+        }
+
+        const response = await fetch(`https://api.dev.wesflo.de${url}`, reqInit).then(resp => resp.json())
             .catch(error => ({error}));
 
         heading.innerText = `Response: ${label}`;
