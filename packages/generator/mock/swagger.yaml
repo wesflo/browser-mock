@@ -1,15 +1,15 @@
 openapi: 3.0.3
 info:
-  title: Infonet-Auftragsverwaltung-API
-  description: Endpunkte fuer die Auftragsverwaltung im Infonet
+  title: API
+  description: Endpunkte fuer API
   version: 3.0.0
 
 servers:
-  - url: 'https://localhost'
+  - url: 'https://localhost/v1'
     description: Entwicklungs server
-  - url: 'https://infonet-auftragsverwaltung-api-test.dev.electronicpartner.io'
+  - url: 'https://api-test.dev.wesflo.de/v1'
     description: Dev server
-  - url: 'https://infonet-auftragsverwaltung-api.electronicpartner.io'
+  - url: 'https://api.wesflo.de/v1'
     description: Production server
 
 paths:
@@ -116,21 +116,6 @@ paths:
           $ref: "#/components/responses/internalServerError"
 
 components:
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      x-ep-auth:
-        secrets:
-          - usermanager
-          - JWT
-        rights:
-          - bestellbestand
-          - warenkorb-debug
-          - bestell_lager
-          - geschaeftsfuehrung
-          - warenkorb-piloten
   parameters:
     orderNumberParameter:
       name: orderNumber
@@ -141,13 +126,13 @@ components:
         type: string
       examples:
         successful:
-          value: "0023456789"
+          value: "1111111111"
         badRequest:
-          value: "9898525258"
+          value: "9999999999"
         forbidden:
-          value: "5615165651"
+          value: "9999999999"
         internalServerError:
-          value: "6654167521"
+          value: "9999999999"
     positionNumberParameter:
       name: positionNumber
       in: path
@@ -189,13 +174,13 @@ components:
         type: string
       examples:
         successful:
-          value: "8009209545"
-        notFound:
           value: "1111111111"
+        notFound:
+          value: "9999999999"
         forbidden:
           value: "9999999999"
         internalServerError:
-          value: "0000000000"
+          value: "9999999999"
 
     readParameter:
       name: read
@@ -912,6 +897,3 @@ components:
             internalServerError:
               value:
                 error: "Internal Server Error"
-
-security:
-  - bearerAuth: [ ]
