@@ -6,15 +6,11 @@ import {getResponses} from "./util/getResponses";
 import * as chalk from "chalk";
 import {generateMockData} from "./util/generateMockData";
 import {
-    IManifest,
-    IManifestRequest,
     IPromptOptions,
     TMapping,
     TPgkConfig,
-    TRequestMethod,
     TResponses
 } from "./interface";
-import {generateMockFileName} from "./util/generateMockFileName";
 import {prompt} from "promptly";
 import {getMappings} from "./util/getMappings";
 import * as path from "node:path";
