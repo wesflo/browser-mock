@@ -11,8 +11,6 @@ page:
    <img src="/browser-mock/packages/chrome/static/icon/icon128.png" alt="Chrome Store Icon">
 </div>
 
-![Chrome Store Icon](./static/icon/icon128.png)
-
 MockProxy is a lightweight browser extension designed to simplify API testing and local development. Effortlessly intercept HTTP requests, redirect them to your local Node.js server, and respond with pre-configured mock data.
 
 ## Features
