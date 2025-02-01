@@ -26,6 +26,8 @@ const buildRule = (activeRequests: IActiveMocks, partials: string[], pIndex: num
 
 const buildRuleset = (activeRequest: IActiveMock, partials: string[], sIndex: number, pIndex: number): Rule[] => {
     return activeRequest.domains.map((domain: string, index: number) => {
+        console.log( activeRequest )
+
         const params = [
                 `status=${activeRequest.status}`,
                 `to=${activeRequest.timeout || 0}`,

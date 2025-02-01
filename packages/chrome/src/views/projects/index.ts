@@ -1,5 +1,5 @@
 import {property, state} from 'lit/decorators.js';
-import {html, LitElement} from 'lit';
+import {html, LitElement, nothing} from 'lit';
 import {defaultStyle} from "../../style/defaultStyle";
 import {style} from "./style";
 import {textStyle} from "../../style/textStyle";
@@ -28,10 +28,8 @@ export class Component extends LitElement {
     render() {
         return html`
             <header>
-                <h1>Projects</h1>
-                <div class="buttons">
-                    <wf-button @onClick="${() => this.setView(VIEW_NEW)}">Add new Project</wf-button>
-                </div>
+                <h1>Projects: ${this.currentView}</h1>
+                ${this.currentView === VIEW_LIST ? this.renderHeaderButtons() : nothing}
             </header>
 
             ${this.viewTask.render({
@@ -49,6 +47,12 @@ export class Component extends LitElement {
         view && (this.currentView = view);
         super.connectedCallback();
     }
+
+    renderHeaderButtons = () => html`
+        <div class="buttons">
+            <wf-button @onClick="${() => this.setView(VIEW_NEW)}">Add new Project</wf-button>
+        </div>
+    `
 
     editProject = async ({detail}: CustomEvent) => {
         this.selectedProjectId = detail;

@@ -56,7 +56,7 @@ export type TRequestMethod = 'GET' | 'PUT' | 'DELETE' | 'POST' | 'PATCH';
 
 export interface IManifestRequest {
     name?: string;
-    url: string;
+    path: string;
     method: TRequestMethod;
     response: {
         [key: string]: string;

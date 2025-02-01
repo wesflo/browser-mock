@@ -1,6 +1,6 @@
 {
   "name": "@wesflo/generator",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Generates mock json files from swagger yml",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -52,10 +52,6 @@
   },
   "wfGenerator": {
     "swagger": "mock/swagger.yaml",
-    "mappings": [
-      "mock/mapping.yaml",
-      "mock/overwrite.yaml"
-    ],
     "target": "tmp/mocks"
   }
 }

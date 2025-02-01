@@ -28,10 +28,10 @@ export const  generateManifest = async (swaggerCnt: OpenAPIObject, mockTargetPat
             const key = getPathMapKey(path, method);
 
             if(!requestMap[key]) {
-                const existingReqObj = existingManifestCnt?.requests?.find((req: IManifestRequest) => req.url === path && req.method === method ) || {name: EMPTY_MANIFEST_REQUEST_NAME};
+                const existingReqObj = existingManifestCnt?.requests?.find((req: IManifestRequest) => req.path === path && req.method === method ) || {name: EMPTY_MANIFEST_REQUEST_NAME};
                 requestMap[key] = {
                     name: existingReqObj.name || EMPTY_MANIFEST_REQUEST_NAME,
-                    url: path,
+                    path,
                     method,
                     response: {}
                 }

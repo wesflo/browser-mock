@@ -3,7 +3,7 @@ import Rule = chrome.declarativeNetRequest.Rule;
 import UpdateRuleOptions = chrome.declarativeNetRequest.UpdateRuleOptions;
 
 export const updateChrome = async (activePlugin: boolean) => {
-    const allRules: Rule[] = await chrome.declarativeNetRequest.getDynamicRules();
+    const allRules: Rule[] = await chrome.declarativeNetRequest.getDynamicRules() || [];
     let rules: Rule[] = [];
 
     if(activePlugin) {
@@ -11,12 +11,13 @@ export const updateChrome = async (activePlugin: boolean) => {
     }
 
     const options: UpdateRuleOptions = {
-        addRules: rules
+        addRules: rules.filter(undefinedFilter),
+        removeRuleIds: allRules.length ? allRules.map((rule) => rule.id).filter(undefinedFilter) : undefined
     }
-
-    allRules && (options.removeRuleIds = allRules.map((rule) => rule.id))
 
     await chrome.declarativeNetRequest.updateDynamicRules(options);
 
     console.log('Rules updated:', rules, await chrome.declarativeNetRequest.getDynamicRules());
 }
+
+const undefinedFilter = (a: any) => typeof a !== 'undefined';

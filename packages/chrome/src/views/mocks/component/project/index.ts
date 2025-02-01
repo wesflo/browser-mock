@@ -47,11 +47,12 @@ export class Component extends LitElement {
                     </header>
                     ${manifest.requests.map((request) => {
                         const id = generateRequestId(request);
+                        console.log( request )
                         return html`
                             <wf-mock-project-request-card
                                     uid="${id}"
                                     pid="${this.uid}"
-                                    .req="${request}"
+                                    .request="${request}"
                                     .domains="${manifest.domains}"
                                     .activeMock="${this.activeMocks[id]}"
                             ></wf-mock-project-request-card>

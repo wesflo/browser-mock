@@ -18,7 +18,7 @@ export class Component extends LitElement {
     @property({type: String}) uid!: IManifestRequest;
     @property({type: String}) pid!: IManifestRequest;
     @property({type: Array}) domains!: TManifestDomains;
-    @property({type: Object}) req!: IManifestRequest;
+    @property({type: Object}) request!: IManifestRequest;
     @property({type: Object}) activeMock!: IActiveMock;
 
     @state() status!: number;
@@ -30,13 +30,13 @@ export class Component extends LitElement {
     static styles = [defaultStyle, textStyle, style];
 
     render() {
-        const {req, statusArr, active, status, timeout} = this;
+        const {request, statusArr, active, status, timeout} = this;
 
         return html`
             <header>
-                <span class="flag ${req.method.toLowerCase()}">${req.method.toUpperCase()}</span>
+                <span class="flag ${request.method.toLowerCase()}">${request.method.toUpperCase()}</span>
                 <h5>
-                    <strong>${req.name ? req.name : 'Unnamed'}</strong>${req.path}
+                    <strong>${request.name ? request.name : 'Unnamed'}</strong>${request.path}
                 </h5>
             </header>
             <div class="cnt">
@@ -71,8 +71,8 @@ export class Component extends LitElement {
     }
 
     connectedCallback() {
-        const {req} = this;
-        const statusArr = Object.keys(req.response);
+        const {request} = this;
+        const statusArr = Object.keys(request.response);
 
         this.active = !!this.activeMock;
         this.status = this.activeMock?.status || Number(statusArr[0])
@@ -98,15 +98,15 @@ export class Component extends LitElement {
     };
 
     buildActiveMockObj = (): Partial<IActiveMock> => {
-        const {req, status, timeout, domains} = this;
-        const {path, method, response} = req;
+        const {request, status, timeout, domains} = this;
+        const {path, method, response} = request;
 
         return {
             domains,
             path,
             method,
             status,
-            mockPath: response[status],
+            mockPath: response[String(status)],
             timeout,
         }
     }

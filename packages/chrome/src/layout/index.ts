@@ -100,9 +100,9 @@ export class BrowserMock extends LitElement {
         await setStorageItem(STORAGE_VIEW,{[VIEW_LVL_1]: view})
     }
 
-    handleToggleBm = () => {
+    handleToggleBm = async () => {
         this.bmIsActive = !this.bmIsActive;
-        mergeStorageItem(STORAGE_ACTIVE, this.bmIsActive)
+        await setStorageItem(STORAGE_ACTIVE, this.bmIsActive)
     }
 
     handleReloadApp = () => {
