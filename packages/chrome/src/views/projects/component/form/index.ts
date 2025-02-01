@@ -103,7 +103,6 @@ export class Component extends LitElement {
                 pathPartials,
             });
 
-
             const manifestCnt = (configFile.length) ? await await configFile[0].text() : manifest;
 
             manifestCnt && await setStorageItem(STORAGE_MANIFEST_PREFIX + id, JSON.parse(manifestCnt));

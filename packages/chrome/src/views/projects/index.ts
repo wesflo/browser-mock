@@ -70,7 +70,6 @@ export class Component extends LitElement {
                 <wf-projects-form @setView="${({detail}) => this.setView(detail)}"></wf-projects-form>`
         },
         [VIEW_EDIT]: () => {
-            console.log( 1 )
             import("./component/form");
             return html`
                 <wf-projects-form @setView="${({detail}) => this.setView(detail)}" uid="${ifDefined(this.selectedProjectId)}"></wf-projects-form>`

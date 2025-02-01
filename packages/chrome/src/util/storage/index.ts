@@ -11,7 +11,6 @@ const getItem = async (key: string) => {
 }
 
 const setItem = async (key: string, data: Object) => {
-    console.log( key, data )
     if(import.meta.env.MODE === MODE_DEV) {
         return window.sessionStorage.setItem(key, JSON.stringify(data));
     }

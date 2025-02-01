@@ -43,7 +43,6 @@ export class Component extends LitElement {
     }
 
     renderProject = (project: IProject) => {
-        console.log( this.activeProjects )
         return html`
             <li>
                 <div class="cta" @click="${() => this.openProject(project.id)}">
