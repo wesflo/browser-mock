@@ -1,17 +1,26 @@
-# MockProxy - A Developer's HTTP Request Interception Tool
+---
+page:
+   name: chrome.html
+   slug: /browser-mock/chrome.html
+---
 
+<div style="text-align:center">
+
+# MockProxy - A Developer's HTTP Request Interception Tool
+![Chrome Store Icon](./static/icon/icon128.png)
+</div>
 MockProxy is a lightweight browser extension designed to simplify API testing and local development. Effortlessly intercept HTTP requests, redirect them to your local Node.js server, and respond with pre-configured mock data.
 
 ## Features
 
-### 🔧 **Core Features**
+### **Core Features**
 - **Request Interception**: Capture and redirect HTTP requests to your local Node.js (Express) server.
 - **Customizable Responses**: Configure responses with JSON files for different HTTP status codes (e.g., `200`, `400`, `404`).
 - **Project Management**: Enable or disable specific requests, entire projects, or the plugin itself.
 - **Dynamic Status Simulation**: Select desired HTTP response codes and simulate various API scenarios.
 - **Timeout Handling**: Introduce custom response delays to test edge cases like slow networks.
 
-### ✨ **Fancy Features**
+### **Other Features**
 - **Manifest-Based Configuration**: Manage projects, domains, and request rules through a single `manifest.json` file.
 - **Pattern Matching for URLs**: Use regex patterns to target complex endpoint structures (e.g., `/api/v1/resource/[\\d]{5}`).
 - **Real-Time Controls**: Enable or disable the plugin, individual requests, or entire projects directly from the popup UI.

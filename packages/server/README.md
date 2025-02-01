@@ -1,3 +1,9 @@
+---
+page:
+name: server.html
+slug: /browser-mock/server.html
+---
+
 # Local Mock Server for Chrome Extension
 
 This project provides a local Node.js server built with Express that can be installed and run using the `@wesflo/mock-server` package. The server is designed to respond to requests from a Chrome extension and return a mock JSON response.

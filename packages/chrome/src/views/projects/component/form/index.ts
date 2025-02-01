@@ -15,7 +15,7 @@ import {uid} from "../../../../util/uid";
 import {updateStorageProject} from "../../../../util/updateStorageProject";
 import {deleteFromStorageItem, getStorageItem, removeStorageItem, setStorageItem} from "../../../../util/storage";
 import {
-    STORAGE_ACTIVE_PROJECTS,
+    STORAGE_ACTIVE_PROJECTS, STORAGE_ACTIVE_REQUESTS,
     STORAGE_MANIFEST_PREFIX,
     STORAGE_PROJECTS,
     STORAGE_VIEW,
@@ -48,38 +48,40 @@ export class Component extends LitElement {
             <wf-input name="name" label="Project Name" value="${ifDefined(this.values.name)}" required></wf-input>
             <wf-input name="path" label="Absolut Path to manifest.json" value="${ifDefined(this.values.path)}" required></wf-input>
             <h4>Manifest</h4>
-            <wf-file name="configFile" label="import file" accept=".json"></wf-file>
-            <span class="spacer">
-                <span>or</span>
-            </span>
-            <wf-textarea 
-                    name="manifest"
-                    label="Manifest content" 
-                    @onInput="${this.handleManualManifest}" 
-                    value="${this.manifest ? JSON.stringify(this.manifest, null, 2) : ''}"
-            ></wf-textarea>
+            <div class="m">
+                <wf-textarea
+                        name="manifest"
+                        label="Manifest content"
+                        @onInput="${this.handleManualManifest}"
+                        value="${this.manifest ? JSON.stringify(this.manifest, null, 2) : ''}"
+                ></wf-textarea>
+                <span class="spacer">
+                    <span>or</span>
+                </span>
+                <wf-file name="configFile" label="import file" accept=".json"></wf-file>
+            </div>
             <div class="buttons right">
                 ${this.uid ? html`<wf-button @onClick="${this.handleDelete}" appearance="danger-outline" size="l" style="margin-right: auto">delete</wf-button>` : nothing}
-                <wf-button @onClick="${this.setView}" size="l" appearance="secondary-outline">cancel</wf-button>
+                <wf-button @onClick="${this.setListView}" size="l" appearance="secondary-outline">cancel</wf-button>
                 <wf-button @onClick="${this.handleFormSubmit}" size="l">save</wf-button>
             </div>
         `;
     }
 
     async connectedCallback() {
-        const uid = await getViewId(VIEW_LVL_3);
-        uid && (this.uid = uid);
-
-        if(this.uid) {
+        const id = await getViewId(VIEW_LVL_3);
+        if(id) {
+            this.uid = id
             const obj = await getStorageItem(STORAGE_PROJECTS);
             this.values = obj[this.uid];
-            this.manifest = await getStorageItem(STORAGE_MANIFEST_PREFIX + uid);
+            this.manifest = await getStorageItem(STORAGE_MANIFEST_PREFIX + id);
+        } else {
+            this.uid = uid();
         }
-
         super.connectedCallback();
     }
 
-    setView = async () => {
+    setListView = async () => {
         // await setViewId(VIEW_LVL_3, null);getStorageItem
         await deleteFromStorageItem(STORAGE_VIEW, [VIEW_LVL_3]);
 
@@ -92,7 +94,7 @@ export class Component extends LitElement {
 
     handleFormSubmit = async () => {
         if(this.form.validate()) {
-            const id = this.uid || uid();
+            const id = this.uid;
             const {name, configFile, path, manifest} = this.form.getValues();
             const pathPartials = path.replace('/manifest.json', '').split('/');
 
@@ -103,12 +105,18 @@ export class Component extends LitElement {
                 pathPartials,
             });
 
-            const manifestCnt = (configFile.length) ? await await configFile[0].text() : manifest;
+            const manifestCnt = (configFile.length) ? await configFile[0].text() : manifest;
 
-            manifestCnt && await setStorageItem(STORAGE_MANIFEST_PREFIX + id, JSON.parse(manifestCnt));
+            if(manifestCnt) {
+                await setStorageItem(STORAGE_MANIFEST_PREFIX + id, JSON.parse(manifestCnt));
+                await deleteFromStorageItem(STORAGE_ACTIVE_REQUESTS, [id]);
 
-            this.toast.add('Project saved', 'success');
-            await this.setView();
+                this.toast.add('Project saved', 'success');
+                await this.setListView();
+                return;
+            }
+
+            this.toast.add('Can\'t save manifest', 'error');
         }
     }
 
@@ -119,7 +127,7 @@ export class Component extends LitElement {
         await removeStorageItem(STORAGE_MANIFEST_PREFIX + uid)
 
         this.toast.add('Project deleted', 'success');
-        await this.setView();
+        await this.setListView();
     }
 }
 

@@ -9,10 +9,10 @@ export const textStyle = css`
         font-size: var(--font-size-l);
     }
     h3, h2 {
-        font-size: 22px;
+        font-size: 18px;
     }
     h1 {
-        font-size: 28px;
+        font-size: 20px;
     }
 
     dl {

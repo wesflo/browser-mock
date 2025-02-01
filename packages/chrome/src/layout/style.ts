@@ -5,21 +5,21 @@ export const style = css`
         display: block;
         background-color: var(--main-bg);
     }
-    
+
     nav {
         display: flex;
         flex-wrap: wrap;
         background-color: var(--primary);
         font-size: var(--font-size-l);
         font-weight: bold;
-        
+
         a {
             position: relative;
             padding: 16px 24px 14px;
             color: var(--font-color-iverse);
             background-color: var(--primary);
             transition: background-color 400ms ease-in-out;
-            
+
             &:after {
                 content: '';
                 display: block;
@@ -33,29 +33,74 @@ export const style = css`
                 background-color: var(--font-color-iverse);
                 transition: all 400ms ease-in-out;
             }
-            
+
             &.active {
                 background-color: var(--primary-bright);
             }
-            
+
             &:hover {
-                
+
                 &:after {
                     opacity: 1;
                     width: 100%;
                 }
             }
         }
-        
+
         wf-switch {
             padding: 10px 16px 0 0;
             margin-left: auto;
         }
     }
 
+    footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 8px;
+        display: flex;
+        justify-content: space-between;
+        background: var(--grey-1);
+
+        dl {
+            display: flex;
+        }
+
+        dt {
+            display: inline-block;
+            padding-right: 10px;
+            font-weight: bold;
+        }
+
+        dd {
+            &:after {
+                display: inline-block;
+                padding: 0 8px 0 6px;
+                content: '-';
+            }
+
+            &:last-child:after {
+                content: unset;
+            }
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: none;
+
+            &:focus,
+            &:focus-visible,
+            &:hover {
+                color: var(--primary-dark);
+            }
+        }
+
+    }
+
     .tabs {
         padding: 16px 8px;
     }
-    
-    
+
+
 `

@@ -12,24 +12,34 @@ export const style = css`
     wf-button {
         margin-bottom: 0;
     }
+
+    .m {
+        display: grid;
+        grid-template-columns: 3fr auto 2fr;
+        gap: 16px;
+        align-items: center;
+        justify-content: center;
+    }
     
     .spacer {
         display: flex;
-        justify-content: center;
+        align-items: center;
         position: relative;
         z-index: 1;
+        height: 100%;
     }
     
     .spacer:after {
         content: '';
         display: block;
-        width: 100%;
-        height: 2px;
+        height: 100%;
+        width: 2px;
         position: absolute;
-        top: 8px;
+        top: 0;
+        left: 6px;
         z-index: -1;
         background: linear-gradient(
-                90deg,
+                0deg,
                 var(--main-bg) 0%,
                 var(--grey-3) 40%,
                 var(--grey-3) 60%,
@@ -38,7 +48,7 @@ export const style = css`
     
     .spacer span {
         display: block;
-        padding: 0 16px;
+        padding: 8px 0;
         background: var(--main-bg);
     }
 `

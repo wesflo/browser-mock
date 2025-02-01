@@ -14,6 +14,7 @@ import "../views/error";
 import {getStorageItem, mergeStorageItem, setStorageItem} from "../util/storage";
 import {STORAGE_ACTIVE, STORAGE_VIEW, VIEW_LVL_1} from "../constant";
 import {getViewId} from "../util/getViewId";
+import pkg from "../../package.json"
 
 export class BrowserMock extends LitElement {
     @property({type: Boolean, reflect: true}) bmIsActive: boolean = false;
@@ -43,6 +44,26 @@ export class BrowserMock extends LitElement {
                 error: (e) => html`
                     <wf-error error="${e}"></wf-error>`,
             }),
+            html`
+                <footer>
+                    <small>v ${pkg.version}</small>
+                    <dl>
+                        <dt>Tutorials</dt>
+                        <dd>
+                            <a href="https://wesflo.github.io/browser-mock/index.html" target="_blank">General</a>
+                        </dd>
+                        <dd>
+                            <a href="https://wesflo.github.io/browser-mock/packages/chrome/index.html" target="_blank">Plugin</a>
+                        </dd>
+                        <dd>
+                            <a href="https://wesflo.github.io/browser-mock/packages/generator/index.html" target="_blank">Generator</a>
+                        </dd>
+                        <dd>
+                            <a href="https://wesflo.github.io/browser-mock/packages/server/index.html" target="_blank">Local Mock Server</a>
+                        </dd>
+                    </dl>
+                </footer>
+            `
         ];
     }
 

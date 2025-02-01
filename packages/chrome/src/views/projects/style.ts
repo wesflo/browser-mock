@@ -5,7 +5,7 @@ export const style = css`
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 20px;
+        margin-bottom: 16px;
     }
 
     wf-button {

@@ -1,3 +1,9 @@
+---
+page:
+name: generator.html
+slug: /browser-mock/generator.html
+---
+
 # wf-generator
 
 `wf-generator` is a Node.js-based generator that uses Swagger definitions and mapping files to automatically generate
