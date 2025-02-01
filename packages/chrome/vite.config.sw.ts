@@ -9,6 +9,7 @@ export default defineConfig({
     },
     build: {
         emptyOutDir: false,
+        minify: false,
         rollupOptions: {
             input: {
                 service_worker: './src/sw/background.ts'

@@ -46,7 +46,7 @@ export class BrowserMock extends LitElement {
             }),
             html`
                 <footer>
-                    <small>v ${pkg.version}</small>
+                    <small>v${pkg.version}</small>
                     <dl>
                         <dt>Tutorials</dt>
                         <dd>

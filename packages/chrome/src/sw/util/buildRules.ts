@@ -11,7 +11,7 @@ export const buildRules = async () => {
     const allActiveRequests: {[key: string]: IActiveMocks} = await getStorageItem(STORAGE_ACTIVE_REQUESTS, []);
 
     return activeProjects.map((pid: string, pIndex: number) => {
-        if(allActiveRequests[pid]) {
+        if(allActiveRequests[pid] && projects[pid]) {
             const {pathPartials} = projects[pid]
             return buildRule(allActiveRequests[pid], pathPartials, pIndex);
         }

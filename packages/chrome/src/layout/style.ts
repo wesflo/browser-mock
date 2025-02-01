@@ -4,9 +4,15 @@ export const style = css`
     :host {
         display: block;
         background-color: var(--main-bg);
+        padding-top: 50px;
+        padding-bottom: 20px;
     }
 
     nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
         display: flex;
         flex-wrap: wrap;
         background-color: var(--primary);
@@ -62,6 +68,12 @@ export const style = css`
         display: flex;
         justify-content: space-between;
         background: var(--grey-1);
+        opacity: .5;
+        transition: opacity 260ms ease-out;
+        
+        &:hover {
+            opacity: 1;
+        }
 
         dl {
             display: flex;
@@ -76,7 +88,7 @@ export const style = css`
         dd {
             &:after {
                 display: inline-block;
-                padding: 0 8px 0 6px;
+                padding: 0 8px 0 4px;
                 content: '-';
             }
 
