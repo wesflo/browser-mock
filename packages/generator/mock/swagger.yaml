@@ -42,7 +42,7 @@ paths:
         '500':
           $ref: "#/components/responses/internalServerError"
 
-  /v1/order/{orderNumber}/details:
+  /v1/order/{orderNumber}/{view}:
     get:
       summary: get the whole details of an order
       description: get the whole details of a order categorized by position numbers
@@ -84,7 +84,7 @@ paths:
         '500':
           $ref: "#/components/responses/internalServerError"
 
-  /v1/order/{orderNumber}/{positionNumber}:
+  /v1/order/{orderNumber}/{positionNumber}/{PositionTitle}:
     delete:
       summary: cancel an order position
       description: cancel an order position

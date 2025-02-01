@@ -52,6 +52,9 @@
   },
   "wfGenerator": {
     "swagger": "mock/swagger.yaml",
-    "target": "tmp/mocks"
+    "target": "tmp/mocks",
+    "mapping": [
+      "mock/mapping.yaml"
+    ]
   }
 }

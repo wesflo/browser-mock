@@ -73,7 +73,7 @@ const generator = async () => {
     }
 
     await generateMockFiles(mockData, promptOptions as IPromptOptions)
-    await generateManifest(swaggerCnt, mockTargetPath);
+    await generateManifest(swaggerCnt, mockTargetPath, mapping);
 
     log(chalk.blueBright('Done with config:'));
     log(chalk.blueBright(JSON.stringify(promptOptions, null, 2)));
