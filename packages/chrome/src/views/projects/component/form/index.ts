@@ -118,7 +118,9 @@ export class Component extends LitElement {
         await deleteFromStorageItem(STORAGE_PROJECTS, [uid]);
         await deleteFromStorageItem(STORAGE_ACTIVE_PROJECTS, [uid]);
         await removeStorageItem(STORAGE_MANIFEST_PREFIX + uid)
+
         this.toast.add('Project deleted', 'success');
+        await this.setView();
     }
 }
 
