@@ -3,6 +3,12 @@
 
 @import "{{ site.theme }}";
 
+header {
+  img {
+    width: 140px
+  }
+}
+
 nav.main {
   margin-bottom: 16px;
 
