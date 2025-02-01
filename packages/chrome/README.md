@@ -4,11 +4,10 @@ page:
    slug: /browser-mock/chrome.html
 ---
 
-<div style="text-align:center">
 
 # MockProxy - A Developer's HTTP Request Interception Tool
 ![Chrome Store Icon](./static/icon/icon128.png)
-</div>
+
 MockProxy is a lightweight browser extension designed to simplify API testing and local development. Effortlessly intercept HTTP requests, redirect them to your local Node.js server, and respond with pre-configured mock data.
 
 ## Features

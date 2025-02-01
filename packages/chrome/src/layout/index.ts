@@ -53,13 +53,13 @@ export class BrowserMock extends LitElement {
                             <a href="https://wesflo.github.io/browser-mock/index.html" target="_blank">General</a>
                         </dd>
                         <dd>
-                            <a href="https://wesflo.github.io/browser-mock/packages/chrome/index.html" target="_blank">Plugin</a>
+                            <a href="https://wesflo.github.io/browser-mock/packages/chrome/README.html" target="_blank">Plugin</a>
                         </dd>
                         <dd>
-                            <a href="https://wesflo.github.io/browser-mock/packages/generator/index.html" target="_blank">Generator</a>
+                            <a href="https://wesflo.github.io/browser-mock/packages/generator/README.html" target="_blank">Generator</a>
                         </dd>
                         <dd>
-                            <a href="https://wesflo.github.io/browser-mock/packages/server/index.html" target="_blank">Local Mock Server</a>
+                            <a href="https://wesflo.github.io/browser-mock/packages/server/README.html" target="_blank">Local Mock Server</a>
                         </dd>
                     </dl>
                 </footer>
