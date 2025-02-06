@@ -70,7 +70,6 @@ paths:
                   value:
                     auftrag:
                       vertriebsauftragsNummer:
-                        value: 'xxxxxxxxx'
                       benutzerId:
                         value: '12346'
                       foo:
@@ -721,8 +720,6 @@ components:
       properties:
         value:
           type: string
-          example:  "Lorem"
-
         type:
           type: string
           enum:
