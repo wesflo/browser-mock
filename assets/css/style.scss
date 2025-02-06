@@ -3,6 +3,12 @@
 
 @import "{{ site.theme }}";
 
+header {
+  img {
+    width: 140px
+  }
+}
+
 nav.main {
   margin-bottom: 16px;
 
@@ -29,4 +35,8 @@ h1 {
   background-color: #646464;
   width: 172px;
   margin: 0 auto 20px;
+
+  img {
+    display: block;
+  }
 }
