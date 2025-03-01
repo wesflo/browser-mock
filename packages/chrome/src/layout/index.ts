@@ -118,7 +118,8 @@ export class BrowserMock extends LitElement {
 
     handleMainNavClick = async (view: TCurrentView) => {
         this.currentView = view;
-        await setStorageItem(STORAGE_VIEW,{[VIEW_LVL_1]: view})
+        await setStorageItem(STORAGE_VIEW,{[VIEW_LVL_1]: view});
+        this.viewLoadTask.run()
     }
 
     handleToggleBm = async () => {
