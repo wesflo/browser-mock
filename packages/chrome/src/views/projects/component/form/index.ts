@@ -17,7 +17,7 @@ import {deleteFromStorageItem, getStorageItem, removeStorageItem, setStorageItem
 import {
     STORAGE_ACTIVE_PROJECTS, STORAGE_ACTIVE_REQUESTS,
     STORAGE_MANIFEST_PREFIX,
-    STORAGE_PROJECTS,
+    STORAGE_PROJECTS, STORAGE_TMP_PROJECTS,
     STORAGE_VIEW,
     VIEW_LVL_3
 } from "../../../../constant";
@@ -45,20 +45,20 @@ export class Component extends LitElement {
 
     render() {
         return html`
-            <wf-input name="name" label="Project Name" value="${ifDefined(this.values.name)}" required></wf-input>
-            <wf-input name="path" label="Absolut Path to manifest.json" value="${ifDefined(this.values.path)}" required></wf-input>
+            <wf-input name="name" label="Project Name" value="${ifDefined(this.values.name)}" required @onInput="${this.handleInputChange}"></wf-input>
+            <wf-input name="path" label="Absolut Path to manifest.json" value="${ifDefined(this.values.path)}" required @onInput="${this.handleInputChange}"></wf-input>
             <h4>Manifest</h4>
             <div class="m">
                 <wf-textarea
                         name="manifest"
                         label="Manifest content"
                         @onInput="${this.handleManualManifest}"
-                        value="${this.manifest ? JSON.stringify(this.manifest, null, 2) : ''}"
+                        value="${this.manifest ? JSON.stringify(this.manifest, null, 2) : this.values.manifest || ''}"
                 ></wf-textarea>
                 <span class="spacer">
                     <span>or</span>
                 </span>
-                <wf-file name="configFile" label="import file" accept=".json"></wf-file>
+                <wf-file name="configFile" label="import file" accept=".json" ></wf-file>
             </div>
             <div class="buttons right">
                 ${this.uid ? html`<wf-button @onClick="${this.handleDelete}" appearance="danger-outline" size="l" style="margin-right: auto">delete</wf-button>` : nothing}
@@ -70,22 +70,28 @@ export class Component extends LitElement {
 
     async connectedCallback() {
         const id = await getViewId(VIEW_LVL_3);
+
         if(id) {
             this.uid = id
             const obj = await getStorageItem(STORAGE_PROJECTS);
             this.values = obj[this.uid];
             this.manifest = await getStorageItem(STORAGE_MANIFEST_PREFIX + id);
         } else {
+            this.values = await getStorageItem(STORAGE_TMP_PROJECTS);
             this.uid = uid();
         }
         super.connectedCallback();
     }
 
     setListView = async () => {
-        // await setViewId(VIEW_LVL_3, null);getStorageItem
         await deleteFromStorageItem(STORAGE_VIEW, [VIEW_LVL_3]);
+        await removeStorageItem(STORAGE_TMP_PROJECTS);
 
         this.dispatchEvent(new CustomEvent('setView', {detail: VIEW_LIST}));
+    }
+
+    handleInputChange = ({currentTarget, detail}: CustomEvent) => {
+        setTimeout(async () => await setStorageItem(STORAGE_TMP_PROJECTS, this.form.getValues()),1);
     }
 
     handleManualManifest = ({detail}: CustomEvent) => {
@@ -110,7 +116,7 @@ export class Component extends LitElement {
             if(manifestCnt) {
                 await setStorageItem(STORAGE_MANIFEST_PREFIX + id, JSON.parse(manifestCnt));
                 await deleteFromStorageItem(STORAGE_ACTIVE_REQUESTS, [id]);
-
+                await removeStorageItem(STORAGE_TMP_PROJECTS);
                 this.toast.add('Project saved', 'success');
                 await this.setListView();
                 return;
@@ -124,7 +130,8 @@ export class Component extends LitElement {
         const {uid} = this
         await deleteFromStorageItem(STORAGE_PROJECTS, [uid]);
         await deleteFromStorageItem(STORAGE_ACTIVE_PROJECTS, [uid]);
-        await removeStorageItem(STORAGE_MANIFEST_PREFIX + uid)
+        await removeStorageItem(STORAGE_MANIFEST_PREFIX + uid);
+        await removeStorageItem(STORAGE_TMP_PROJECTS);
 
         this.toast.add('Project deleted', 'success');
         await this.setListView();

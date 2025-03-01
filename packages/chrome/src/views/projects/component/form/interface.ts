@@ -1,5 +1,6 @@
 import {IProject} from "../../../../interface";
 
-export interface IFormValues extends IProject{
+export interface IFormValues extends IProject {
     configFile: File[];
+    manifest?: string;
 }
