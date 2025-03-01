@@ -1,5 +1,5 @@
 import {getStorageItem} from "../../util/storage";
-import {STORAGE_ACTIVE_PROJECTS, STORAGE_ACTIVE_REQUESTS, STORAGE_PROJECTS} from "../../constant";
+import {STORAGE_ACTIVE_PROJECTS, STORAGE_ACTIVE_REQUESTS, STORAGE_APP_CONFIG, STORAGE_PROJECTS} from "../../constant";
 import {IActiveMock, IActiveMocks, IProjects} from "../../interface";
 import Rule = chrome.declarativeNetRequest.Rule;
 import RuleActionType = chrome.declarativeNetRequest.RuleActionType;
@@ -20,11 +20,12 @@ export const buildRules = async () => {
 }
 
 const buildRule = (activeRequests: IActiveMocks, partials: string[], pIndex: number): Rule[] => {
-    return Object.values(activeRequests).map((activeRequest: IActiveMock, index: number) => buildRuleset(activeRequest, partials, index, pIndex))
+    const {port} = getStorageItem(STORAGE_APP_CONFIG, {port: '2313'});
+    return Object.values(activeRequests).map((activeRequest: IActiveMock, index: number) => buildRuleset(activeRequest, partials, index, pIndex, port))
         .flat();
 }
 
-const buildRuleset = (activeRequest: IActiveMock, partials: string[], sIndex: number, pIndex: number): Rule[] => {
+const buildRuleset = (activeRequest: IActiveMock, partials: string[], sIndex: number, pIndex: number, port: string): Rule[] => {
     return activeRequest.domains.map((domain: string, index: number) => {
         const params = [
                 `status=${activeRequest.status}`,
@@ -38,7 +39,7 @@ const buildRuleset = (activeRequest: IActiveMock, partials: string[], sIndex: nu
             action: {
                 type: RuleActionType.REDIRECT,
                 redirect: {
-                    url: `http://127.0.0.1:2313/latest/mock?${params.join('&')}`
+                    url: `http://127.0.0.1:${port}/latest/mock?${params.join('&')}`
                 }
             },
             condition: {

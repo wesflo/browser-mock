@@ -6,7 +6,7 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "wesflo-ms": "./dist/index.js"
+    "wf-serve": "./dist/index.js"
   },
   "scripts": {
     "build": "npm run prebuild && tsc",
