@@ -33,13 +33,13 @@ npm install -g @wesflo/mock-server
 You can start the mock server using `npx`:
 
 ```bash
-npx wesflo-ms
+npx wf-serve
 ```
 
 Or if you've installed it globally, you can run it directly:
 
 ```bash
-wesflo-ms
+wf-serve
 ```
 
 For more details on the mock server, please refer to the [Mock Server README](./packages/server/README.md).

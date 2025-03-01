@@ -4,14 +4,14 @@ name: generator.html
 slug: /browser-mock/generator.html
 ---
 
-# wf-generator
+# wf-generate
 
-`wf-generator` is a Node.js-based generator that uses Swagger definitions and mapping files to automatically generate
+`wf-generate` is a Node.js-based generator that uses Swagger definitions and mapping files to automatically generate
 mock data. This data can be used for testing APIs or as placeholders in development environments.
 
 ## Installation
 
-To install `wf-generator`, make sure you have Node.js installed, then run the following command:
+To install `wf-generate`, make sure you have Node.js installed, then run the following command:
 
 `npm install @wesflo/generator`
 
@@ -20,11 +20,11 @@ To install `wf-generator`, make sure you have Node.js installed, then run the fo
 ### CLI
 
 After installation, you can invoke the tool via the command line. The script will be available by default with the
-command `wf-generator`.
+command `wf-generate`.
 
 Run the command:
 
-` npx wf-generator `
+` npx wf-generate `
 
 ### Configuration
 

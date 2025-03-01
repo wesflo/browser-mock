@@ -18,6 +18,8 @@ export const style = css`
         background-color: var(--primary);
         font-size: var(--font-size-l);
         font-weight: bold;
+        z-index: 2;
+        box-shadow: var(--box-shadow);
 
         a {
             position: relative;

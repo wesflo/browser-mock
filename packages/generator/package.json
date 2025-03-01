@@ -1,12 +1,12 @@
 {
   "name": "@wesflo/generator",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Generates mock json files from swagger yml",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "wf-generator": "./dist/index.js"
+    "wf-generate": "./dist/index.js"
   },
   "scripts": {
     "prebuild": "rm -rf dist && mkdir dist",

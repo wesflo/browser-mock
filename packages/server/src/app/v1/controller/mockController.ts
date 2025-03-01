@@ -30,8 +30,9 @@ export const mockHandler = async (req: Request, res: Response): Promise<void> =>
             });
         }
     }
+    const toNum = Number(to) || 0;
+    toNum && await new Promise((resolve) => setTimeout(resolve, Number(to)))
 
-    await res.setTimeout(Number(to));
     res.status(Number(status))
     fileCnt && res.json(JSON.parse(fileCnt))
 
