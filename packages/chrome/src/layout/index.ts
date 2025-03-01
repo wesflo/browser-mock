@@ -2,7 +2,7 @@ import {html, LitElement} from "lit";
 import {property} from "lit/decorators.js";
 import {classMap} from "lit-html/directives/class-map.js";
 import {Task} from '@lit/task';
-import {TAB_API_MOCKS, TAB_PROJECTS, TABS} from "./constant";
+import {TAB_API_MOCKS, TAB_APP_CONFIG, TAB_PROJECTS, TABS} from "./constant";
 import {TCurrentView} from "./interface";
 import {style} from "./style";
 import i18n from "../i18n.json";
@@ -11,8 +11,8 @@ import {resetStyle} from "../style/resetStyle";
 import "../component/switch";
 import "../component/progress";
 import "../views/error";
-import {getStorageItem, mergeStorageItem, setStorageItem} from "../util/storage";
-import {STORAGE_ACTIVE, STORAGE_VIEW, VIEW_LVL_1} from "../constant";
+import {getStorageItem, setStorageItem} from "../util/storage";
+import {STORAGE_ACTIVE, STORAGE_APP_CONFIG, STORAGE_VIEW, VIEW_LVL_1} from "../constant";
 import {getViewId} from "../util/getViewId";
 import pkg from "../../package.json"
 
@@ -68,10 +68,18 @@ export class BrowserMock extends LitElement {
     }
 
     async connectedCallback () {
+        const dataAttr = 'data-theme';
         const view = await getViewId(VIEW_LVL_1);
         view && (this.currentView = view);
+        const config = await getStorageItem(STORAGE_APP_CONFIG);
+        if(config.darkMode) {
+            document.documentElement.setAttribute(dataAttr, 'dark');
+        } else {
+            document.documentElement.removeAttribute(dataAttr);
+        }
 
         super.connectedCallback();
+
         window.addEventListener('wfReloadApp', this.handleReloadApp);
     }
 
@@ -90,6 +98,11 @@ export class BrowserMock extends LitElement {
             await import("../views/mocks");
             return html`
                 <wf-view-mocks></wf-view-mocks>`;
+        },
+        [TAB_APP_CONFIG]: async () => {
+            await import("../views/config");
+            return html`
+                <wf-view-config></wf-view-config>`;
         },
     }
 

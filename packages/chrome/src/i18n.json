@@ -1,6 +1,7 @@
 {
   "view": {
     "mocks": "Mocks",
-    "projects": "Projects"
+    "projects": "Projects",
+    "app-config": "Config"
   }
 }

@@ -53,5 +53,55 @@ body {
     --border-radius: 8px;
     --collapse-padding: 16px 16px 32px;
     --box-shadow: 0 2px 6px rgba(0,0,0,0.18), 0 2px 6px rgba(0,0,0,0.24);
+}
 
+[data-theme="dark"] {
+    --primary: #0072a3;
+    --secondary: #7441a8;
+    --tertiary: #468a92;
+    --primary-dark: #1585bd; /* Etwas heller als primary */
+    --secondary-dark: #8653ba;
+    --tertiary-dark: #569ea5;
+    --primary-bright: #00628c; /* Etwas dunkler als primary */
+    --secondary-bright: #623890;
+    --tertiary-bright: #3b747b;
+    --primary-inverse: #1a2e3d; /* Sehr dunkel für den Dark Mode */
+    --secondary-inverse: #2b1a3d;
+    --tertiary-inverse: #1d3033;
+
+    --success: #008f5d;
+    --success-dark: #006845;
+    --success-bright: #00b487;
+    --warning: #c35602;
+    --warning-dark: #923f00;
+    --warning-bright: #e07b35;
+    --error: #ab2121;
+    --error-dark: #7c1717;
+    --error-bright: #c74242;
+
+    --grey-0: #1e1e1e;
+    --grey-1: #282828;
+    --grey-3: #3a3a3a;
+    --grey-5: #4d4d4d;
+    --grey-7: #666;
+    --grey-9: #888;
+    --grey-11: #aaa;
+    --grey-100: #e0e0e0;
+
+    --font-size: 14px;
+    --font-size-s: 10px;
+    --font-size-l: 16px;
+    --font-color: var(--grey-11);
+    --font-color-iverse: var(--grey-1);
+    --font-family: "Gill Sans Extrabold", sans-serif;
+
+    --main-bg: #282828;
+
+    --border-radius: 8px;
+    --collapse-padding: 16px 16px 32px;
+    --box-shadow: 0 2px 6px rgba(0,0,0,0.72), 0 2px 6px rgba(0,0,0,0.92);
+}
+
+html, body {
+    background: var(--main-bg);
 }

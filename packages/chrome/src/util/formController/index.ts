@@ -43,7 +43,7 @@ export class FormController<T extends Form, N> {
                 checkFn = check;
             }
 
-            const isValid = checkFn(value, item);
+            const isValid = checkFn(value, item, ...Object.values(args));
 
             if (!isValid) {
                 const key = checkFn.name;
