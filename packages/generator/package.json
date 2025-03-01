@@ -11,8 +11,8 @@
   "scripts": {
     "prebuild": "rm -rf dist && mkdir dist",
     "build": "npm run prebuild && tsc",
-    "publish": "npm run build && npm publish --access=public",
-    "build:local": "npm run build && npm pack",
+    "bundle": "npm run build && npm publish --access=public",
+    "bundle:local": "npm run build && npm pack",
     "dev": "tsc --watch",
     "test": "jest --coverage",
     "test:watch": "jest --watch --coverage=false"

@@ -10,7 +10,7 @@
     "build": "npm run clean && npm run build:popup && npm run build:sw",
     "build:popup": "vite build --config ./vite.config.ts",
     "build:sw": "vite build --config ./vite.config.sw.ts",
-    "publish": "npm run build && node publish.js",
+    "bundle": "npm run build && node publish.js",
     "dev:sw": "vite build --config ./vite.config.sw.ts --watch",
     "clean": "rm -rf ./dist && rm -f ./wesflo-chrome-mock.zip && mkdir ./dist",
     "cem": "cem analyze",
