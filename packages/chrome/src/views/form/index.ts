@@ -20,7 +20,6 @@ import {
     VIEW_LVL_3, VIEW_PROJECTS
 } from "../../constant";
 import {toastFactory} from "../../component/toast/util/toastFactory";
-import {getViewId} from "../../util/getViewId";
 import {textStyle} from "../../style/textStyle";
 import {IManifest} from "../../interface";
 import {fieldsetStyle} from "../../style/formStyle";

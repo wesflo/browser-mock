@@ -3,8 +3,8 @@ import {html, LitElement} from 'lit';
 import {defaultStyle} from "../../../../style/defaultStyle";
 import {style} from "./style";
 import {textStyle} from "../../../../style/textStyle";
-import {getStorageItem, mergeStorageItem} from "../../../../util/storage";
-import {IActiveMock, IManifest, IManifestRequest, IProject} from "../../../../interface";
+import {getStorageItem} from "../../../../util/storage";
+import {IActiveMock, IManifest, IProject} from "../../../../interface";
 import {Task} from "@lit/task";
 import {STORAGE_ACTIVE_REQUESTS, STORAGE_MANIFEST_PREFIX, STORAGE_PROJECTS, VIEW_LVL_3} from "../../../../constant";
 import "../../../../component/progress";
@@ -64,8 +64,8 @@ export class Component extends LitElement {
     }
 
     async connectedCallback() {
-        const view = await getViewId(VIEW_LVL_3);
-        view && (this.uid = view);
+        // const view = await getViewId(VIEW_LVL_3);
+        // view && (this.uid = view);
 
         super.connectedCallback();
     }

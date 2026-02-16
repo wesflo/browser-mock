@@ -13,7 +13,7 @@ import "../views/mocks";
 import "../views/form";
 import "../views/config";
 import {getStorageItem, setStorageItem} from "../util/storage";
-import {VIEW_MOCKS, VIEW_CONFIG, VIEW_PROJECTS, STORAGE_ACTIVE, STORAGE_APP_CONFIG, STORAGE_VIEW, VIEW_EDIT, VIEW_LVL_1, VIEW_NEW} from "../constant";
+import {VIEW_MOCKS, VIEW_CONFIG, VIEW_PROJECTS, STORAGE_ACTIVE, STORAGE_APP_CONFIG, STORAGE_VIEW, VIEW_EDIT, VIEW_LVL_1, VIEW_NEW, STORAGE_SELECTED_PROJECT} from "../constant";
 import {getViewId} from "../util/getViewId";
 import pkg from "../../package.json"
 import {MouseEvent} from "happy-dom";
@@ -81,7 +81,7 @@ export class BrowserMock extends LitElement {
     async connectedCallback () {
         const dataAttr = 'data-theme';
         this.bmIsActive = await getStorageItem(STORAGE_ACTIVE, false);
-        const view = getViewId(VIEW_LVL_1);
+        const view = getViewId();
         view && (this.currentView = view);
         const config = getStorageItem(STORAGE_APP_CONFIG);
         if(config.darkMode) {
@@ -112,20 +112,22 @@ export class BrowserMock extends LitElement {
 
     setView = (view: string) => {
         this.currentView = view;
-        setStorageItem(STORAGE_VIEW, {[VIEW_LVL_1]: view});
+        setStorageItem(STORAGE_VIEW, view);
     }
 
     handleToggleBm = async () => {
         this.bmIsActive = !this.bmIsActive;
-        setStorageItem(STORAGE_ACTIVE, this.bmIsActive)
+        setStorageItem(STORAGE_ACTIVE, this.bmIsActive);
     }
 
     handleEditProject = ({detail}: CustomEvent<string>) => {
-        console.log( 'Edit', detail );
+        setStorageItem(STORAGE_SELECTED_PROJECT, detail);
+        this.setView(VIEW_EDIT);
     }
 
     handleOpenProject = ({detail}: CustomEvent<string>) => {
-        console.log( 'Open', detail );
+        setStorageItem(STORAGE_SELECTED_PROJECT, detail);
+        this.setView(VIEW_MOCKS);
     }
 }
 

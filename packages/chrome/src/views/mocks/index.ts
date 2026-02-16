@@ -8,8 +8,8 @@ import {Task} from "@lit/task";
 import {TView} from "./interface";
 import {VIEW_PROJECT, VIEW_PROJECTS} from "./constant";
 import {getViewId} from "../../util/getViewId";
-import {STORAGE_VIEW, VIEW_LVL_1, VIEW_LVL_2, VIEW_LVL_3, VIEW_MOCKS} from "../../constant";
-import {mergeStorageItem, setStorageItem} from "../../util/storage";
+import {STORAGE_VIEW} from "../../constant";
+import {mergeStorageItem} from "../../util/storage";
 
 export class Component extends LitElement {
     @property({type: String}) error: string = '';
@@ -30,8 +30,8 @@ export class Component extends LitElement {
     }
 
     async connectedCallback () {
-        const view = await getViewId(VIEW_LVL_2);
-        view && (this.currentView = view);
+        // const view = await getViewId();
+        // view && (this.currentView = view);
         super.connectedCallback();
     }
 
@@ -71,10 +71,6 @@ export class Component extends LitElement {
 
     showList = async () => {
         this.currentView = VIEW_PROJECTS;
-        await setStorageItem(STORAGE_VIEW, {
-            [VIEW_LVL_1]: VIEW_MOCKS,
-            [VIEW_LVL_2]: VIEW_PROJECTS}
-        );
     }
 }
 

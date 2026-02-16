@@ -2,12 +2,12 @@ import {state} from 'lit/decorators.js';
 import {html, LitElement} from 'lit';
 import {defaultStyle} from "../../style/defaultStyle";
 import {style} from "./style";
-import {STORAGE_PROJECTS} from "../../constant";
+import {STORAGE_PROJECTS, STORAGE_SELECTED_PROJECT} from "../../constant";
 
 import "../../component/button";
 import "../../component/progress";
 import "../../component/no-project";
-import {getStorageItem} from "../../util/storage";
+import {getStorageItem, setStorageItem} from "../../util/storage";
 import {IProject, IProjects} from "../../interface";
 import {buttonsWrapperStyles} from "../../component/button/style";
 import {MouseEvent} from "happy-dom";
