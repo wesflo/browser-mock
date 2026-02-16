@@ -1,67 +1,69 @@
-import {property, state} from 'lit/decorators.js';
-import {html, LitElement, nothing} from 'lit';
-import {defaultStyle, tabsStyles} from "../../style/defaultStyle";
+import {state} from 'lit/decorators.js';
+import {html, LitElement} from 'lit';
+import {defaultStyle} from "../../style/defaultStyle";
 import {style} from "./style";
-import {textStyle} from "../../style/textStyle";
-import {VIEW_EDIT, VIEW_LIST, VIEW_NEW} from "./constant";
-import {Task} from "@lit/task";
-import {TView} from "./interface";
-import {
-    STORAGE_VIEW,
-    VIEW_LVL_2, VIEW_LVL_3
-} from "../../constant";
+import {STORAGE_PROJECTS} from "../../constant";
+
 import "../../component/button";
-import "./component/form";
-import "./component/list";
 import "../../component/progress";
-import "../error";
-import {getViewId} from "../../util/getViewId";
-import {ifDefined} from "lit-html/directives/if-defined.js";
-import {mergeStorageItem} from "../../util/storage";
-import {classMap} from "lit-html/directives/class-map.js";
+import "../../component/no-project";
+import {getStorageItem} from "../../util/storage";
+import {IProject, IProjects} from "../../interface";
+import {buttonsWrapperStyles} from "../../component/button/style";
+import {MouseEvent} from "happy-dom";
 
 export class Component extends LitElement {
-    @property({type: String}) error: string = '';
+    static styles = [defaultStyle, buttonsWrapperStyles, style];
 
-    @state() selectedProjectId?: string;
-    @state() currentView: TView = VIEW_LIST;
-
-    static styles = [defaultStyle, textStyle, tabsStyles, style];
+    @state() projects: IProjects = {};
 
     render() {
+        const values = Object.values(this.projects);
+
+        if (!values.length) {
+            return html`
+                <wf-no-project></wf-no-project>
+            `;
+        }
         return html`
-            <div class="tabs">
-                <wf-projects-list class="${classMap({tab: true, active: this.currentView === VIEW_LIST})}" @onEdit="${this.editProject}"></wf-projects-list>
-                <wf-projects-form 
-                        class="${classMap({tab: true, active: [VIEW_EDIT, VIEW_NEW].includes(this.currentView)})}"
-                        uid="${ifDefined(this.selectedProjectId)}"
-                        @setView="${({detail}) => this.setView(detail)}"
-                ></wf-projects-form>
-            </div>
+            <ul>
+                ${values.map(this.renderProject)}
+            </ul>`
+
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
+        this.projects = getStorageItem(STORAGE_PROJECTS);
+    }
+
+    renderProject = (project: IProject) => {
+        return html`
+            <li class="project">
+                <a href="#${project.id}" @click="${(e) => this.openProject(e, project.id)}">${project.name}</a>
+                <div class="buttons">
+                    <wf-button
+                            appearance="primary"
+                            size="inherit"
+                            @onClick="${() => this.editProject(project.id)}"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                            <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/>
+                        </svg>
+                    </wf-button>
+                </div>
+            </li>
         `;
     }
 
-    async connectedCallback () {
-        const view = await getViewId(VIEW_LVL_2);
-        view && (this.currentView = view);
-        super.connectedCallback();
+    editProject = (id: string) => {
+        this.dispatchEvent(new CustomEvent('onEditProject', {detail: id}));
     }
 
-    editProject = async ({detail}: CustomEvent) => {
-        this.selectedProjectId = detail;
-        this.currentView = VIEW_EDIT;
-        await mergeStorageItem(STORAGE_VIEW, {
-            [VIEW_LVL_2]: VIEW_EDIT,
-            [VIEW_LVL_3]: detail,
-        })
+    openProject = (e: MouseEvent, id: string) => {
+        e.preventDefault();
+        this.dispatchEvent(new CustomEvent('onOpenProject', {detail: id}));
     }
-
-    setView = async (view: typeof VIEW_NEW | typeof VIEW_EDIT | typeof VIEW_LIST) => {
-        this.currentView = view;
-
-        await mergeStorageItem(STORAGE_VIEW, {[VIEW_LVL_2]: view});
-    }
-
 }
 
 if (!customElements.get('wf-view-projects')) {

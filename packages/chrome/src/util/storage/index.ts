@@ -1,17 +1,17 @@
 import {MODE_DEV} from "../../constant";
 
 const getItem = (key: string) => {
-    if(import.meta.env.MODE === MODE_DEV) {
+    if (import.meta.env.MODE === MODE_DEV) {
         const item = window.sessionStorage.getItem(key)
         return item ? JSON.parse(item) : null;
     }
 
     const data = chrome.storage.local.get();
-    return data? data[key] : null;
+    return data ? data[key] : null;
 }
 
 const setItem = (key: string, data: Object) => {
-    if(import.meta.env.MODE === MODE_DEV) {
+    if (import.meta.env.MODE === MODE_DEV) {
         return window.sessionStorage.setItem(key, JSON.stringify(data));
     }
 
@@ -19,7 +19,7 @@ const setItem = (key: string, data: Object) => {
 }
 
 export const getStorageItem = (key: string, fallback = {}) => {
-    return  getItem(key) || fallback;
+    return getItem(key) || fallback;
 }
 
 export const setStorageItem = (key: string, obj: Object) => {
@@ -42,7 +42,7 @@ export const deleteFromStorageItem = (sKey: string, oKeys: string[]) => {
 }
 
 export const removeStorageItem = (key: string) => {
-    if(import.meta.env.MODE === MODE_DEV) {
+    if (import.meta.env.MODE === MODE_DEV) {
         return window.sessionStorage.removeItem(key);
     }
 
@@ -50,7 +50,7 @@ export const removeStorageItem = (key: string) => {
 }
 
 export const flushStorage = () => {
-    if(import.meta.env.MODE === MODE_DEV) {
+    if (import.meta.env.MODE === MODE_DEV) {
         return window.sessionStorage.clear();
     }
 

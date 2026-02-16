@@ -26,7 +26,7 @@ export const style = css`
 
         a {
             position: relative;
-            padding: 16px 24px 10px;
+            padding: 16px 16px 10px;
             color: var(--primary);
             background-color: var(--grey-2);
             transition: background-color 400ms ease-in-out;
@@ -44,7 +44,7 @@ export const style = css`
                 background-color: var(--primary);
                 transition: all 400ms ease-in-out;
             }
-
+            &.new-project,
             &.app-config {
                 padding-top: 10px;
                 padding-bottom: 8px;
@@ -53,6 +53,7 @@ export const style = css`
             &.active {
                 background-color: var(--grey-1);
             }
+            
             &:hover {
                 &:after {
                     opacity: 1;
@@ -69,6 +70,10 @@ export const style = css`
             padding: 4px 8px;
             margin-left: auto;
         }
+    }
+    
+    .cnt {
+        padding: 16px 8px;
     }
 
     footer {

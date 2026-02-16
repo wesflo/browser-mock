@@ -1,31 +1,29 @@
 import {property, state, queryAll} from 'lit/decorators.js';
 import {html, LitElement, nothing} from 'lit';
-import {defaultStyle} from "../../../../style/defaultStyle";
+import {defaultStyle} from "../../style/defaultStyle";
 import {style} from "./style";
-import {FormController} from "../../../../util/formController";
-import {inputFieldTypes} from "../../../../util/formController/constant";
+import {FormController} from "../../util/formController";
+import {inputFieldTypes} from "../../util/formController/constant";
 import {IFormValues} from "./interface";
-import "../../../../component/button";
-import "../../../../component/input";
-import "../../../../component/textarea";
-import {buttonsWrapperStyles} from "../../../../component/button/style";
+import "../../component/button";
+import "../../component/input";
+import "../../component/textarea";
+import {buttonsWrapperStyles} from "../../component/button/style";
 import {ifDefined} from "lit-html/directives/if-defined.js";
-import {uid} from "../../../../util/uid";
-import {updateStorageProject} from "../../../../util/updateStorageProject";
-import {deleteFromStorageItem, getStorageItem, removeStorageItem, setStorageItem} from "../../../../util/storage";
+import {updateStorageProject} from "../../util/updateStorageProject";
+import {deleteFromStorageItem, getStorageItem, removeStorageItem, setStorageItem} from "../../util/storage";
 import {
     STORAGE_ACTIVE_PROJECTS, STORAGE_ACTIVE_REQUESTS,
     STORAGE_MANIFEST_PREFIX,
-    STORAGE_PROJECTS, STORAGE_TMP_PROJECTS,
+    STORAGE_PROJECTS, STORAGE_SELECTED_PROJECT, STORAGE_TMP_PROJECTS,
     STORAGE_VIEW,
-    VIEW_LVL_3
-} from "../../../../constant";
-import {VIEW_LIST} from "../../constant";
-import {toastFactory} from "../../../../component/toast/util/toastFactory";
-import {getViewId} from "../../../../util/getViewId";
-import {textStyle} from "../../../../style/textStyle";
-import {IManifest} from "../../../../interface";
-import {fieldsetStyle} from "../../../../style/formStyle";
+    VIEW_LVL_3, VIEW_PROJECTS
+} from "../../constant";
+import {toastFactory} from "../../component/toast/util/toastFactory";
+import {getViewId} from "../../util/getViewId";
+import {textStyle} from "../../style/textStyle";
+import {IManifest} from "../../interface";
+import {fieldsetStyle} from "../../style/formStyle";
 
 export class Component extends LitElement {
     @property({type: String}) uid: string;
@@ -64,30 +62,32 @@ export class Component extends LitElement {
         `;
     }
 
-    async connectedCallback() {
-        const id = await getViewId(VIEW_LVL_3);
+     connectedCallback() {
+        const uid =  getStorageItem(STORAGE_SELECTED_PROJECT, null);
 
-        if(id) {
-            this.uid = id
-            const obj = await getStorageItem(STORAGE_PROJECTS);
-            this.values = obj[this.uid];
-            this.manifest = await getStorageItem(STORAGE_MANIFEST_PREFIX + id);
+        if(uid) {
+            this.uid = uid
+            const obj =  getStorageItem(STORAGE_PROJECTS);
+            this.values = obj[uid];
+            this.manifest =  getStorageItem(STORAGE_MANIFEST_PREFIX + uid);
         } else {
-            this.values = await getStorageItem(STORAGE_TMP_PROJECTS);
-            this.uid = uid();
+            this.uid = crypto.randomUUID();
+            this.values = getStorageItem(STORAGE_TMP_PROJECTS);
         }
         super.connectedCallback();
     }
 
-    setListView = async () => {
-        await deleteFromStorageItem(STORAGE_VIEW, [VIEW_LVL_3]);
-        await removeStorageItem(STORAGE_TMP_PROJECTS);
-
-        this.dispatchEvent(new CustomEvent('setView', {detail: VIEW_LIST}));
+    disconnectedCallback() {
+        deleteFromStorageItem(STORAGE_VIEW, [VIEW_LVL_3]);
+        removeStorageItem(STORAGE_TMP_PROJECTS);
     }
 
-    handleInputChange = ({currentTarget, detail}: CustomEvent) => {
-        setTimeout(async () => await setStorageItem(STORAGE_TMP_PROJECTS, this.form.getValues()),1);
+    setListView = async () => {
+        this.dispatchEvent(new CustomEvent('setView', {detail: VIEW_PROJECTS}));
+    }
+
+    handleInputChange = () => {
+        setTimeout(() =>  setStorageItem(STORAGE_TMP_PROJECTS, this.form.getValues()),1);
     }
 
     handleManualManifest = ({detail}: CustomEvent) => {
@@ -133,6 +133,6 @@ export class Component extends LitElement {
     }
 }
 
-if (!customElements.get('wf-projects-form')) {
-    customElements.define('wf-projects-form', Component);
+if (!customElements.get('wf-view-form')) {
+    customElements.define('wf-view-form', Component);
 }

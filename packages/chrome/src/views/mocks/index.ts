@@ -7,11 +7,9 @@ import "../../component/button";
 import {Task} from "@lit/task";
 import {TView} from "./interface";
 import {VIEW_PROJECT, VIEW_PROJECTS} from "./constant";
-import {IProject} from "../../interface";
 import {getViewId} from "../../util/getViewId";
-import {STORAGE_VIEW, VIEW_LVL_1, VIEW_LVL_2, VIEW_LVL_3} from "../../constant";
+import {STORAGE_VIEW, VIEW_LVL_1, VIEW_LVL_2, VIEW_LVL_3, VIEW_MOCKS} from "../../constant";
 import {mergeStorageItem, setStorageItem} from "../../util/storage";
-import {TAB_API_MOCKS} from "../../layout/constant";
 
 export class Component extends LitElement {
     @property({type: String}) error: string = '';
@@ -74,7 +72,7 @@ export class Component extends LitElement {
     showList = async () => {
         this.currentView = VIEW_PROJECTS;
         await setStorageItem(STORAGE_VIEW, {
-            [VIEW_LVL_1]: TAB_API_MOCKS,
+            [VIEW_LVL_1]: VIEW_MOCKS,
             [VIEW_LVL_2]: VIEW_PROJECTS}
         );
     }
