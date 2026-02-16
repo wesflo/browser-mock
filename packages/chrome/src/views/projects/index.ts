@@ -1,6 +1,6 @@
 import {property, state} from 'lit/decorators.js';
 import {html, LitElement, nothing} from 'lit';
-import {defaultStyle} from "../../style/defaultStyle";
+import {defaultStyle, tabsStyles} from "../../style/defaultStyle";
 import {style} from "./style";
 import {textStyle} from "../../style/textStyle";
 import {VIEW_EDIT, VIEW_LIST, VIEW_NEW} from "./constant";
@@ -11,11 +11,14 @@ import {
     VIEW_LVL_2, VIEW_LVL_3
 } from "../../constant";
 import "../../component/button";
+import "./component/form";
+import "./component/list";
 import "../../component/progress";
 import "../error";
 import {getViewId} from "../../util/getViewId";
 import {ifDefined} from "lit-html/directives/if-defined.js";
 import {mergeStorageItem} from "../../util/storage";
+import {classMap} from "lit-html/directives/class-map.js";
 
 export class Component extends LitElement {
     @property({type: String}) error: string = '';
@@ -23,22 +26,18 @@ export class Component extends LitElement {
     @state() selectedProjectId?: string;
     @state() currentView: TView = VIEW_LIST;
 
-    static styles = [defaultStyle, textStyle, style];
+    static styles = [defaultStyle, textStyle, tabsStyles, style];
 
     render() {
         return html`
-            <header>
-                <h1>Projects: ${this.currentView}</h1>
-                ${this.currentView === VIEW_LIST ? this.renderHeaderButtons() : nothing}
-            </header>
-
-            ${this.viewTask.render({
-                pending: () => html`
-                    <wf-progress></wf-progress>`,
-                complete: (view) => view,
-                error: (e) => html`
-                    <wf-error error="${e}"></wf-error>`,
-            })}
+            <div class="tabs">
+                <wf-projects-list class="${classMap({tab: true, active: this.currentView === VIEW_LIST})}" @onEdit="${this.editProject}"></wf-projects-list>
+                <wf-projects-form 
+                        class="${classMap({tab: true, active: [VIEW_EDIT, VIEW_NEW].includes(this.currentView)})}"
+                        uid="${ifDefined(this.selectedProjectId)}"
+                        @setView="${({detail}) => this.setView(detail)}"
+                ></wf-projects-form>
+            </div>
         `;
     }
 
@@ -47,12 +46,6 @@ export class Component extends LitElement {
         view && (this.currentView = view);
         super.connectedCallback();
     }
-
-    renderHeaderButtons = () => html`
-        <div class="buttons">
-            <wf-button @onClick="${() => this.setView(VIEW_NEW)}">Add new Project</wf-button>
-        </div>
-    `
 
     editProject = async ({detail}: CustomEvent) => {
         this.selectedProjectId = detail;
@@ -63,41 +56,12 @@ export class Component extends LitElement {
         })
     }
 
-    views = {
-        [VIEW_NEW]: () => {
-            import("./component/form");
-            return html`
-                <wf-projects-form @setView="${({detail}) => this.setView(detail)}"></wf-projects-form>`
-        },
-        [VIEW_EDIT]: () => {
-            import("./component/form");
-            return html`
-                <wf-projects-form @setView="${({detail}) => this.setView(detail)}" uid="${ifDefined(this.selectedProjectId)}"></wf-projects-form>`
-        },
-        [VIEW_LIST]: () => {
-            import("./component/list");
-            return html`
-                <wf-projects-list @onEdit="${this.editProject}"></wf-projects-list>`;
-        }
-    }
-
     setView = async (view: typeof VIEW_NEW | typeof VIEW_EDIT | typeof VIEW_LIST) => {
         this.currentView = view;
 
         await mergeStorageItem(STORAGE_VIEW, {[VIEW_LVL_2]: view});
     }
 
-    viewTask: Task<[TView]> = new Task(this, {
-        task: async ([view]) => {
-            if (this.views[view]) {
-                return this.views[this.currentView]();
-            }
-
-            return html`
-                <wf-error></wf-error>`;
-        },
-        args: () => [this.currentView],
-    });
 }
 
 if (!customElements.get('wf-view-projects')) {

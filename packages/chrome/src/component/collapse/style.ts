@@ -34,7 +34,7 @@ export const style = css`
     label {
         display: block;
         width: 100%;
-        font-size: var(--font-size-l);
+        font-size: var(--font-size);
         padding: 20px 0 16px;
         padding-inline: 16px 40px;
         cursor: pointer;

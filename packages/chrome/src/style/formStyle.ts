@@ -25,7 +25,7 @@ export const formStyle = css`
         height: 48px;
         width: 100%;
         max-width: 100%;
-        font-size: var(--font-size-l);
+        font-size: var(--font-size);
         outline: none;
         transition:
                 border-left-color 140ms ease-out,
@@ -69,8 +69,8 @@ export const formStyle = css`
 export const labelStyle = css`
     label {
         position: absolute;
-        top: 16px;
-        font-size: var(--font-size-l);
+        top: 12px;
+        font-size: var(--font-size);
         inset-inline-start: 12px;
         padding: 4px;
         max-width: 100%;
@@ -96,21 +96,36 @@ export const labelStyle = css`
     .asterisks {
         color: var(--grey-3);
     }
+    
+    .hint {
+        min-height: 16px;
+        font-size: var(--font-size-s);
+        display: block;
+        padding: 4px 0 0 8px;
+    }
+`
+
+export const fieldsetStyle = css`
+    fieldset {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        
+        legend {
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+    }
 `
 
 export const formHintStyle = css`
-    .hint {
-        display: block;
-        padding: 4px 0 0 8px;
-        font-size: var(--font-size-s);
+    .msg {
         color: var(--grey-3);
     }
 `
 
 export const formErrorStyle = css`
     .err {
-        display: block;
-        padding: 4px 0 0 8px;
         color: var(--error);
     }
 

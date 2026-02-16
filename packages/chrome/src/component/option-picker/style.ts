@@ -24,7 +24,7 @@ export const style = css`
         display: inline-flex;
         align-items: center;
         font-weight: bold;
-        font-size: var(--font-size-l);
+        font-size: var(--font-size);
         top: unset;
         transform: unset;
         inset-inline-start: unset;

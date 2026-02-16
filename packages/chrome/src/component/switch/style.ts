@@ -37,61 +37,39 @@ export const style = css`
         inset-inline-start: unset;
         overflow: visible;
         background: transparent;
-    }
 
-    span {
-        position: relative;
-        display: inline-block;
-        padding: 8px 4px;
-        margin-right: 8px;
-
-        &:before,
-        &:after {
-            content: '';
-            display: block;
-            transition: all 300ms ease-out;
-        }
-
-        &:before {
-            width: 40px;
-            height: 12px;
-            border-radius: 999em;
-            background: var(--grey-7);
-            opacity: .4;
-        }
-
-        &:after {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            left: 0;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: var(--grey-7);
-            box-shadow: var(--box-shadow);
-        }
-    }
-
-    :host([inverse]) {
-        input {
-            &:checked + label span {
-                &:before {
-                    background: var(--primary-inverse);
-                }
-
-                &:after {
-                    background: var(--primary-inverse);
-                }
-            }
-        }
         span {
+            position: relative;
+            display: inline-block;
+            padding: 8px 4px;
+            margin-right: 8px;
+
+            &:before,
+            &:after {
+                content: '';
+                display: block;
+                transition: all 300ms ease-out;
+            }
+
             &:before {
-            background: var(--grey-3);
-        }
+                width: 40px;
+                height: 12px;
+                border-radius: 99em;
+                background: var(--grey-7);
+                opacity: .4;
+            }
 
             &:after {
-                background: var(--grey-5);
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                left: 0;
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                background: var(--primary-inverse);
+                border: 1px solid var(--primary-inverse);
+                box-shadow: var(--box-shadow);
             }
         }
     }

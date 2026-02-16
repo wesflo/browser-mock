@@ -14,18 +14,21 @@ export const style = css`
         left: 0;
         right: 0;
         display: flex;
-        flex-wrap: wrap;
-        background-color: var(--primary);
-        font-size: var(--font-size-l);
-        font-weight: bold;
+        justify-content: space-between;
+        background-color: var(--grey-2);
+        font-size: var(--font-size);
         z-index: 2;
         box-shadow: var(--box-shadow);
 
+        svg {
+            fill: var(--primary);
+        }
+
         a {
             position: relative;
-            padding: 16px 24px 14px;
-            color: var(--font-color-iverse);
-            background-color: var(--primary);
+            padding: 16px 24px 10px;
+            color: var(--primary);
+            background-color: var(--grey-2);
             transition: background-color 400ms ease-in-out;
 
             &:after {
@@ -38,25 +41,32 @@ export const style = css`
                 left: 50%;
                 transform: translateX(-50%);
                 opacity: 0;
-                background-color: var(--font-color-iverse);
+                background-color: var(--primary);
                 transition: all 400ms ease-in-out;
             }
 
-            &.active {
-                background-color: var(--primary-bright);
+            &.app-config {
+                padding-top: 10px;
+                padding-bottom: 8px;
             }
 
+            &.active {
+                background-color: var(--grey-1);
+            }
             &:hover {
-
                 &:after {
                     opacity: 1;
                     width: 100%;
                 }
             }
         }
+        
+        .box {
+            display: flex;
+        }
 
         wf-switch {
-            padding: 10px 16px 0 0;
+            padding: 4px 8px;
             margin-left: auto;
         }
     }
@@ -111,10 +121,5 @@ export const style = css`
         }
 
     }
-
-    .tabs {
-        padding: 16px 8px;
-    }
-
 
 `

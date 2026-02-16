@@ -24,8 +24,6 @@ export default class Component extends LitElement {
                 <slot></slot>
                 ${renderAsterisks(this.required)}
             </label>
-            ${renderFormErrorMsg(this.error)}
-            ${renderFormInputHint(this.hint)}
         `
     }
 

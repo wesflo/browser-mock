@@ -29,8 +29,10 @@ export default class Component extends LitElement {
         <div class="options">
             ${this.renderFields()}
         </div>
-        ${renderFormErrorMsg(this.error)}
-        ${renderFormInputHint(this.hint)}
+        <span class="hint">
+            ${renderFormErrorMsg(this.error)}
+            ${renderFormInputHint(this.hint)}
+        </span>
     `
 
     renderFields = () => filter(this.childNodes, (item: Element) => item.nodeName === 'WF-OPTION')

@@ -1,6 +1,5 @@
 import {css} from "lit";
 
-
 export const defaultStyle = css`
     :host {
         display: block;
@@ -50,3 +49,19 @@ export const defaultStyle = css`
         list-style: none;
     }
 `
+
+export const tabsStyles = css`
+
+
+    .tabs {
+        padding: 16px 8px;
+    }
+
+    .tab {
+        display: none;
+
+        &.active {
+            display: block;
+        }
+    }
+`;

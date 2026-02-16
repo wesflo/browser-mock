@@ -4,7 +4,7 @@ body,html {
 }
 
 body {
-    min-width: 760px;
+    /*min-width: 760px;*/
     min-height: 580px;
 }
 
@@ -34,6 +34,7 @@ body {
 
     --grey-0: #fff;
     --grey-1: #f1f1f1;
+    --grey-2: #e2e2e2;
     --grey-3: #d4d4d4;
     --grey-5: #b4b4b4;
     --grey-7: #909090;

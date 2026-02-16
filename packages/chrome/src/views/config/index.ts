@@ -46,7 +46,7 @@ export class ConfigView extends LitElement {
                 Dark mode
             </wf-switch>
             <div class="buttons right">
-                <wf-button @onClick="${this.handleFormSubmit}" size="l">save</wf-button>
+                <wf-button @onClick="${this.handleFormSubmit}">save</wf-button>
             </div>
         `;
     }
