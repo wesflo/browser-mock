@@ -10,13 +10,16 @@
       ],
       "requests": [
         {
+          "uid": "r1",
           "name": "Get Dummy Data",
           "path": "/api/v1/health",
           "method": "GET",
           "status": 200,
+          "timeout": 400,
           "response": "./health-patch.json"
         },
         {
+          "uid": "r2",
           "name": "Post Dummy Data",
           "path": "/api/v2/foo/[\\d]{5,10}",
           "method": "POST",
@@ -24,6 +27,7 @@
           "response": "./health-patch.json"
         },
         {
+          "uid": "r3",
           "name": "Put Dummy Data",
           "path": "/api/v1/return/[\\d]{4,10}/[\\d]{2,10}",
           "method": "PUT",
@@ -31,15 +35,41 @@
           "response": "./health-patch.json"
         },
         {
+          "uid": "r4",
           "name": "Delete Dummy Data",
           "path": "/api/v1/health",
           "method": "DELETE",
           "status": 204
         },
         {
+          "uid": "r5",
           "name": "Patch Dummy Data",
           "path": "/api/v1/health",
           "method": "PATCH",
+          "status": 200,
+          "response": "./health-patch.json"
+        }
+      ]
+    },
+    {
+      "domains": [
+        "https://super-api.wesflo.de"
+      ],
+      "requests": [
+        {
+          "uid": "r1",
+          "name": "Get Dummy Data",
+          "path": "/api/v1/health",
+          "method": "GET",
+          "timeout": 200,
+          "status": 200,
+          "response": "./health-patch.json"
+        },
+        {
+          "uid": "r2",
+          "name": "Post Dummy Data",
+          "path": "/api/v2/foo/[\\d]{5,10}",
+          "method": "POST",
           "status": 200,
           "response": "./health-patch.json"
         }

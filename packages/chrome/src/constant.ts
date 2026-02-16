@@ -12,11 +12,8 @@ export const STORAGE_MANIFEST_PREFIX = 'wf-bm-manifest-';
 export const STORAGE_ACTIVE_REQUESTS = 'wf-bm-active-requests';
 export const STORAGE_APP_CONFIG = 'wf-bm-app-config';
 
-export const VIEW_LVL_1 = 'l1';
-export const VIEW_LVL_2 = 'l2';
-export const VIEW_LVL_3 = 'l3';
 export const VIEW_PROJECTS = 'projects';
-export const VIEW_MOCKS = 'mocks';
+export const VIEW_PROJECT = 'project';
 export const VIEW_CONFIG = 'app-config';
 
 export const VIEW_NEW = 'new-project';

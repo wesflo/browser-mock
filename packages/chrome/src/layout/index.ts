@@ -9,11 +9,11 @@ import "../component/switch";
 import "../component/progress";
 import "../views/error";
 import "../views/projects";
-import "../views/mocks";
+import "../views/project";
 import "../views/form";
 import "../views/config";
 import {getStorageItem, setStorageItem} from "../util/storage";
-import {VIEW_MOCKS, VIEW_CONFIG, VIEW_PROJECTS, STORAGE_ACTIVE, STORAGE_APP_CONFIG, STORAGE_VIEW, VIEW_EDIT, VIEW_LVL_1, VIEW_NEW, STORAGE_SELECTED_PROJECT} from "../constant";
+import {VIEW_PROJECT, VIEW_CONFIG, VIEW_PROJECTS, STORAGE_ACTIVE, STORAGE_APP_CONFIG, STORAGE_VIEW, VIEW_EDIT, VIEW_NEW, STORAGE_SELECTED_PROJECT} from "../constant";
 import {getViewId} from "../util/getViewId";
 import pkg from "../../package.json"
 import {MouseEvent} from "happy-dom";
@@ -22,7 +22,7 @@ import {TemplateResult} from "lit-html";
 export class BrowserMock extends LitElement {
     @property({type: Boolean, reflect: true}) bmIsActive: boolean = false;
 
-    @property({type: String}) currentView: string = VIEW_MOCKS;
+    @property({type: String}) currentView: string = VIEW_PROJECT;
 
     static styles = [resetStyle, defaultStyle, style];
 
@@ -50,7 +50,7 @@ export class BrowserMock extends LitElement {
                         @onEditProject="${this.handleEditProject}"
                         @onOpenProject="${this.handleOpenProject}"
                     ></wf-view-projects>` : nothing} 
-                    ${this.currentView === VIEW_MOCKS ? html`<wf-view-mock></wf-view-mock>` : nothing} 
+                    ${this.currentView === VIEW_PROJECT ? html`<wf-view-project></wf-view-project>` : nothing} 
                     ${this.currentView === VIEW_CONFIG ? html`<wf-view-config></wf-view-config>` : nothing} 
                     ${[VIEW_EDIT, VIEW_NEW].includes(this.currentView) ? html`<wf-view-form
                             @setView="${({detail}) => this.setView(detail)}"
@@ -127,7 +127,7 @@ export class BrowserMock extends LitElement {
 
     handleOpenProject = ({detail}: CustomEvent<string>) => {
         setStorageItem(STORAGE_SELECTED_PROJECT, detail);
-        this.setView(VIEW_MOCKS);
+        this.setView(VIEW_PROJECT);
     }
 }
 

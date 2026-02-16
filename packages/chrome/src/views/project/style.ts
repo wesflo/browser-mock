@@ -1,40 +1,58 @@
 import {css} from "lit";
 
 export const style = css`
-    :host {
-        padding: 12px;
-        margin-bottom: 12px;
-        border-bottom: 1px solid var(--grey-5);
+    h1 {
+        margin-bottom: 16px;
     }
     
     header {
-        display: grid;
-        grid-template-columns: 80px 1fr;
-        gap: 16px;
-        align-items: center;
-        margin-bottom: 8px;
-
-        strong {
-            font-weight: bold;
-            margin-right: 16px;
-        }
-    }
-
-    .cnt {
-        display: grid;
-        gap: 16px;
-        grid-template-columns: repeat(3, 1fr);
-        align-items: center;
-    }
-
-    dl {
-        margin-bottom: 16px;
-    }
-
-    h6 {
-        font-weight: normal;
     }
     
+    .cnt {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+
+        wf-switch {
+            margin-bottom: 8px;
+        }
+    }
+    
+    ul {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    li {
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        padding: 8px 16px;
+    }
+    
+    .mock {
+        background-color: var(--grey-1);
+    }
+    
+    .request {
+        background-color: var(--grey-0);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 4px;
+
+        h5 {
+            margin-right: auto;
+        }
+    }
+    
+
+    h6 {
+        font-size: var(--font-size-s);
+        font-weight: normal;
+        margin: 8px;
+    }
+
     .flag {
         display: inline-flex;
         justify-content: center;
@@ -43,6 +61,7 @@ export const style = css`
         border-radius: 999em;
         font-weight: bold;
 
+        &.success,
         &.get {
             color: #1fa900;
             border-color: #1fa900;
@@ -57,7 +76,8 @@ export const style = css`
             color: #0091a4;
             border-color: #0091a4;
         }
-
+        
+        &.error,
         &.delete {
             color: #9f1300;
             border-color: #9f1300;
@@ -68,4 +88,5 @@ export const style = css`
             border-color: #0275bb;
         }
     }
+    
 `

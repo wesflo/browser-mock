@@ -1,4 +1,3 @@
-import {VIEW_LVL_1, VIEW_LVL_2, VIEW_LVL_3} from "./constant";
 
 export interface IProject {
     id: string;
@@ -15,25 +14,32 @@ export interface IProjects {
 export type TRequestMethod = 'GET' | 'PUT' | 'DELETE' | 'POST' | 'PATCH';
 
 export interface IManifestRequest {
+    uid: string;
     name: string;
     path: string;
     method: TRequestMethod;
-    response: {
-        [key: string]: string;
-    }
+    status: number;
+    timeout: number;
+    response: string;
 }
-export type TManifestDomains = string[];
-export interface IManifest {
+export interface IManifestMocks {
     domains: TManifestDomains;
     requests: IManifestRequest[];
 }
 
+export type TManifestDomains = string[];
+
+export interface IManifest {
+    name:string;
+    mocks: IManifestMocks[];
+}
+
 export interface IActiveMock {
+    uid: string;
     path: string;
     method: TRequestMethod;
     status: number;
     mockPath: string;
-    timeout?: number;
     domains: string[];
 }
 
@@ -41,4 +47,3 @@ export interface IActiveMocks {
     [key: string]: IActiveMock
 }
 
-export type TLvl = typeof VIEW_LVL_1 | typeof VIEW_LVL_2 | typeof VIEW_LVL_3

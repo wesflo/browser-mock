@@ -17,7 +17,7 @@ import {
     STORAGE_MANIFEST_PREFIX,
     STORAGE_PROJECTS, STORAGE_SELECTED_PROJECT, STORAGE_TMP_PROJECTS,
     STORAGE_VIEW,
-    VIEW_LVL_3, VIEW_PROJECTS
+    VIEW_PROJECTS
 } from "../../constant";
 import {toastFactory} from "../../component/toast/util/toastFactory";
 import {textStyle} from "../../style/textStyle";
@@ -77,7 +77,7 @@ export class Component extends LitElement {
     }
 
     disconnectedCallback() {
-        deleteFromStorageItem(STORAGE_VIEW, [VIEW_LVL_3]);
+        removeStorageItem(STORAGE_SELECTED_PROJECT);
         removeStorageItem(STORAGE_TMP_PROJECTS);
     }
 
